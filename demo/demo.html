@@ -17,25 +17,10 @@
     </style>
     <script src="../src/everything-hook.js"></script>
     <script>
-        eHook.hook(window, 'alert', {
-            after: function (method, args) {
-                console.log('函数结束被劫持了');
-            },
-            before: function () {
-                console.log('函数开始被劫持了');
-            }
-        });
-        eHook.hook(window, 'alert', {
-            after: function (method, args) {
-                console.log('函数结束被劫持了');
-            },
-            before: function () {
-                console.log('函数开始被劫持了');
-            },
-            replace: function (method) {
-                return function () {
-                    method('你好');
-                }
+        var id = eHook.hookReplace(window, 'alert', function (method) {
+            return function () {
+                method.apply(window, arguments);
+                method.apply(window, arguments);
             }
         });
     </script>
