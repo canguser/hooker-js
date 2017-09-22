@@ -1,0 +1,57 @@
+<!---- Creator: Eoly -->
+<!---- On 2017/9/20 -->
+<!---- Call http://palerock.cn -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Title</title>
+    <style>
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+    </style>
+    <!--<script src="ajaxHook.js"></script>-->
+    <script src="../src/everything-hook.js"></script>
+    <script>
+        aHook.register('.*/h5_back/group/find-groups2', {
+            open: function (o) {
+                console.log(o);
+                o.params.push({
+                    key: 'hhh',
+                    value: '12356'
+                });
+//                o.method = 'put';
+            },
+            onreadystatechange: function (res) {
+                console.log(res,this);
+            }
+        });
+        aHook.register('http://palerock.cn/h5_back/group/find-.*', {
+            open: function (args) {
+                console.log(args)
+            }
+        });
+    </script>
+    <script src="ajax.js"></script>
+    <script>
+        Ajax({
+            url: 'http://palerock.cn/h5_back/group/find-groups',
+            method: 'get',
+            params: {goodsTypeId: 11},
+            async: true
+        }).then(function (res) {
+            console.log(res);
+        }, function (res) {
+            console.log(res);
+        });
+    </script>
+</head>
+<body>
+
+</body>
+</html>

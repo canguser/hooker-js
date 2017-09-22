@@ -18,17 +18,9 @@
     <!--<script src="ajaxHook.js"></script>-->
     <script src="../src/everything-hook.js"></script>
     <script>
-        var id = eHook.hookAjax({
-            //拦截回调
-            onreadystatechange: function (old, args) {
-                console.log("onreadystatechange called: %O", this)
-            },
-            onload: function (old, args) {
-                console.log("onload called: %O", this);
-            },
-            //拦截函数
-            open: function (old, arg) {
-                console.log("open called: method:%s,url:%s,async:%s", arg[0], arg[1], arg[2])
+        aHook.register('http://palerock.cn/h5_back/group/find-all-groups-count', {
+            open: function () {
+
             }
         });
     </script>

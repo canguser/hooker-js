@@ -17,11 +17,8 @@
     </style>
     <script src="../src/everything-hook.js"></script>
     <script>
-        var id = eHook.hookReplace(window, 'alert', function (method) {
-            return function () {
-                method.apply(window, arguments);
-                method.apply(window, arguments);
-            }
+        var id = eHook.hookBefore(window.Math, 'max', function (method, args) {
+            args[0] = 100;
         });
     </script>
 </head>
