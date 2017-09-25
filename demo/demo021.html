@@ -18,21 +18,19 @@
     <!--<script src="ajaxHook.js"></script>-->
     <script src="../src/everything-hook.js"></script>
     <script>
-        aHook.register('.*/h5_back/group/find-groups2', {
-            open: function (o) {
-                console.log(o);
-                o.params.push({
-                    key: 'hhh',
-                    value: '12356'
-                });
-//                o.method = 'put';
-            },
-            onreadystatechange: function (res) {
-                console.log(res,this);
-            }
-        });
+        aHook.register('.*/h5_back/group/find-groups',
+                function (o) {
+                    console.log(o, this);
+                    o.params.push({
+                        key: 'hhh',
+                        value: '12356'
+                    });
+                }, function (res) {
+                    console.log(res[0].target.response);
+                }
+        );
         aHook.register('http://palerock.cn/h5_back/group/find-.*', {
-            open: function (args) {
+            hookRequest: function (args) {
                 console.log(args)
             }
         });

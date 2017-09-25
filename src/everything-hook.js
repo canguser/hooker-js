@@ -19,7 +19,7 @@
         };
         this._getAutoId = function () {
             return _autoId++;
-        }
+        };
     };
     EHook.prototype = {
         /**
@@ -30,7 +30,7 @@
          */
         _getHookedId: function (context) {
             var hookedId = context.___hookedId;
-            if (hookedId == null) {
+            if (hookedId === null) {
                 hookedId = context.___hookedId = this._getAutoStrId();
             }
             return hookedId;
@@ -99,7 +99,7 @@
          */
         _hook: function (parent, methodName, context) {
             if (context === undefined) {
-                context = parent
+                context = parent;
             }
             var method = parent[methodName];
             var methodTask = this._getHookedMethodTask(parent, methodName);
@@ -193,25 +193,25 @@
             return this.hook(parent, methodName, {
                 replace: replace,
                 context: context
-            })
+            });
         },
         hookBefore: function (parent, methodName, before, context) {
             return this.hook(parent, methodName, {
                 before: before,
                 context: context
-            })
+            });
         },
         hookCurrent: function (parent, methodName, current, context) {
             return this.hook(parent, methodName, {
                 current: current,
                 context: context
-            })
+            });
         },
         hookAfter: function (parent, methodName, after, context) {
             return this.hook(parent, methodName, {
                 after: after,
                 context: context
-            })
+            });
         },
         /**
          * 劫持全局ajax
@@ -267,7 +267,7 @@
                         }
                     }
                 };
-            })
+            });
         },
         /**
          * 解除劫持
@@ -294,7 +294,7 @@
         this._urlDispatcherList = [];
         this._getAutoId = function () {
             return autoId++;
-        }
+        };
     };
     AHook.prototype = {
         /**
@@ -373,12 +373,12 @@
                 onreadystatechange: function () {
                     if (this.readyState == 4 && this.status == 200 || this.status == 304) {
                         var args = _getHookedArgs(arguments);
-                        _this._invokeAimMethods(this, 'onreadystatechange', args);
+                        _this._invokeAimMethods(this, 'hookResponse', args);
                     }
                 },
                 onload: function () {
                     var args = _getHookedArgs(arguments);
-                    _this._invokeAimMethods(this, 'onload', args);
+                    _this._invokeAimMethods(this, 'hookResponse', args);
                 },
                 // 拦截请求
                 open: function () {
@@ -386,7 +386,7 @@
                     var fullUrl = args[0][1];
                     _this._xhrDispatcher(this, fullUrl);
                     var argsObject = _this._parseOpenArgs(args[0]);
-                    _this._invokeAimMethods(this, 'open', [argsObject]);
+                    _this._invokeAimMethods(this, 'hookRequest', [argsObject]);
                     _this._rebuildOpenArgs(argsObject, args[0]);
                 }
             };
@@ -398,12 +398,26 @@
         /**
          * 注册ajaxUrl拦截
          * @param urlPatcher
-         * @param config
+         * @param configOrRequest
+         * @param response
          * @return {number}
          */
-        register: function (urlPatcher, config) {
-            if (!urlPatcher || !utils.isExistObject(config)) {
+        register: function (urlPatcher, configOrRequest, response) {
+            if (!urlPatcher) {
                 return -1;
+            }
+            if (!utils.isFunction(configOrRequest) && !utils.isFunction(response)) {
+                return -1;
+            }
+            var config = {};
+            if (utils.isFunction(configOrRequest)) {
+                config.hookRequest = configOrRequest;
+            }
+            if (utils.isFunction(response)) {
+                config.hookResponse = response;
+            }
+            if (utils.isExistObject(configOrRequest)) {
+                config = configOrRequest;
             }
             var id = this._getAutoId();
             this._urlDispatcherList.push({
@@ -480,14 +494,14 @@
         this.ergodicArrayObject(this, keys, function (propertyName) {
             // 若内部对象需要遍历
             var _propertyName = propertyName;
-            if (isReadInnerObject && obj[propertyName] != null && typeof obj[propertyName] == 'object') {
+            if (isReadInnerObject && obj[propertyName] !== null && typeof obj[propertyName] == 'object') {
                 this.ergodicObject(this, obj[propertyName], function (value, key) {
                     return cb.call(context, value, _propertyName + '.' + key);
-                }, true)
+                }, true);
             } else {
                 return cb.call(context, obj[propertyName], propertyName);
             }
-        })
+        });
     },
     /**
      * 获取数组对象的一个属性发起动作
@@ -498,14 +512,14 @@
      * @param checkProperty {boolean} 是否排除不拥有该属性的对象[default:true]
      */
     getPropertyDo: function (context, arr, propertyName, cb, checkProperty) {
-        if (checkProperty == null) {
+        if (checkProperty === null) {
             checkProperty = true;
         }
         this.ergodicArrayObject(context, arr, function (ele) {
             if (!checkProperty || ele.hasOwnProperty(propertyName)) {
                 cb.call(context, ele[propertyName], ele);
             }
-        })
+        });
     },
     /**
      * 通过数组中每个对象的指定属性生成一个新数组
@@ -533,7 +547,7 @@
                 return;
             }
             results.push(
-                method.apply(_this, args)
+                method.apply(context, args)
             );
         });
         return results;
@@ -571,7 +585,7 @@
             }
             var paramsStr = [];
             for (var i = 0; i < params.length; i++) {
-                if (params[i].key != null && params[i].value != null) {
+                if (params[i].key !== null && params[i].value !== null) {
                     paramsStr.push(params[i].key + '=' + params[i].value);
                 }
             }
