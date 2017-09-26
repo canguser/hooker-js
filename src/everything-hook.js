@@ -5,7 +5,7 @@
  * View: http://palerock.cn
  * ---------------------------
  */
-'use strict';
+// 'use strict';
 ~function (utils) {
     var _global = this;
     var EHook = function () {
@@ -222,18 +222,18 @@
             var _this = this;
             var hookMethod = function (methodName) {
                 if (utils.isFunction(methods[methodName])) {
-                    // 在执行方法之前hook原方法，除开on开头的方法
+                    // 在执行方法之前hook原方法
                     _this.hookBefore(this.xhr, methodName, methods[methodName]);
                 }
                 // 返回方法调用内部的xhr
                 return this.xhr[methodName].bind(this.xhr);
             };
-            var getFactory = function (attr) {
+            var getProperty = function (attr) {
                 return function () {
                     return this.hasOwnProperty(attr + "_") ? this[attr + "_"] : this.xhr[attr];
                 };
             };
-            var setFactory = function (attr) {
+            var setProperty = function (attr) {
                 return function (f) {
                     var xhr = this.xhr;
                     if (attr.indexOf("on") !== 0) {
@@ -261,11 +261,13 @@
                             this[propertyName] = hookMethod.bind(this)(propertyName);
                         } else {
                             Object.defineProperty(this, propertyName, {
-                                get: getFactory(propertyName),
-                                set: setFactory(propertyName)
+                                get: getProperty(propertyName),
+                                set: setProperty(propertyName)
                             });
                         }
                     }
+                    // 定义外部xhr可以在内部访问
+                    this.xhr.xhr = this;
                 };
             });
         },
@@ -312,7 +314,7 @@
                     methods.push(config[methodName]);
                 }
             });
-            utils.invokeMethods(xhr, methods, args);
+            return utils.invokeMethods(xhr, methods, args);
         },
         /**
          * 根据url获取配置列表
@@ -340,6 +342,27 @@
             xhr.patcherList = this._urlPatcher(url);
         },
         /**
+         * 转换响应事件
+         * @param e
+         * @param xhr
+         * @private
+         */
+        _parseEvent: function (e, xhr) {
+            Object.defineProperties(e, {
+                target: {
+                    get: function () {
+                        return xhr;
+                    }
+                },
+                srcElement: {
+                    get: function () {
+                        return xhr;
+                    }
+                }
+            });
+            return e;
+        },
+        /**
          * 解析open方法的参数
          * @param args
          * @private
@@ -353,36 +376,69 @@
                 async: args[2]
             };
         },
+        /**
+         * 劫持ajax 请求参数
+         * @param argsObject
+         * @param argsArray
+         * @private
+         */
         _rebuildOpenArgs: function (argsObject, argsArray) {
             argsArray[0] = argsObject.method;
             argsArray[1] = utils.urlUtils.margeUrlAndParams(argsObject.url, argsObject.params);
             argsArray[2] = argsObject.async;
         },
         /**
+         * 获取劫持方法的参数 [原方法,原方法参数,原方法返回值]，剔除原方法参数
+         * @param args
+         * @return {*|Array.<T>}
+         * @private
+         */
+        _getHookedArgs: function (args) {
+            // 将参数中'原方法'剔除
+            return Array.prototype.slice.call(args, 0).splice(1);
+        },
+        /**
+         * 响应被触发时调用的方法
+         * @param outerXhr
+         * @param funcArgs
+         * @private
+         */
+        _onResponse: function (outerXhr, funcArgs) {
+            // 因为参数是被劫持的参数为[method(原方法),args(参数)],该方法直接获取参数并转换为数组
+            var args = this._getHookedArgs(funcArgs);
+            args[0][0] = this._parseEvent(args[0][0], outerXhr.xhr); // 强制事件指向外部xhr
+            // 执行所有的名为hookResponse的方法组
+            var results = this._invokeAimMethods(outerXhr, 'hookResponse', args);
+            // 遍历结果数组并获取最后返回的有效的值作为响应值
+            var resultIndex = -1;
+            utils.ergodicArrayObject(outerXhr, results, function (res, i) {
+                if (res != null) {
+                    resultIndex = i;
+                }
+            });
+            if (resultIndex != -1) {
+                outerXhr.xhr.responseText_ = outerXhr.xhr.response_ = results[resultIndex];
+            }
+        },
+        /**
          * 手动开始劫持
          */
         startHook: function () {
             var _this = this;
-            var _getHookedArgs = function (args) {
-                // 获取劫持方法的参数 [原方法,原方法参数,原方法返回值]
-                // 将参数中'原方法'剔除
-                return Array.prototype.slice.call(args, 0).splice(1);
-            };
             var normalMethods = {
+                // 方法中的this指向内部xhr
                 // 拦截响应
                 onreadystatechange: function () {
                     if (this.readyState == 4 && this.status == 200 || this.status == 304) {
-                        var args = _getHookedArgs(arguments);
-                        _this._invokeAimMethods(this, 'hookResponse', args);
+                        _this._onResponse(this, arguments);
                     }
                 },
                 onload: function () {
-                    var args = _getHookedArgs(arguments);
-                    _this._invokeAimMethods(this, 'hookResponse', args);
+                    _this._onResponse(this, arguments);
                 },
                 // 拦截请求
                 open: function () {
-                    var args = _getHookedArgs(arguments);
+                    var args = _this._getHookedArgs(arguments);
                     var fullUrl = args[0][1];
                     _this._xhrDispatcher(this, fullUrl);
                     var argsObject = _this._parseOpenArgs(args[0]);
@@ -390,7 +446,6 @@
                     _this._rebuildOpenArgs(argsObject, args[0]);
                 }
             };
-            // todo reinfecta [aop切入实现劫持所有参数并赋值]
             // 设置总的hookId
             this.___hookedId = _global.eHook.hookAjax(normalMethods);
             this.isHooked = true;

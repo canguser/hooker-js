@@ -18,15 +18,18 @@
     <!--<script src="ajaxHook.js"></script>-->
     <script src="../src/everything-hook.js"></script>
     <script>
-        aHook.register('.*/h5_back/group/find-groups',
+        // 方法中的this指向内部xhr[只可以调用不可以更改]，
+        // this.xhr指向外部xhr可以更改可以重定义[需要用代理属性，即在属性名后面加上'_']
+        aHook.register('.*/palerock.cn/h5_back/group/find-groups',
                 function (o) {
-                    console.log(o, this);
+                    console.log(o, this.xhr);
                     o.params.push({
                         key: 'hhh',
                         value: '12356'
                     });
                 }, function (res) {
-                    console.log(res[0].target.response);
+//                    this.xhr.status_ = 0;
+                    return 'asdas';
                 }
         );
         aHook.register('http://palerock.cn/h5_back/group/find-.*', {
@@ -36,6 +39,7 @@
         });
     </script>
     <script src="ajax.js"></script>
+    <script src="jquery-3.1.1.js"></script>
     <script>
         Ajax({
             url: 'http://palerock.cn/h5_back/group/find-groups',
