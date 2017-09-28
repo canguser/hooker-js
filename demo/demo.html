@@ -17,8 +17,9 @@
     </style>
     <script src="../src/everything-hook.js"></script>
     <script>
-        var id = eHook.hookBefore(window.Math, 'max', function (method, args) {
-            args[0] = 100;
+
+        eHook.hookBefore(HTMLInputElement.prototype, 'onblur', function (method, args) {
+            console.log(this);
         });
     </script>
 </head>

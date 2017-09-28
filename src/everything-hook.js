@@ -151,7 +151,11 @@
             var hookedFailure = -1;
             // 调用方法的上下文
             var context = config.context !== undefined ? config.context : parent;
-            if (!parent[methodName] || !utils.isFunction(parent[methodName])) {
+            if (parent[methodName] == null) {
+                parent[methodName] = function () {
+                }
+            }
+            if (!utils.isFunction(parent[methodName])) {
                 return hookedFailure;
             }
             var methodTask = this._getHookedMethodTask(parent, methodName);
