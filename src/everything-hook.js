@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         New Userscript
-// @namespace    http://tampermonkey.net/
-// @version      0.1
+// @namespace    https://gitee.com/HGJing/everthing-hook/
+// @version      0.2
 // @include      *
-// @description  try to take over the world!
-// @author       You
+// @description  js hooked
+// @author       Cangshi
 // @match        http://*/*
 // @grant        none
 // ==/UserScript==
