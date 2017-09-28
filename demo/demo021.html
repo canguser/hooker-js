@@ -20,23 +20,14 @@
     <script>
         // 方法中的this指向内部xhr[只可以调用不可以更改]，
         // this.xhr指向外部xhr可以更改可以重定义[需要用代理属性，即在属性名后面加上'_']
-        aHook.register('.*/palerock.cn/h5_back/group/find-groups',
-                function (o) {
-                    console.log(o, this.xhr);
-                    o.params.push({
-                        key: 'hhh',
-                        value: '12356'
-                    });
-                }, function (res) {
+        aHook.register('.*/palerock.cn/h5_back/group/find-groups', {
+                    hookResponse: function (e) {
 //                    this.xhr.status_ = 0;
-                    return 'asdas';
+                        console.log(this);
+                        return 'asdas';
+                    }
                 }
         );
-        aHook.register('http://palerock.cn/h5_back/group/find-.*', {
-            hookRequest: function (args) {
-                console.log(args)
-            }
-        });
     </script>
     <script src="ajax.js"></script>
     <script src="jquery-3.1.1.js"></script>
@@ -51,6 +42,48 @@
         }, function (res) {
             console.log(res);
         });
+        setTimeout(function () {
+            Ajax({
+                url: 'http://palerock.cn/h5_back/group/find-groups',
+                method: 'get',
+                params: {goodsTypeId: 11},
+                async: true
+            }).then(function (res) {
+                console.log(res);
+//                console.log(JSON.parse(res));
+            }, function (res) {
+                console.log(res);
+            });
+        }, 2000);
+
+        setTimeout(function () {
+            Ajax({
+                url: 'http://palerock.cn/h5_back/group/find-groups',
+                method: 'get',
+                params: {goodsTypeId: 11},
+                async: true
+            }).then(function (res) {
+                console.log(res);
+//                console.log(JSON.parse(res));
+            }, function (res) {
+                console.log(res);
+            });
+        }, 4000);
+
+        setTimeout(function () {
+            Ajax({
+                url: 'http://palerock.cn/h5_back/group/find-groups',
+                method: 'get',
+                params: {goodsTypeId: 11},
+                async: true
+            }).then(function (res) {
+                console.log(res);
+//                console.log(JSON.parse(res));
+            }, function (res) {
+                console.log(res);
+            });
+        }, 6000);
+
     </script>
 </head>
 <body>

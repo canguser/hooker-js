@@ -10,16 +10,16 @@ var Ajax = function (conf) {
         var params = conf.params;
         for (var name in params) {
             if (params.hasOwnProperty(name))
-            if (params[name]) {
-                if (typeof params[name] != 'string' ){
-                    continue;
+                if (params[name]) {
+                    if (typeof params[name] != 'string') {
+                        continue;
+                    }
+                    if (conf.url.indexOf('?') != -1) {
+                        conf.url = conf.url + '&' + name + '=' + params[name];
+                    } else {
+                        conf.url = conf.url + '?' + name + '=' + params[name];
+                    }
                 }
-                if (conf.url.indexOf('?') != -1) {
-                    conf.url = conf.url + '&' + name + '=' + params[name];
-                }else {
-                    conf.url = conf.url + '?' + name + '=' + params[name];
-                }
-            }
         }
     }
     Ajax.sentRequest(conf);
@@ -36,6 +36,7 @@ Ajax.OnFailure = function (result) {
 Ajax.OnSuccess = function (result) {
 };
 Ajax.onReady = function (e) {
+    // console.log(e.srcElement.patcherList,e);
     var element = e.srcElement;
     var result = {};
     if (element.status >= 200 && element.status < 400) {

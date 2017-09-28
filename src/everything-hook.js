@@ -30,7 +30,7 @@
          */
         _getHookedId: function (context) {
             var hookedId = context.___hookedId;
-            if (hookedId === null) {
+            if (hookedId == null) {
                 hookedId = context.___hookedId = this._getAutoStrId();
             }
             return hookedId;
@@ -236,6 +236,7 @@
             var setProperty = function (attr) {
                 return function (f) {
                     var xhr = this.xhr;
+                    var that = this;
                     if (attr.indexOf("on") !== 0) {
                         this[attr + "_"] = f;
                         return;
@@ -246,6 +247,10 @@
                         };
                         // on方法在set时劫持
                         _this.hookBefore(xhr, attr, methods[attr]);
+                        // console.log(1,attr);
+                        // xhr[attr] = function () {
+                        //     methods[attr](that) || f.apply(xhr, arguments);
+                        // }
                     } else {
                         xhr[attr] = f;
                     }
@@ -348,18 +353,22 @@
          * @private
          */
         _parseEvent: function (e, xhr) {
-            Object.defineProperties(e, {
-                target: {
-                    get: function () {
-                        return xhr;
+            try {
+                Object.defineProperties(e, {
+                    target: {
+                        get: function () {
+                            return xhr;
+                        }
+                    },
+                    srcElement: {
+                        get: function () {
+                            return xhr;
+                        }
                     }
-                },
-                srcElement: {
-                    get: function () {
-                        return xhr;
-                    }
-                }
-            });
+                });
+            } catch (error) {
+                console.warn('重定义返回事件失败，劫持响应可能失败');
+            }
             return e;
         },
         /**
@@ -444,6 +453,10 @@
                     var argsObject = _this._parseOpenArgs(args[0]);
                     _this._invokeAimMethods(this, 'hookRequest', [argsObject]);
                     _this._rebuildOpenArgs(argsObject, args[0]);
+                },
+                send: function () {
+                    var args = _this._getHookedArgs(arguments);
+                    _this._invokeAimMethods(this, 'hookSend', args);
                 }
             };
             // 设置总的hookId
@@ -461,7 +474,7 @@
             if (!urlPatcher) {
                 return -1;
             }
-            if (!utils.isFunction(configOrRequest) && !utils.isFunction(response)) {
+            if (!utils.isExistObject(configOrRequest) && !utils.isFunction(response)) {
                 return -1;
             }
             var config = {};

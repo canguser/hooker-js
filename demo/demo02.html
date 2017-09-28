@@ -42,7 +42,18 @@
             error: function (res) {
                 console.log(res);
             }
-        })
+        });
+        setTimeout(function () {
+            $.ajax({
+                url: 'http://palerock.cn/h5_back/group/find-all-groups-count?id=100&ll=9',
+                success: function (res) {
+                    console.log(res);
+                },
+                error: function (res) {
+                    console.log(res);
+                }
+            });
+        },2000);
     </script>
 </head>
 <body>
