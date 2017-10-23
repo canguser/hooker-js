@@ -3,7 +3,7 @@ Everything-Hook
 
 简介：用于劫持方法，进行AOP切点操作
 
-Hello word:
+Hello world:
 
 ```
 eHook.hookBefore(window,'alert',function(method,args){
