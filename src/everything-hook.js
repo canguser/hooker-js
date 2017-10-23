@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         New Userscript
 // @namespace    https://gitee.com/HGJing/everthing-hook/
-// @version      0.2.1
+// @version      0.2.3
 // @include      *
 // @description  js hooked
 // @author       Cangshi
@@ -307,6 +307,12 @@
             if (isDeeply) {
                 delete this._getHookedMethodMap(context)[methodName];
             }
+        },
+        protect: function (parent, methodName) {
+            Object.defineProperty(parent, methodName, {
+                configurable: false,
+                writable: false
+            });
         }
     };
     var eHook = new EHook();
