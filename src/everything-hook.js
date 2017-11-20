@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         New Userscript
 // @namespace    https://gitee.com/HGJing/everthing-hook/
-// @version      0.2.3
+// @version      0.2.4
 // @include      *
 // @description  js hooked
 // @author       Cangshi
