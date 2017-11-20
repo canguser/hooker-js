@@ -308,11 +308,28 @@
                 delete this._getHookedMethodMap(context)[methodName];
             }
         },
+        /**
+         * 保护一个对象使之不会被篡改
+         * @param parent
+         * @param methodName
+         */
         protect: function (parent, methodName) {
             Object.defineProperty(parent, methodName, {
                 configurable: false,
                 writable: false
             });
+        },
+        /**
+         * 装载插件
+         * @param option
+         */
+        plugins: function (option) {
+            if (utils.isFunction(option.mount)) {
+                var result = option.mount.call(this, utils);
+                if (typeof option.name === 'string') {
+                    _global[option.name] = result;
+                }
+            }
         }
     };
     var eHook = new EHook();
