@@ -18,9 +18,16 @@
     <script src="../src/everything-hook.js"></script>
     <script>
 
-        eHook.hookBefore(HTMLInputElement.prototype, 'onblur', function (method, args) {
-            console.log(this);
+        eHook.hookBefore(window, 'setInterval', function (method, args) {
+            args[1] = 400;
         });
+
+        console.log('do');
+
+        setInterval(function () {
+            console.log('hh');
+        }, 5000)
+
     </script>
 </head>
 <body>
