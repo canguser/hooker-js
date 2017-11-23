@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
-// @version      0.2.7
+// @version      0.2.7001
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -564,6 +564,9 @@
      * @return {boolean}
      */
     isFunction: function (func) {
+        if (!func) {
+            return false;
+        }
         return typeof func === 'function';
     },
     /**
