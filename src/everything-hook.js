@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
-// @version      0.2.6
+// @version      0.2.7
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -134,7 +134,7 @@
             if (methodTask.task.before.length > 0) {
                 methodStr = methodStr + 'invokeMethods(context, methodTask.task.before,[methodTask.original, arguments]);\n';
             }
-            if (utils.isFunction(methodTask.task.current)) {
+            if (utils.isFunction(methodTask.task.current.method)) {
                 methodStr = methodStr + 'result = methodTask.task.current.method.call(context, parent, methodTask.original, arguments);\n';
             } else {
                 methodStr = methodStr + 'result = methodTask.original.apply(context, arguments);\n';
