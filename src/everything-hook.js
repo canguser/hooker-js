@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
-// @version      0.2.5
+// @version      0.2.6
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -88,18 +88,24 @@
          * @param context
          * @param methods
          * @param args
+         * @return result 最后一次执行方法的有效返回值
          * @private
          */
         _invokeMethods: function (context, methods, args) {
             if (!utils.isArray(methods)) {
                 return;
             }
+            var result = null;
             utils.ergodicArrayObject(context, methods, function (_method) {
                 if (!utils.isFunction(_method.method)) {
                     return;
                 }
-                _method.method.apply(this, args);
+                var r = _method.method.apply(this, args);
+                if (r != null) {
+                    result = r;
+                }
             });
+            return result;
         },
         /**
          * 生成和替换劫持方法
@@ -135,7 +141,7 @@
             }
             if (methodTask.task.after.length > 0) {
                 methodStr = methodStr + 'var args = [];args.push(methodTask.original);args.push(arguments);args.push(result);\n';
-                methodStr = methodStr + 'invokeMethods(context, methodTask.task.after, args);\n';
+                methodStr = methodStr + 'var r = invokeMethods(context, methodTask.task.after, args);result = (r!=null?r:result);\n';
             }
             methodStr = methodStr + 'return result;\n})';
             // 绑定劫持函数
