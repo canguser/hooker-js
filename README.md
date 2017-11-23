@@ -160,10 +160,10 @@ return:
 
 例：
 ```
-eHook.hookAfter(Math, 'max', function (m, args, result) {
-     return result + 1;
+eHook.hookReplace(Math,'max',function (m) {
+     return Math.min;
 });
-console.log(Math.max(1,8)); // 9
+console.log(Math.max(1, 8)); // 1
 ```
 
 
