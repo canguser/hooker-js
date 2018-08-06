@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
-// @version      0.2.7002
+// @version      0.2.7003
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -129,23 +129,115 @@
             }
             var invokeMethods = this._invokeMethods;
             // 组装劫持函数
-            var methodStr = '(function(){\n';
-            methodStr = methodStr + 'var result = undefined;\n';
-            if (methodTask.task.before.length > 0) {
-                methodStr = methodStr + 'invokeMethods(context, methodTask.task.before,[methodTask.original, arguments]);\n';
-            }
-            if (utils.isExistObject(methodTask.task.current) && utils.isFunction(methodTask.task.current.method)) {
-                methodStr = methodStr + 'result = methodTask.task.current.method.call(context, parent, methodTask.original, arguments);\n';
-            } else {
-                methodStr = methodStr + 'result = methodTask.original.apply(context, arguments);\n';
-            }
-            if (methodTask.task.after.length > 0) {
-                methodStr = methodStr + 'var args = [];args.push(methodTask.original);args.push(arguments);args.push(result);\n';
-                methodStr = methodStr + 'var r = invokeMethods(context, methodTask.task.after, args);result = (r!=null?r:result);\n';
-            }
-            methodStr = methodStr + 'return result;\n})';
+            var resultMethod = (function () {
+                var result = undefined;
+                if (methodTask.task.before.length > 0) {
+                    if (utils.isExistObject(methodTask.task.current) && utils.isFunction(methodTask.task.current.method)) {
+                        if (methodTask.task.after.length > 0) {
+                            return function () {
+                                var result = undefined;
+                                invokeMethods(context, methodTask.task.before, [methodTask.original, arguments]);
+                                result = methodTask.task.current.method.call(context, parent, methodTask.original, arguments);
+                                var args = [];
+                                args.push(methodTask.original);
+                                args.push(arguments);
+                                args.push(result);
+                                var r = invokeMethods(context, methodTask.task.after, args);
+                                result = (r != null ? r : result);
+                                return result;
+                            }
+                        } else {
+                            return function () {
+                                var result = undefined;
+                                invokeMethods(context, methodTask.task.before, [methodTask.original, arguments]);
+                                result = methodTask.original.apply(context, arguments);
+                                return result;
+                            }
+                        }
+                    } else {
+                        if (methodTask.task.after.length > 0) {
+                            return function () {
+                                var result = undefined;
+                                invokeMethods(context, methodTask.task.before, [methodTask.original, arguments]);
+                                result = methodTask.original.apply(context, arguments);
+                                var args = [];
+                                args.push(methodTask.original);
+                                args.push(arguments);
+                                args.push(result);
+                                var r = invokeMethods(context, methodTask.task.after, args);
+                                result = (r != null ? r : result);
+                                return result;
+                            }
+                        } else {
+                            return function () {
+                                var result = undefined;
+                                invokeMethods(context, methodTask.task.before, [methodTask.original, arguments]);
+                                result = methodTask.original.apply(context, arguments);
+                                return result;
+                            }
+                        }
+                    }
+                } else {
+                    if (utils.isExistObject(methodTask.task.current) && utils.isFunction(methodTask.task.current.method)) {
+                        if (methodTask.task.after.length > 0) {
+                            return function () {
+                                var result = undefined;
+                                result = methodTask.task.current.method.call(context, parent, methodTask.original, arguments);
+                                var args = [];
+                                args.push(methodTask.original);
+                                args.push(arguments);
+                                args.push(result);
+                                var r = invokeMethods(context, methodTask.task.after, args);
+                                result = (r != null ? r : result);
+                                return result;
+                            }
+                        } else {
+                            return function () {
+                                var result = undefined;
+                                result = methodTask.original.apply(context, arguments);
+                                return result;
+                            }
+                        }
+                    } else {
+                        if (methodTask.task.after.length > 0) {
+                            return function () {
+                                var result = undefined;
+                                result = methodTask.original.apply(context, arguments);
+                                var args = [];
+                                args.push(methodTask.original);
+                                args.push(arguments);
+                                args.push(result);
+                                var r = invokeMethods(context, methodTask.task.after, args);
+                                result = (r != null ? r : result);
+                                return result;
+                            }
+                        } else {
+                            return function () {
+                                var result = undefined;
+                                result = methodTask.original.apply(context, arguments);
+                                return result;
+                            }
+                        }
+                    }
+                }
+            }());
+            // var methodStr = '(function(){\n';
+            // methodStr = methodStr + 'var result = undefined;\n';
+            // if (methodTask.task.before.length > 0) {
+            //     methodStr = methodStr + 'invokeMethods(context, methodTask.task.before,[methodTask.original, arguments]);\n';
+            // }
+            // if (utils.isExistObject(methodTask.task.current) && utils.isFunction(methodTask.task.current.method)) {
+            //     methodStr = methodStr + 'result = methodTask.task.current.method.call(context, parent, methodTask.original, arguments);\n';
+            // } else {
+            //     methodStr = methodStr + 'result = methodTask.original.apply(context, arguments);\n';
+            // }
+            // if (methodTask.task.after.length > 0) {
+            //     methodStr = methodStr + 'var args = [];args.push(methodTask.original);args.push(arguments);args.push(result);\n';
+            //     methodStr = methodStr + 'var r = invokeMethods(context, methodTask.task.after, args);result = (r!=null?r:result);\n';
+            // }
+            // methodStr = methodStr + 'return result;\n})';
             // 绑定劫持函数
-            parent[methodName] = eval(methodStr);
+            parent[methodName] = resultMethod;
         },
         /**
          * 劫持一个方法
