@@ -142,6 +142,8 @@
                                 args.push(methodTask.original);
                                 args.push(arguments);
                                 args.push(result);
+                                var r = invokeMethods(context, methodTask.task.after, args);
+                                result = (r != null ? r : result);
                                 return result;
                             }
                         } else {
@@ -162,6 +164,8 @@
                                 args.push(methodTask.original);
                                 args.push(arguments);
                                 args.push(result);
+                                var r = invokeMethods(context, methodTask.task.after, args);
+                                result = (r != null ? r : result);
                                 return result;
                             }
                         } else {
@@ -183,6 +187,8 @@
                                 args.push(methodTask.original);
                                 args.push(arguments);
                                 args.push(result);
+                                var r = invokeMethods(context, methodTask.task.after, args);
+                                result = (r != null ? r : result);
                                 return result;
                             }
                         } else {
@@ -201,6 +207,8 @@
                                 args.push(methodTask.original);
                                 args.push(arguments);
                                 args.push(result);
+                                var r = invokeMethods(context, methodTask.task.after, args);
+                                result = (r != null ? r : result);
                                 return result;
                             }
                         } else {
