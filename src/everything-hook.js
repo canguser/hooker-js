@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
-// @version      0.2.7002
+// @version      0.2.7003
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
