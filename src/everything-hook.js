@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
-// @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
+// @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
 // @version      0.2.7003
 // @include      *
 // @description  it can hook everything
