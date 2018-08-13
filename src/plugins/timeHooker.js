@@ -94,7 +94,7 @@
                             if (!timer) {
                                 return;
                             }
-                            var t = prompt("输入欲改变计时器变化倍率（当前：" + __this._percentage + "）");
+                            var t = prompt("输入欲改变计时器变化倍率（当前：" + 1 / __this._percentage + "）");
                             if (t == undefined) {
                                 return;
                             }
