@@ -9,10 +9,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>Title</title>
     <style>
-        * {
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
+        /** {*/
+            /*-webkit-box-sizing: border-box;*/
+            /*-moz-box-sizing: border-box;*/
+            /*box-sizing: border-box;*/
+        /*}*/
+        ._th-container ._th-item{
+            margin-bottom: 3px;
+            position: relative;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            opacity: .3;
+            background-color: aquamarine;
+            border-radius: 100%;
+            text-align: center;
+            line-height: 30px;
+            transition: all .5s;
+            right: 30px;
+        }
+        ._th-container ._th-item._item-x4{
+            margin-left: 18px;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+        }
+        ._th-container ._th-item._item-x2{
+            margin-left: 17px;
+            width: 38px;
+            height: 38px;
+            line-height: 38px;
+        }
+        ._th-container ._th-item._item-x-2{
+            width: 36px;
+            height: 36px;
+            margin-left: 16px;
+            line-height: 36px;
+        }
+        ._th-container ._th-item._item-x-4{
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            margin-left: 14px;
+        }
+        ._th-container ._th-item._item-reset{
+            width: 30px;
+            line-height: 30px;
+            height: 30px;
+            margin-left: 10px;
+        }
+        ._th-click-hover {
+            position: relative;
+            transition: all .5s;
+            height: 50px;
+            width: 50px;cursor: pointer;opacity: .3;
+            border-radius: 100%;background-color: aquamarine;
+            z-index: 99999;
+            text-align: center;
+            line-height: 50px;
+            right: 0;
+        }
+        ._th-container:hover{
+            left: -10px;
+        }
+        ._th-container{
+            font-size: 12px;
+            transition: all .5s;
+            left: -40px;top: 20%;
+            position: fixed;
             box-sizing: border-box;
+        }
+        ._th-container ._th-item:hover{
+            opacity: .8;
+            background-color: #5fb492;
+            color: aliceblue;
+        }
+        ._th-container:hover ._th-click-hover{
+            opacity: .8;
+        }
+        ._th-container:hover ._th-item{
+            opacity: .6;
+            right: 0;
+        }
+        ._th-container ._th-click-hover:hover {
+            opacity: .8;
+            background-color: #5fb492;
+            color: aliceblue;
         }
     </style>
     <script src="../src/everything-hook.js"></script>
@@ -31,6 +113,15 @@
     </script>
 </head>
 <body>
-
+<div class="_th-container">
+    <div class="_th-click-hover" onclick="onChange()">
+        1
+    </div>
+    <div class="_th-item _item-x4">&gt;</div>
+    <div class="_th-item _item-x-2">&lt;</div>
+    <div class="_th-item _item-x2">&gt;&gt;</div>
+    <div class="_th-item _item-x-4">&lt;&lt;</div>
+    <div class="_th-item _item-reset">O</div>
+</div>
 </body>
 </html>
