@@ -2,7 +2,7 @@
 // @name         TimerHooker
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      0.1.5001
+// @version      0.2.0001
 // @description  it can hook the timer speed to change.
 // @include      *
 // @require      https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
