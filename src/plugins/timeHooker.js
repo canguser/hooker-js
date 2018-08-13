@@ -2,11 +2,10 @@
 // @name         TimerHooker
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      0.2.0001
+// @version      0.2.0002
 // @description  it can hook the timer speed to change.
 // @include      *
 // @require      https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @require      https://code.jquery.com/jquery-3.3.1.min.js
 // @author       Cangshi
 // @match        http://*/*
 // @run-at       document-start
@@ -19,7 +18,7 @@
  * View: http://palerock.cn
  * ---------------------------
  */
-
+//               https://code.jquery.com/jquery-3.3.1.min.js
 ~function (global) {
 
     var generate = function ($) {
