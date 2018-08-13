@@ -1,11 +1,14 @@
 // ==UserScript==
 // @name         TimerHooker
 // @namespace    https://gitee.com/HGJing/everthing-hook/
-// @version      0.1.3
+// @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
+// @version      0.1.4
 // @description  it can hook the timer speed to change.
 // @include      *
+// @require      https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
 // @author       Cangshi
 // @match        http://*/*
+// @run-at       document-start
 // @grant        none
 // ==/UserScript==
 /**
@@ -102,12 +105,12 @@
                             timer.change(parseFloat(t));
                         };
                         // 在页面左边添加一个半圆便于修改
-                        var html = ` <div style="position: fixed;
-                                            left: -25px;top: 20%;height: 50px;
-                                            width: 50px;cursor: pointer;opacity: .3;
-                                            border-radius: 100%;background-color: aquamarine;
-                                            z-index: 99999;" onclick="onChange()">
-                                      </div>`;
+                        var html = '<div style="position: fixed;\
+                                            left: -25px;top: 20%;height: 50px;\
+                                            width: 50px;cursor: pointer;opacity: .3;\
+                                            border-radius: 100%;background-color: aquamarine;\
+                                            z-index: 99999;" onclick="onChange()">\
+                                      </div>';
                         var node = document.createElement('div');
                         node.innerHTML = html;
                         window.addEventListener('load', function () {
