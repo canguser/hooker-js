@@ -2,7 +2,7 @@
 // @name         TimerHooker
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      0.1.4
+// @version      0.1.5
 // @description  it can hook the timer speed to change.
 // @include      *
 // @require      https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
@@ -18,6 +18,7 @@
  * View: http://palerock.cn
  * ---------------------------
  */
+//               https://code.jquery.com/jquery-3.3.1.min.js
 ~function () {
     if (eHook) {
         eHook.plugins({
@@ -93,7 +94,7 @@
                             if (!timer) {
                                 return;
                             }
-                            var t = prompt("输入欲改变计时器间隔变化率（当前：" + __this._percentage + "）");
+                            var t = prompt("输入欲改变计时器变化倍率（当前：" + __this._percentage + "）");
                             if (t == undefined) {
                                 return;
                             }
@@ -102,7 +103,12 @@
                                 onChange();
                                 return;
                             }
-                            timer.change(parseFloat(t));
+                            if (parseFloat(t) <= 0) {
+                                alert("倍率不能小于等于0");
+                                onChange();
+                                return;
+                            }
+                            timer.change(1 / parseFloat(t));
                         };
                         // 在页面左边添加一个半圆便于修改
                         var html = '<div style="position: fixed;\
