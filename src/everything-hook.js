@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.3.7006
+// @version      0.3.7007
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -763,7 +763,8 @@
     },
     urlUtils: {
         urlMatching: function (url, matchUrl) {
-            var pattern = eval('/' + matchUrl.replace(/\//g, '\\/') + '/');
+            var patternString = '/' + matchUrl.replace(/\//g, '\\/') + '/';
+            var pattern = new RegExp(patternString);
             return pattern.test(url);
         },
         getUrlWithoutParam: function (url) {

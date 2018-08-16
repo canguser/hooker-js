@@ -28,11 +28,11 @@
                     filterPatten: ''
                 };
                 var ajaxChange = {
+                    filter: function (patten) {
+                        ajaxObject.filterPatten = patten;
+                        return this;
+                    },
                     ajax: {
-                        filter: function (patten) {
-                            ajaxObject.filterPatten = patten;
-                            return this;
-                        },
                         req: function () {
 
                         },
@@ -43,34 +43,47 @@
 
                         }
                     },
-                    cb: function () {
+                    cb: {
+                        req: function () {
 
-                    },
-                    hookedCb: function () {
-                        localStorage.setItem(cb_names_key, JSON.stringify(Array.prototype.slice.call(arguments, 0)));
-                    }
-                };
-                var cbNames = cb_names_value && JSON.parse(cb_names_value);
-                if (cbNames) {
-                    cbNames.map(function (name) {
-                        try {
-                            Object.defineProperty(window, name, {
-                                get: function () {
-                                    return cbObject[name];
-                                },
-                                set: function (f) {
-                                    global.eHook.unHook(cbObject, name, true);
-                                    cbObject[name] = f;
-                                    global.eHook.hookBefore(cbObject, name, function (m, args) {
-                                        ajaxChange.cb.call(this, name, args);
-                                    });
-                                }
-                            });
-                        } catch (e) {
-                            console.log('Callback - ' + name + ', hooked failed.');
+                        },
+                        resp: function () {
+
                         }
-                    })
-                }
+                    },
+                };
+                // hook jsonp
+                global.eHook.hookBefore(Node.prototype, 'appendChild', function (m, args) {
+                    if (args[0].localName === 'script') {
+                        var src = decodeURI(args[0].src);
+                        var isPass = true;
+                        if (ajaxObject.filterPatten) {
+                            isPass = util.urlUtils.urlMatching(src, ajaxObject.filterPatten);
+                        }
+                        if (!isPass) {
+                            return;
+                        }
+                        args[0].requestParams = util.urlUtils.getParamFromUrl(src);
+                        args[0].requestUrl = util.urlUtils.getUrlWithoutParam(src);
+                        ajaxChange.cb.req.call(this, args[0], util);
+                    }
+                }, false);
+                global.eHook.hookBefore(Node.prototype, 'insertBefore', function (m, args) {
+                    if (args[0].localName === 'script') {
+                        var src = decodeURI(args[0].src);
+                        var isPass = true;
+                        if (!isPass) {
+                            return;
+                        }
+                        if (ajaxObject.filterPatten) {
+                            isPass = util.urlUtils.urlMatching(src, ajaxObject.filterPatten);
+                        }
+                        args[0].requestParams = util.urlUtils.getParamFromUrl(src);
+                        args[0].requestUrl = util.urlUtils.getUrlWithoutParam(src);
+                        ajaxChange.cb.req.call(this, args[0], util);
+                    }
+                }, false);
+
                 global.aHook.register('.*', {
                         hookResponse: function () {
                             var isPass = true;
