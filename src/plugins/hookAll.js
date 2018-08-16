@@ -21,9 +21,66 @@
              * @param util
              */
             mount: function (util) {
-                var cb_names_key = '___hook_cb_names';
-                var cb_names_value = localStorage.getItem(cb_names_key);
-                var cbObject = {};
+                var cbObject = {
+                    resp: {},
+                    parseScript: function (m, args) {
+                        if (args[0].localName === 'script') {
+                            var src = decodeURI(args[0].src);
+                            var isPass = true;
+                            if (ajaxObject.filterPatten) {
+                                isPass = util.urlUtils.urlMatching(src, ajaxObject.filterPatten);
+                            }
+                            if (!isPass) {
+                                return;
+                            }
+                            args[0].requestParams = util.urlUtils.getParamFromUrl(src);
+                            args[0].requestUrl = util.urlUtils.getUrlWithoutParam(src);
+                            ajaxChange.cb.req.call(this, args[0], util);
+                            src = util.urlUtils.margeUrlAndParams(args[0].requestUrl, args[0].requestParams);
+                            args[0].src = encodeURI(src);
+                            var cbName = 'callback';
+                            args[0].requestParams.map(function (kv) {
+                                if (kv.key.toLowerCase() === 'cb' || kv.key.toLowerCase() === 'callback') {
+                                    cbName = kv.value;
+                                }
+                            });
+                            if (window[cbName]) {
+                                if (global.eHook._getHookedMap()[global.eHook._getHookedId(window)][cbName]) {
+                                    global.eHook.unHook(window, cbName, true);
+                                }
+                                global.eHook.hookBefore(window, cbName, function (m, args) {
+                                    ajaxChange.cb.resp.call(this, args, util);
+                                });
+                                console.log('Hooking call back: ' + cbName + ' success.')
+                            } else {
+                                var isDelete = false;
+                                try {
+                                    isDelete = delete window[cbName]
+                                } catch (e) {
+                                    isDelete = false;
+                                }
+                                if (isDelete) {
+                                    Object.defineProperty(window, cbName, {
+                                        set: function (v) {
+                                            global.eHook.unHook(cbObject.resp, cbName, true);
+                                            cbObject.resp[cbName] = v;
+                                            global.eHook.hookBefore(cbObject.resp,
+                                                cbName, function (m, args) {
+                                                    ajaxChange.cb.resp.call(this, args, util);
+                                                });
+                                        },
+                                        get: function () {
+                                            return cbObject.resp[cbName];
+                                        }
+                                    });
+                                    console.log('Hooking(proxy) call back: ' + cbName + ' success.')
+                                } else {
+                                    console.log('Hooking call back: ' + cbName + ' failed.')
+                                }
+                            }
+                        }
+                    }
+                };
                 var ajaxObject = {
                     filterPatten: ''
                 };
@@ -54,38 +111,10 @@
                 };
                 // hook jsonp
                 global.eHook.hookBefore(Node.prototype, 'appendChild', function (m, args) {
-                    if (args[0].localName === 'script') {
-                        var src = decodeURI(args[0].src);
-                        var isPass = true;
-                        if (ajaxObject.filterPatten) {
-                            isPass = util.urlUtils.urlMatching(src, ajaxObject.filterPatten);
-                        }
-                        if (!isPass) {
-                            return;
-                        }
-                        args[0].requestParams = util.urlUtils.getParamFromUrl(src);
-                        args[0].requestUrl = util.urlUtils.getUrlWithoutParam(src);
-                        ajaxChange.cb.req.call(this, args[0], util);
-                        src = util.urlUtils.margeUrlAndParams(args[0].requestUrl, args[0].requestParams);
-                        args[0].src = encodeURI(src);
-                    }
+                    cbObject.parseScript(m, args);
                 }, false);
                 global.eHook.hookBefore(Node.prototype, 'insertBefore', function (m, args) {
-                    if (args[0].localName === 'script') {
-                        var src = decodeURI(args[0].src);
-                        var isPass = true;
-                        if (ajaxObject.filterPatten) {
-                            isPass = util.urlUtils.urlMatching(src, ajaxObject.filterPatten);
-                        }
-                        if (!isPass) {
-                            return;
-                        }
-                        args[0].requestParams = util.urlUtils.getParamFromUrl(src);
-                        args[0].requestUrl = util.urlUtils.getUrlWithoutParam(src);
-                        ajaxChange.cb.req.call(this, args[0], util);
-                        src = util.urlUtils.margeUrlAndParams(args[0].requestUrl, args[0].requestParams);
-                        args[0].src = encodeURI(src);
-                    }
+                    cbObject.parseScript(m, args);
                 }, false);
 
                 global.aHook.register('.*', {
