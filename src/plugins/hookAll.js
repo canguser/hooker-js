@@ -66,21 +66,25 @@
                         args[0].requestParams = util.urlUtils.getParamFromUrl(src);
                         args[0].requestUrl = util.urlUtils.getUrlWithoutParam(src);
                         ajaxChange.cb.req.call(this, args[0], util);
+                        src = util.urlUtils.margeUrlAndParams(args[0].requestUrl, args[0].requestParams);
+                        args[0].src = encodeURI(src);
                     }
                 }, false);
                 global.eHook.hookBefore(Node.prototype, 'insertBefore', function (m, args) {
                     if (args[0].localName === 'script') {
                         var src = decodeURI(args[0].src);
                         var isPass = true;
-                        if (!isPass) {
-                            return;
-                        }
                         if (ajaxObject.filterPatten) {
                             isPass = util.urlUtils.urlMatching(src, ajaxObject.filterPatten);
+                        }
+                        if (!isPass) {
+                            return;
                         }
                         args[0].requestParams = util.urlUtils.getParamFromUrl(src);
                         args[0].requestUrl = util.urlUtils.getUrlWithoutParam(src);
                         ajaxChange.cb.req.call(this, args[0], util);
+                        src = util.urlUtils.margeUrlAndParams(args[0].requestUrl, args[0].requestParams);
+                        args[0].src = encodeURI(src);
                     }
                 }, false);
 
