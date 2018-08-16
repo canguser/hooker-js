@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.2.7003
+// @version      0.3.7006
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -138,21 +138,21 @@
                         if (methodTask.task.after.length > 0) {
                             return function () {
                                 var result = undefined;
-                                invokeMethods(context, methodTask.task.before, [methodTask.original, arguments]);
-                                result = methodTask.task.current.method.call(context, parent, methodTask.original, arguments);
+                                invokeMethods(context||this, methodTask.task.before, [methodTask.original, arguments]);
+                                result = methodTask.task.current.method.call(context||this, parent, methodTask.original, arguments);
                                 var args = [];
                                 args.push(methodTask.original);
                                 args.push(arguments);
                                 args.push(result);
-                                var r = invokeMethods(context, methodTask.task.after, args);
+                                var r = invokeMethods(context||this, methodTask.task.after, args);
                                 result = (r != null ? r : result);
                                 return result;
                             }
                         } else {
                             return function () {
                                 var result = undefined;
-                                invokeMethods(context, methodTask.task.before, [methodTask.original, arguments]);
-                                result = methodTask.original.apply(context, arguments);
+                                invokeMethods(context||this, methodTask.task.before, [methodTask.original, arguments]);
+                                result = methodTask.original.apply(context||this, arguments);
                                 return result;
                             }
                         }
@@ -160,21 +160,21 @@
                         if (methodTask.task.after.length > 0) {
                             return function () {
                                 var result = undefined;
-                                invokeMethods(context, methodTask.task.before, [methodTask.original, arguments]);
-                                result = methodTask.original.apply(context, arguments);
+                                invokeMethods(context||this, methodTask.task.before, [methodTask.original, arguments]);
+                                result = methodTask.original.apply(context||this, arguments);
                                 var args = [];
                                 args.push(methodTask.original);
                                 args.push(arguments);
                                 args.push(result);
-                                var r = invokeMethods(context, methodTask.task.after, args);
+                                var r = invokeMethods(context||this, methodTask.task.after, args);
                                 result = (r != null ? r : result);
                                 return result;
                             }
                         } else {
                             return function () {
                                 var result = undefined;
-                                invokeMethods(context, methodTask.task.before, [methodTask.original, arguments]);
-                                result = methodTask.original.apply(context, arguments);
+                                invokeMethods(context||this, methodTask.task.before, [methodTask.original, arguments]);
+                                result = methodTask.original.apply(context||this, arguments);
                                 return result;
                             }
                         }
@@ -184,19 +184,19 @@
                         if (methodTask.task.after.length > 0) {
                             return function () {
                                 var result = undefined;
-                                result = methodTask.task.current.method.call(context, parent, methodTask.original, arguments);
+                                result = methodTask.task.current.method.call(context||this, parent, methodTask.original, arguments);
                                 var args = [];
                                 args.push(methodTask.original);
                                 args.push(arguments);
                                 args.push(result);
-                                var r = invokeMethods(context, methodTask.task.after, args);
+                                var r = invokeMethods(context||this, methodTask.task.after, args);
                                 result = (r != null ? r : result);
                                 return result;
                             }
                         } else {
                             return function () {
                                 var result = undefined;
-                                result = methodTask.original.apply(context, arguments);
+                                result = methodTask.original.apply(context||this, arguments);
                                 return result;
                             }
                         }
@@ -204,19 +204,19 @@
                         if (methodTask.task.after.length > 0) {
                             return function () {
                                 var result = undefined;
-                                result = methodTask.original.apply(context, arguments);
+                                result = methodTask.original.apply(context||this, arguments);
                                 var args = [];
                                 args.push(methodTask.original);
                                 args.push(arguments);
                                 args.push(result);
-                                var r = invokeMethods(context, methodTask.task.after, args);
+                                var r = invokeMethods(context||this, methodTask.task.after, args);
                                 result = (r != null ? r : result);
                                 return result;
                             }
                         } else {
                             return function () {
                                 var result = undefined;
-                                result = methodTask.original.apply(context, arguments);
+                                result = methodTask.original.apply(context||this, arguments);
                                 return result;
                             }
                         }
