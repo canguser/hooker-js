@@ -15,30 +15,39 @@
     'use strict';
     if (global.eHook) {
         global.eHook.plugins({
-            name: 'ajaxChange',
+            name: 'NetHook',
             /**
              * 插件装载
              * @param util
              */
             mount: function (util) {
                 var cb_names_key = '___hook_cb_names';
-                var cb_names_value = sessionStorage.getItem(cb_names_key);
+                var cb_names_value = localStorage.getItem(cb_names_key);
                 var cbObject = {};
+                var ajaxObject = {
+                    filterPatten: ''
+                };
                 var ajaxChange = {
-                    req: function () {
+                    ajax: {
+                        filter: function (patten) {
+                            ajaxObject.filterPatten = patten;
+                            return this;
+                        },
+                        req: function () {
 
-                    },
-                    resp: function () {
+                        },
+                        resp: function () {
 
-                    },
-                    send: function () {
+                        },
+                        send: function () {
 
+                        }
                     },
                     cb: function () {
 
                     },
                     hookedCb: function () {
-                        sessionStorage.setItem(cb_names_key, JSON.stringify(Array.prototype.slice.call(arguments, 0)));
+                        localStorage.setItem(cb_names_key, JSON.stringify(Array.prototype.slice.call(arguments, 0)));
                     }
                 };
                 var cbNames = cb_names_value && JSON.parse(cb_names_value);
@@ -50,7 +59,7 @@
                                     return cbObject[name];
                                 },
                                 set: function (f) {
-                                    global.eHook.unHook(cbObject, name);
+                                    global.eHook.unHook(cbObject, name, true);
                                     cbObject[name] = f;
                                     global.eHook.hookBefore(cbObject, name, function (m, args) {
                                         ajaxChange.cb.call(this, name, args);
@@ -64,13 +73,26 @@
                 }
                 global.aHook.register('.*', {
                         hookResponse: function () {
-                            return ajaxChange.resp.call(this, arguments, util);
+                            var isPass = true;
+                            if (ajaxObject.filterPatten) {
+                                isPass = util.urlUtils.urlMatching(this.responseURL, ajaxObject.filterPatten);
+                            }
+                            return isPass && ajaxChange.ajax.resp.call(this, arguments, util);
                         },
-                        hookSend: function () {
-                            return ajaxChange.req.call(this, arguments, util);
+                        hookSend: function (args) {
+                            var isPass = true;
+                            if (ajaxObject.filterPatten) {
+                                isPass = util.urlUtils.urlMatching(this.requestURL, ajaxObject.filterPatten);
+                            }
+                            return isPass && ajaxChange.ajax.send.call(this, arguments, util);
                         },
-                        hookRequest: function () {
-                            return ajaxChange.send.call(this, arguments, util);
+                        hookRequest: function (args) {
+                            var isPass = true;
+                            if (ajaxObject.filterPatten) {
+                                isPass = util.urlUtils.urlMatching(args.url, ajaxObject.filterPatten);
+                            }
+                            this.requestURL = args.url;
+                            return isPass && ajaxChange.ajax.req.call(this, arguments, util);
                         }
                     }
                 );
@@ -78,5 +100,4 @@
             }
         });
     }
-    // Your code here...
 })(window);
