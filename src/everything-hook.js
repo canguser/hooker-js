@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.3.7009
+// @version      0.3.7010
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -411,6 +411,23 @@
             if (isDeeply) {
                 delete this._getHookedMethodMap(context)[methodName];
             }
+        },
+        /**
+         * 解除劫持
+         * @param context 上下文
+         * @param methodName 方法名
+         */
+        removeHookMethod: function (context, methodName) {
+            if (!context[methodName] || !utils.isFunction(context[methodName])) {
+                return;
+            }
+            var methodTask = this._getHookedMethodTask(context, methodName);
+            if (!methodTask.original) {
+                delete this._getHookedMethodMap(context)[methodName];
+                return;
+            }
+            delete this._getHookedMethodMap(context)[methodName].task;
+            delete this._getHookedMethodMap(context)[methodName].replace;
         },
         /**
          * 保护一个对象使之不会被篡改

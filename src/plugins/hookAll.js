@@ -45,7 +45,7 @@
                                 }
                             });
                             if (window[cbName]) {
-                                global.eHook.unHook(window, cbName, true);
+                                global.eHook.removeHookMethod(window, cbName);
                                 global.eHook.hookBefore(window, cbName, function (m, args) {
                                     ajaxChange.cb.resp.call(this, args, util);
                                 });
