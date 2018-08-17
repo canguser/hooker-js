@@ -38,17 +38,20 @@
                             ajaxChange.cb.req.call(this, args[0], util);
                             src = util.urlUtils.margeUrlAndParams(args[0].requestUrl, args[0].requestParams);
                             args[0].src = encodeURI(src);
-                            var cbName = 'callback';
+                            var cbName = 'cb';
                             args[0].requestParams.map(function (kv) {
                                 if (kv.key.toLowerCase() === 'cb' || kv.key.toLowerCase() === 'callback') {
                                     cbName = kv.value;
                                 }
                             });
                             if (window[cbName]) {
+                                console.log(window[cbName])
                                 global.eHook.removeHookMethod(window, cbName);
+                                console.log(window[cbName])
                                 global.eHook.hookBefore(window, cbName, function (m, args) {
-                                    ajaxChange.cb.resp.call(this, args, util);
-                                });
+                                    ajaxChange.cb.resp.call(window, args, util);
+                                }, false);
+                                console.log(window[cbName])
                                 console.log('Hooking call back: ' + cbName + ' success.')
                             } else {
                                 var isDelete = false;

@@ -422,12 +422,12 @@
                 return;
             }
             var methodTask = this._getHookedMethodTask(context, methodName);
+            var original = methodTask.original;
+            delete this._getHookedMethodMap(context)[methodName];
             if (!methodTask.original) {
-                delete this._getHookedMethodMap(context)[methodName];
                 return;
             }
-            delete this._getHookedMethodMap(context)[methodName].task;
-            delete this._getHookedMethodMap(context)[methodName].replace;
+            this._getHookedMethodMap(context)[methodName].original = original;
         },
         /**
          * 保护一个对象使之不会被篡改
