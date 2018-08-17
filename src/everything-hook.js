@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.4.7027
+// @version      0.4.7033
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -667,11 +667,13 @@
                     var fullUrl = args[0][1];
                     _this._xhrDispatcher(this, fullUrl);
                     var argsObject = _this._parseOpenArgs(args[0]);
+                    this.openArgs = argsObject;
                     _this._invokeAimMethods(this, 'hookRequest', [argsObject]);
                     _this._rebuildOpenArgs(argsObject, args[0]);
                 },
                 send: function () {
                     var args = _this._getHookedArgs(arguments);
+                    this.sendArgs = args;
                     _this._invokeAimMethods(this, 'hookSend', args);
                 }
             };
