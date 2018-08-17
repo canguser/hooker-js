@@ -50,6 +50,7 @@
                                 console.log(window[cbName])
                                 global.eHook.hookBefore(window, cbName, function (m, args) {
                                     ajaxChange.cb.resp.call(window, args, util);
+                                    console.log(args);
                                 }, false);
                                 console.log(window[cbName])
                                 console.log('Hooking call back: ' + cbName + ' success.')
