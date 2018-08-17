@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.4.7021
+// @version      0.4.7025
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -34,6 +34,9 @@
             return _autoId++;
         };
     };
+    if (_global.eHook && (_global.eHook instanceof EHook)) {
+        return;
+    }
     EHook.prototype = {
         /**
          * 获取一个对象的劫持id，若没有则创建一个

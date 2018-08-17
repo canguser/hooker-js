@@ -83,8 +83,8 @@
                     filterPatten: ''
                 };
                 var ajaxChange = {
-                    filter: function (patten) {
-                        ajaxObject.filterPatten = patten;
+                    filter: function (pattern) {
+                        ajaxObject.filterPatten = pattern;
                         return this;
                     },
                     ajax: {
@@ -121,14 +121,14 @@
                             if (ajaxObject.filterPatten) {
                                 isPass = util.urlUtils.urlMatching(this.responseURL, ajaxObject.filterPatten);
                             }
-                            return isPass && ajaxChange.ajax.resp.call(this, arguments, util);
+                            return !isPass ? undefined : ajaxChange.ajax.resp.call(this, arguments, util);
                         },
                         hookSend: function (args) {
                             var isPass = true;
                             if (ajaxObject.filterPatten) {
                                 isPass = util.urlUtils.urlMatching(this.requestURL, ajaxObject.filterPatten);
                             }
-                            return isPass && ajaxChange.ajax.send.call(this, arguments, util);
+                            return !isPass ? undefined : ajaxChange.ajax.resp.call(this, arguments, util);
                         },
                         hookRequest: function (args) {
                             var isPass = true;
@@ -136,7 +136,7 @@
                                 isPass = util.urlUtils.urlMatching(args.fullUrl, ajaxObject.filterPatten);
                             }
                             this.requestURL = args.fullUrl;
-                            return isPass && ajaxChange.ajax.req.call(this, arguments, util);
+                            return !isPass ? undefined : ajaxChange.ajax.resp.call(this, arguments, util);
                         }
                     }
                 );
