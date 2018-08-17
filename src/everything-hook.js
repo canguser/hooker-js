@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.4.7013
+// @version      0.4.7014
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -865,12 +865,13 @@
         }
     },
     FunctionBuilder: function (func) {
+        var _this = this;
         var fs = [];
         fs.push(func);
         var properties = ['push', 'unshift', 'slice', 'map', 'forEach', 'keys', 'find', 'concat', 'fill', 'shift', 'values']
         properties.map(function (property) {
             if (typeof Array.prototype[property] === 'function') {
-                Object.defineProperty(this, property, {
+                Object.defineProperty(_this, property, {
                     get: function () {
                         return function () {
                             fs[property].apply(fs, arguments);
