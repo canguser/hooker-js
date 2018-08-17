@@ -424,9 +424,6 @@
             var methodTask = this._getHookedMethodTask(context, methodName);
             var original = methodTask.original;
             delete this._getHookedMethodMap(context)[methodName];
-            if (!methodTask.original) {
-                return;
-            }
             this._getHookedMethodMap(context)[methodName].original = original;
         },
         /**
