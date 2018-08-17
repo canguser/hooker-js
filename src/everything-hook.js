@@ -894,9 +894,11 @@
                 };
                 rfs.map(function (f) {
                     var dv = f.apply(context || this, declareVar);
-                    Object.keys(dv).map(function (key) {
-                        declareVar[key] = dv[key];
-                    });
+                    if (dv) {
+                        Object.keys(dv).map(function (key) {
+                            declareVar[key] = dv[key];
+                        });
+                    }
                 });
                 return declareVar.returnValue;
             }
