@@ -45,9 +45,7 @@
                                 }
                             });
                             if (window[cbName]) {
-                                if (global.eHook._getHookedMap()[global.eHook._getHookedId(window)][cbName]) {
-                                    global.eHook.unHook(window, cbName, true);
-                                }
+                                global.eHook.unHook(window, cbName, true);
                                 global.eHook.hookBefore(window, cbName, function (m, args) {
                                     ajaxChange.cb.resp.call(this, args, util);
                                 });
