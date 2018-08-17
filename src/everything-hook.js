@@ -241,6 +241,7 @@
                 });
             } else {
                 builder.push(function (v) {
+                    console.log(methodTask);
                     return {
                         result: methodTask.original.apply(context || this, v.arguments)
                     }
