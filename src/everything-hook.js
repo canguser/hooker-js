@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.3.7012
+// @version      0.4.7012
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -131,98 +131,138 @@
             }
             var invokeMethods = this._invokeMethods;
             // 组装劫持函数
-            var resultMethod = (function () {
-                var result = undefined;
-                if (methodTask.task.before.length > 0) {
-                    if (utils.isExistObject(methodTask.task.current) && utils.isFunction(methodTask.task.current.method)) {
-                        if (methodTask.task.after.length > 0) {
-                            return function () {
-                                var result = undefined;
-                                invokeMethods(context || this, methodTask.task.before, [methodTask.original, arguments]);
-                                result = methodTask.task.current.method.call(context || this, parent, methodTask.original, arguments);
-                                var args = [];
-                                args.push(methodTask.original);
-                                args.push(arguments);
-                                args.push(result);
-                                var r = invokeMethods(context || this, methodTask.task.after, args);
-                                result = (r != null ? r : result);
-                                return result;
-                            }
-                        } else {
-                            return function () {
-                                var result = undefined;
-                                invokeMethods(context || this, methodTask.task.before, [methodTask.original, arguments]);
-                                result = methodTask.original.apply(context || this, arguments);
-                                return result;
-                            }
-                        }
-                    } else {
-                        if (methodTask.task.after.length > 0) {
-                            return function () {
-                                var result = undefined;
-                                invokeMethods(context || this, methodTask.task.before, [methodTask.original, arguments]);
-                                result = methodTask.original.apply(context || this, arguments);
-                                var args = [];
-                                args.push(methodTask.original);
-                                args.push(arguments);
-                                args.push(result);
-                                var r = invokeMethods(context || this, methodTask.task.after, args);
-                                result = (r != null ? r : result);
-                                return result;
-                            }
-                        } else {
-                            return function () {
-                                var result = undefined;
-                                invokeMethods(context || this, methodTask.task.before, [methodTask.original, arguments]);
-                                result = methodTask.original.apply(context || this, arguments);
-                                return result;
-                            }
-                        }
+            // var resultMethod = (function () {
+            //     var result = undefined;
+            //     if (methodTask.task.before.length > 0) {
+            //         if (utils.isExistObject(methodTask.task.current) && utils.isFunction(methodTask.task.current.method)) {
+            //             if (methodTask.task.after.length > 0) {
+            //                 return function () {
+            //                     var result = undefined;
+            //                     invokeMethods(context || this, methodTask.task.before, [methodTask.original, arguments]);
+            //                     result = methodTask.task.current.method.call(context || this, parent, methodTask.original, arguments);
+            //                     var args = [];
+            //                     args.push(methodTask.original);
+            //                     args.push(arguments);
+            //                     args.push(result);
+            //                     var r = invokeMethods(context || this, methodTask.task.after, args);
+            //                     result = (r != null ? r : result);
+            //                     return result;
+            //                 }
+            //             } else {
+            //                 return function () {
+            //                     var result = undefined;
+            //                     invokeMethods(context || this, methodTask.task.before, [methodTask.original, arguments]);
+            //                     result = methodTask.original.apply(context || this, arguments);
+            //                     return result;
+            //                 }
+            //             }
+            //         } else {
+            //             if (methodTask.task.after.length > 0) {
+            //                 return function () {
+            //                     var result = undefined;
+            //                     invokeMethods(context || this, methodTask.task.before, [methodTask.original, arguments]);
+            //                     result = methodTask.original.apply(context || this, arguments);
+            //                     var args = [];
+            //                     args.push(methodTask.original);
+            //                     args.push(arguments);
+            //                     args.push(result);
+            //                     var r = invokeMethods(context || this, methodTask.task.after, args);
+            //                     result = (r != null ? r : result);
+            //                     return result;
+            //                 }
+            //             } else {
+            //                 return function () {
+            //                     var result = undefined;
+            //                     invokeMethods(context || this, methodTask.task.before, [methodTask.original, arguments]);
+            //                     result = methodTask.original.apply(context || this, arguments);
+            //                     return result;
+            //                 }
+            //             }
+            //         }
+            //     } else {
+            //         if (utils.isExistObject(methodTask.task.current) && utils.isFunction(methodTask.task.current.method)) {
+            //             if (methodTask.task.after.length > 0) {
+            //                 return function () {
+            //                     var result = undefined;
+            //                     result = methodTask.task.current.method.call(context || this, parent, methodTask.original, arguments);
+            //                     var args = [];
+            //                     args.push(methodTask.original);
+            //                     args.push(arguments);
+            //                     args.push(result);
+            //                     var r = invokeMethods(context || this, methodTask.task.after, args);
+            //                     result = (r != null ? r : result);
+            //                     return result;
+            //                 }
+            //             } else {
+            //                 return function () {
+            //                     var result = undefined;
+            //                     result = methodTask.original.apply(context || this, arguments);
+            //                     return result;
+            //                 }
+            //             }
+            //         } else {
+            //             if (methodTask.task.after.length > 0) {
+            //                 return function () {
+            //                     var result = undefined;
+            //                     result = methodTask.original.apply(context || this, arguments);
+            //                     var args = [];
+            //                     args.push(methodTask.original);
+            //                     args.push(arguments);
+            //                     args.push(result);
+            //                     var r = invokeMethods(context || this, methodTask.task.after, args);
+            //                     result = (r != null ? r : result);
+            //                     return result;
+            //                 }
+            //             } else {
+            //                 return function () {
+            //                     var result = undefined;
+            //                     result = methodTask.original.apply(context || this, arguments);
+            //                     return result;
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }());
+            var builder = new utils.FunctionBuilder(function (v) {
+                return {
+                    result: undefined
+                };
+            });
+            if (methodTask.task.before.length > 0) {
+                builder.push(function (v) {
+                    invokeMethods(context || this, methodTask.task.before, [methodTask.original, arguments]);
+                });
+            }
+            if (utils.isExistObject(methodTask.task.current) && utils.isFunction(methodTask.task.current.method)) {
+                builder.push(function (v) {
+                    return {
+                        result: methodTask.task.current.method.call(context || this, parent, methodTask.original, arguments)
                     }
-                } else {
-                    if (utils.isExistObject(methodTask.task.current) && utils.isFunction(methodTask.task.current.method)) {
-                        if (methodTask.task.after.length > 0) {
-                            return function () {
-                                var result = undefined;
-                                result = methodTask.task.current.method.call(context || this, parent, methodTask.original, arguments);
-                                var args = [];
-                                args.push(methodTask.original);
-                                args.push(arguments);
-                                args.push(result);
-                                var r = invokeMethods(context || this, methodTask.task.after, args);
-                                result = (r != null ? r : result);
-                                return result;
-                            }
-                        } else {
-                            return function () {
-                                var result = undefined;
-                                result = methodTask.original.apply(context || this, arguments);
-                                return result;
-                            }
-                        }
-                    } else {
-                        if (methodTask.task.after.length > 0) {
-                            return function () {
-                                var result = undefined;
-                                result = methodTask.original.apply(context || this, arguments);
-                                var args = [];
-                                args.push(methodTask.original);
-                                args.push(arguments);
-                                args.push(result);
-                                var r = invokeMethods(context || this, methodTask.task.after, args);
-                                result = (r != null ? r : result);
-                                return result;
-                            }
-                        } else {
-                            return function () {
-                                var result = undefined;
-                                result = methodTask.original.apply(context || this, arguments);
-                                return result;
-                            }
-                        }
+                });
+            } else {
+                builder.push(function (v) {
+                    return {
+                        result: methodTask.original.apply(context || this, arguments)
                     }
-                }
-            }());
+                });
+            }
+            if (methodTask.task.after.length > 0) {
+                builder.push(function (v) {
+                    var args = [];
+                    args.push(methodTask.original);
+                    args.push(arguments);
+                    args.push(v.result);
+                    var r = invokeMethods(context || this, methodTask.task.after, args);
+                    return {
+                        result: (r != null ? r : v.result)
+                    };
+                });
+            }
+            builder.push(function (v) {
+                return {
+                    returnValue: v.result
+                };
+            });
             // var methodStr = '(function(){\n';
             // methodStr = methodStr + 'var result = undefined;\n';
             // if (methodTask.task.before.length > 0) {
@@ -239,7 +279,7 @@
             // }
             // methodStr = methodStr + 'return result;\n})';
             // 绑定劫持函数
-            parent[methodName] = resultMethod;
+            parent[methodName] = builder.result();
         },
         /**
          * 劫持一个方法
@@ -822,6 +862,42 @@
                 }
             }
             return url + '?' + paramsStr.join('&');
+        }
+    },
+    FunctionBuilder: function (func) {
+        var fs = [];
+        fs.push(func);
+        for (var property in Array.prototype) {
+            if (typeof Array.prototype[property] === 'function') {
+                Object.defineProperty(this, property, {
+                    get: function () {
+                        return function () {
+                            fs[property].apply(fs, arguments);
+                            return this;
+                        }
+                    }
+                });
+            }
+        }
+        this.result = function (context) {
+            var rfs = [];
+            fs.map(function (f, index) {
+                if (typeof f === 'function') {
+                    rfs.push(f);
+                }
+            });
+            return function () {
+                var declareVar = {
+                    arguments: arguments
+                };
+                rfs.map(function (f) {
+                    var dv = f.apply(context || this, declareVar);
+                    Object.keys(dv).map(function (key) {
+                        declareVar[key] = dv[key];
+                    });
+                });
+                return declareVar.returnValue;
+            }
         }
     }
 });
