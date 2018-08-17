@@ -421,7 +421,8 @@
             if (!context[methodName] || !utils.isFunction(context[methodName])) {
                 return;
             }
-            delete this._getHookedMethodTask(context, methodName);
+            this._getHookedMethodTask(context, methodName);
+            delete this._getHookedMethodMap(context)[methodName];
         },
         /**
          * 保护一个对象使之不会被篡改
