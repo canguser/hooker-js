@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.4.7020
+// @version      0.4.7021
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -374,6 +374,9 @@
          * @return {*|number} 劫持的id
          */
         hookAjax: function (methods) {
+            if (this.isHooked(_global, 'XMLHttpRequest')) {
+                return;
+            }
             var _this = this;
             var hookMethod = function (methodName) {
                 if (utils.isFunction(methods[methodName])) {
@@ -453,7 +456,7 @@
             }
         },
         /**
-         * 解除劫持
+         *  移除所有劫持相关的方法
          * @param context 上下文
          * @param methodName 方法名
          */
@@ -470,6 +473,15 @@
                     after: []
                 }
             };
+        },
+        /**
+         * 判断一个方法是否被劫持过
+         * @param context
+         * @param methodName
+         */
+        isHooked: function (context, methodName) {
+            var hookMap = this._getHookedMap(context);
+            return hookMap[methodName] !== undefined || hookMap[methodName].original !== undefined;
         },
         /**
          * 保护一个对象使之不会被篡改

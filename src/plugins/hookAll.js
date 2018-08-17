@@ -133,9 +133,9 @@
                         hookRequest: function (args) {
                             var isPass = true;
                             if (ajaxObject.filterPatten) {
-                                isPass = util.urlUtils.urlMatching(args.url, ajaxObject.filterPatten);
+                                isPass = util.urlUtils.urlMatching(args.fullUrl, ajaxObject.filterPatten);
                             }
-                            this.requestURL = args.url;
+                            this.requestURL = args.fullUrl;
                             return isPass && ajaxChange.ajax.req.call(this, arguments, util);
                         }
                     }
