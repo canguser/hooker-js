@@ -230,19 +230,19 @@
             });
             if (methodTask.task.before.length > 0) {
                 builder.push(function (v) {
-                    invokeMethods(context || this, methodTask.task.before, [methodTask.original, arguments]);
+                    invokeMethods(context || this, methodTask.task.before, [methodTask.original, v.arguments]);
                 });
             }
             if (utils.isExistObject(methodTask.task.current) && utils.isFunction(methodTask.task.current.method)) {
                 builder.push(function (v) {
                     return {
-                        result: methodTask.task.current.method.call(context || this, parent, methodTask.original, arguments)
+                        result: methodTask.task.current.method.call(context || this, parent, methodTask.original, v.arguments)
                     }
                 });
             } else {
                 builder.push(function (v) {
                     return {
-                        result: methodTask.original.apply(context || this, arguments)
+                        result: methodTask.original.apply(context || this, v.arguments)
                     }
                 });
             }
@@ -250,7 +250,7 @@
                 builder.push(function (v) {
                     var args = [];
                     args.push(methodTask.original);
-                    args.push(arguments);
+                    args.push(v.arguments);
                     args.push(v.result);
                     var r = invokeMethods(context || this, methodTask.task.after, args);
                     return {
