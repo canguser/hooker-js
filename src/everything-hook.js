@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.4.7014
+// @version      0.4.7020
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -241,7 +241,6 @@
                 });
             } else {
                 builder.push(function (v) {
-                    console.log(methodTask);
                     return {
                         result: methodTask.original.apply(context || v.this, v.arguments)
                     }
