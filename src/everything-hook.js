@@ -893,7 +893,7 @@
                     arguments: arguments
                 };
                 rfs.map(function (f) {
-                    var dv = f.apply(context || this, declareVar);
+                    var dv = f.apply(context || this, [declareVar]);
                     if (dv) {
                         Object.keys(dv).map(function (key) {
                             declareVar[key] = dv[key];
