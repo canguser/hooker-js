@@ -868,7 +868,7 @@
         var _this = this;
         var fs = [];
         fs.push(func);
-        var properties = ['push', 'unshift', 'slice', 'map', 'forEach', 'keys', 'find', 'concat', 'fill', 'shift', 'values']
+        var properties = ['push', 'unshift', 'slice', 'map', 'forEach', 'keys', 'find', 'concat', 'fill', 'shift', 'values'];
         properties.map(function (property) {
             if (typeof Array.prototype[property] === 'function') {
                 Object.defineProperty(_this, property, {
