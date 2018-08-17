@@ -45,15 +45,11 @@
                                 }
                             });
                             if (window[cbName]) {
-                                console.log(window[cbName])
                                 global.eHook.removeHookMethod(window, cbName);
-                                console.log(window[cbName])
                                 global.eHook.hookBefore(window, cbName, function (m, args) {
                                     ajaxChange.cb.resp.call(window, args, util);
-                                    console.log(args);
+                                    // console.log('Hooking call back: ' + cbName + ' success.')
                                 }, false);
-                                console.log(window[cbName])
-                                console.log('Hooking call back: ' + cbName + ' success.')
                             } else {
                                 var isDelete = false;
                                 try {
