@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.4.7012
+// @version      0.4.7013
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -867,7 +867,8 @@
     FunctionBuilder: function (func) {
         var fs = [];
         fs.push(func);
-        for (var property in Array.prototype) {
+        var properties = ['push', 'unshift', 'slice', 'map', 'forEach', 'keys', 'find', 'concat', 'fill', 'shift', 'values']
+        properties.map(function (property) {
             if (typeof Array.prototype[property] === 'function') {
                 Object.defineProperty(this, property, {
                     get: function () {
@@ -878,7 +879,7 @@
                     }
                 });
             }
-        }
+        });
         this.result = function (context) {
             var rfs = [];
             fs.map(function (f, index) {
