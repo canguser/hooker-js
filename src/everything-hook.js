@@ -481,7 +481,7 @@
          */
         isHooked: function (context, methodName) {
             var hookMap = this._getHookedMap(context);
-            return hookMap[methodName] !== undefined || hookMap[methodName].original !== undefined;
+            return hookMap[methodName] !== undefined && hookMap[methodName].original !== undefined;
         },
         /**
          * 保护一个对象使之不会被篡改
