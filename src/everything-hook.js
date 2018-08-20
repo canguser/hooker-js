@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.4.7033
+// @version      0.4.7044
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -857,9 +857,15 @@
             }
             var paramsStr = parts[1].split('&');
             for (var i = 0; i < paramsStr.length; i++) {
-                var ps = paramsStr[i].split('=');
-                if (ps.length < 2) {
-                    continue;
+                var index = paramsStr[i].indexOf('=');
+                var ps = new Array(2);
+                if (index !== -1) {
+                    ps = [
+                        paramsStr[i].substring(0, index),
+                        paramsStr[i].substring(index + 1),
+                    ];
+                } else {
+                    ps[0] = paramsStr[i];
                 }
                 params.push({
                     key: ps[0],

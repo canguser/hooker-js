@@ -37,7 +37,7 @@
                             args[0].requestUrl = util.urlUtils.getUrlWithoutParam(src);
                             ajaxChange.cb.req.call(this, args[0], util);
                             src = util.urlUtils.margeUrlAndParams(args[0].requestUrl, args[0].requestParams);
-                            args[0].src = encodeURI(src);
+                            args[0].src = src;
                             var cbName = 'cb';
                             args[0].requestParams.map(function (kv) {
                                 if (kv.key.toLowerCase() === 'cb' || kv.key.toLowerCase() === 'callback') {
@@ -128,15 +128,17 @@
                             if (ajaxObject.filterPatten) {
                                 isPass = util.urlUtils.urlMatching(this.requestURL, ajaxObject.filterPatten);
                             }
-                            return !isPass ? undefined : ajaxChange.ajax.resp.call(this, arguments, util);
+                            return !isPass ? undefined : ajaxChange.ajax.send.call(this, arguments, util);
                         },
                         hookRequest: function (args) {
+                            console.log(this,args);
+                            window.util = util;
                             var isPass = true;
                             if (ajaxObject.filterPatten) {
                                 isPass = util.urlUtils.urlMatching(args.fullUrl, ajaxObject.filterPatten);
                             }
                             this.requestURL = args.fullUrl;
-                            return !isPass ? undefined : ajaxChange.ajax.resp.call(this, arguments, util);
+                            return !isPass ? undefined : ajaxChange.ajax.req.call(this, arguments, util);
                         }
                     }
                 );
