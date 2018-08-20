@@ -131,7 +131,6 @@
                             return !isPass ? undefined : ajaxChange.ajax.send.call(this, arguments, util);
                         },
                         hookRequest: function (args) {
-                            console.log(this,args);
                             window.util = util;
                             var isPass = true;
                             if (ajaxObject.filterPatten) {
