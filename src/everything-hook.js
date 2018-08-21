@@ -1809,6 +1809,9 @@
                 if (!key){
                     return;
                 }
+                if (proxy[key]){
+                    return;
+                }
                 Object.defineProperty(proxy, key, {
                     get: function () {
                         return utils[utilName][key];
