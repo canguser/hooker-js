@@ -1577,13 +1577,11 @@
         _invokeAimMethods: function (xhr, methodName, args) {
             var configs = utils.parseArrayByProperty(xhr.patcherList, 'config');
             var methods = [];
-            console.log(configs);
             utils.ergodicArrayObject(xhr, configs, function (config) {
                 if (utils.isFunction(config[methodName])) {
                     methods.push(config[methodName]);
                 }
             });
-            console.log(methods);
             return utils.invokeMethods(xhr, methods, args);
         },
         /**
