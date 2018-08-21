@@ -902,7 +902,7 @@
             getFunctionParams: function (func) {
                 if (typeof func === 'function' || typeof func === 'object') {
                     var name = ('' + func).match(/function.*\(([^)]*)\)/);
-                    return name[1].replace(/ /g, '').split(',');
+                    return name[1].replace(/( )|(\n)/g, '').split(',');
                 }
                 return;
             },
@@ -918,6 +918,112 @@
                     callerName = this.getFunctionName(caller);
                 }
                 return callerName;
+            },
+            FunctionBuilder: function (func) {
+                var _this = this;
+                var fs = [];
+                fs.push(func);
+                var properties = ['push', 'unshift', 'slice', 'map', 'forEach', 'keys', 'find', 'concat', 'fill', 'shift', 'values'];
+                properties.map(function (property) {
+                    if (typeof Array.prototype[property] === 'function') {
+                        Object.defineProperty(_this, property, {
+                            get: function () {
+                                return function () {
+                                    fs[property].apply(fs, arguments);
+                                    return this;
+                                }
+                            }
+                        });
+                    }
+                });
+                this.result = function (context) {
+                    var rfs = [];
+                    fs.map(function (f, index) {
+                        if (typeof f === 'function') {
+                            rfs.push(f);
+                        }
+                    });
+                    return function () {
+                        var declareVar = {
+                            arguments: arguments,
+                            this: this
+                        };
+                        rfs.map(function (f) {
+                            var dv = f.apply(context || this, [declareVar]);
+                            if (dv) {
+                                Object.keys(dv).map(function (key) {
+                                    declareVar[key] = dv[key];
+                                });
+                            }
+                        });
+                        return declareVar.returnValue;
+                    }
+                }
+            },
+            invokeMethods: function (context, methods, args) {
+                if (!this.isArray(methods)) {
+                    return;
+                }
+                var results = [];
+                var _this = this;
+                this.ergodicArrayObject(context, methods, function (method) {
+                    if (!_this.isFunction(method)) {
+                        return;
+                    }
+                    results.push(
+                        method.apply(context, args)
+                    );
+                });
+                return results;
+            }
+        }
+    });
+
+    factory('UrlUtils',[],function () {
+        return {
+            urlMatching: function (url, matchUrl) {
+                var pattern = new RegExp(matchUrl);
+                return pattern.test(url);
+            },
+            getUrlWithoutParam: function (url) {
+                return url.split('?')[0];
+            },
+            getParamFromUrl: function (url) {
+                var params = [];
+                var parts = url.split('?');
+                if (parts.length < 2) {
+                    return params;
+                }
+                var paramsStr = parts[1].split('&');
+                for (var i = 0; i < paramsStr.length; i++) {
+                    var index = paramsStr[i].indexOf('=');
+                    var ps = new Array(2);
+                    if (index !== -1) {
+                        ps = [
+                            paramsStr[i].substring(0, index),
+                            paramsStr[i].substring(index + 1),
+                        ];
+                    } else {
+                        ps[0] = paramsStr[i];
+                    }
+                    params.push({
+                        key: ps[0],
+                        value: ps[1]
+                    });
+                }
+                return params;
+            },
+            margeUrlAndParams: function (url, params) {
+                if (url.indexOf('?') !== -1 || !(params instanceof Array)) {
+                    return url;
+                }
+                var paramsStr = [];
+                for (var i = 0; i < params.length; i++) {
+                    if (params[i].key !== null && params[i].value !== null) {
+                        paramsStr.push(params[i].key + '=' + params[i].value);
+                    }
+                }
+                return url + '?' + paramsStr.join('&');
             }
         }
     });
