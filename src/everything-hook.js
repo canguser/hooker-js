@@ -1000,7 +1000,7 @@
         }
     });
 
-    factory('UrlUtils',[],function () {
+    factory('UrlUtils', [], function () {
         return {
             urlMatching: function (url, matchUrl) {
                 var pattern = new RegExp(matchUrl);
@@ -1044,7 +1044,9 @@
                         paramsStr.push(params[i].key + '=' + params[i].value);
                     }
                 }
-                return url + '?' + paramsStr.join('&');
+                var paramsPart = paramsStr.join('&');
+
+                return url + (paramsPart ? '?' + paramsPart : '');
             }
         }
     });
@@ -1795,7 +1797,7 @@
         }
         var proxy = {};
         Object.keys(utils).forEach(function (utilName) {
-            if (!utilName){
+            if (!utilName) {
                 return;
             }
             Object.defineProperty(proxy, utilName, {
@@ -1804,10 +1806,10 @@
                 }
             });
             Object.keys(utils[utilName]).forEach(function (key) {
-                if (!key){
+                if (!key) {
                     return;
                 }
-                if (proxy[key]){
+                if (proxy[key]) {
                     return;
                 }
                 Object.defineProperty(proxy, key, {
