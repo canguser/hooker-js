@@ -1790,12 +1790,12 @@
                     BaseUtils: BaseUtils,
                     ColorUtils: ColorUtils,
                     UrlUtils: UrlUtils,
+                    urlUtils: UrlUtils,
                     FunctionUtils: FunctionUtils
                 };
             });
         }
         var proxy = {};
-        console.log(utils)
         Object.keys(utils).forEach(function (utilName) {
             if (!utilName){
                 return;
@@ -1816,7 +1816,6 @@
                 })
             })
         });
-        window.p = proxy;
         return proxy;
     })()
 );
