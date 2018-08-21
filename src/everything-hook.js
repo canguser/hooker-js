@@ -19,7 +19,6 @@
  * ---------------------------
  */
 // 'use strict';
-
 ~function (_global) {
 
     // base
@@ -1057,7 +1056,6 @@
             var args = arguments;
             depend.call(arguments[1] || this, ['FunctionUtils'], function (FunctionUtils) {
                 var depends = FunctionUtils.getFunctionParams(args[0]);
-                console.log(depends);
                 depend(depends, args[0]);
             })
         }
