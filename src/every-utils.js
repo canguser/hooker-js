@@ -276,7 +276,7 @@
                     return result;
                 }
                 this.getPropertyDo(this, arr, propertyName, function (value) {
-                    result.push(propertyName);
+                    result.push(value);
                 }, true);
                 return result;
             },

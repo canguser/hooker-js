@@ -16,17 +16,17 @@
         }
     </style>
     <!--<script src="ajaxHook.js"></script>-->
-    <!--<script src="../src/everything-hook.js"></script>-->
+    <script src="../src/everything-hook.js"></script>
     <!--<script src="../src/plugins/hookAll.js"></script>-->
     <script>
-        // var id = aHook.register('.*/login', {
-        //     hookSend: function (args) {
-        //     },
-        //     hookResponse: function (e) {
-        //         console.log(this)
-        //     }
-        // });
-        // console.log(id);
+        var id = aHook.register('.*/login', {
+            hookSend: function (args) {
+            },
+            hookResponse: function (e) {
+                console.log(this)
+            }
+        });
+        console.log(id);
     </script>
     <script src="jquery-3.1.1.js"></script>
     <script>
