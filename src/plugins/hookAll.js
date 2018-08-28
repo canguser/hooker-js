@@ -36,8 +36,12 @@
                             args[0].requestParams = util.urlUtils.getParamFromUrl(src);
                             args[0].requestUrl = util.urlUtils.getUrlWithoutParam(src);
                             ajaxChange.cb.req.call(this, args[0], util);
-                            src = util.urlUtils.margeUrlAndParams(args[0].requestUrl, args[0].requestParams);
-                            args[0].src = src;
+                            var aimedUrl = util.urlUtils.margeUrlAndParams(args[0].requestUrl, args[0].requestParams);
+                            if (aimedUrl !== src) {
+                                // src = aimedUrl;
+                                args[0].src = aimedUrl;
+                                console.log(src, args[0].src, aimedUrl);
+                            }
                             var cbName = 'cb';
                             args[0].requestParams.map(function (kv) {
                                 if (kv.key.toLowerCase() === 'cb' || kv.key.toLowerCase() === 'callback') {
