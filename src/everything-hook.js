@@ -18,7 +18,7 @@
  * View: http://palerock.cn
  * ---------------------------
  */
-// 'use strict';
+'use strict';
 ~function (_global) {
 
     // base
