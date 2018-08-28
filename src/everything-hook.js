@@ -1408,13 +1408,18 @@
          * @param context 上下文
          * @param methodName 方法名
          * @param isDeeply {boolean=} 是否深度解除[默认为false]
-         * @param eqId {number=} todo 解除指定id的劫持[可选]
+         * @param eqId {number=}  解除指定id的劫持[可选]
          */
         unHook: function (context, methodName, isDeeply, eqId) {
             if (!context[methodName] || !utils.isFunction(context[methodName])) {
                 return;
             }
             var methodTask = this._getHookedMethodTask(context, methodName);
+            if (eqId) {
+                if (this.unHookById(eqId)) {
+                    return;
+                }
+            }
             if (!methodTask.original) {
                 delete this._getHookedMethodMap(context)[methodName];
                 return;
@@ -1423,6 +1428,38 @@
             if (isDeeply) {
                 delete this._getHookedMethodMap(context)[methodName];
             }
+        },
+        /**
+         * 通过Id解除劫持
+         * @param eqId
+         * @returns {boolean}
+         */
+        unHookById: function (eqId) {
+            var hasEq = false;
+            if (eqId) {
+                var hookedMap = this._getHookedMap();
+                utils.ergodicObject(this, hookedMap, function (contextMap) {
+                    utils.ergodicObject(this, contextMap, function (methodTask) {
+                        methodTask.task.before = methodTask.task.before.filter(function (before) {
+                            hasEq = hasEq || before.id === eqId;
+                            return before.id !== eqId;
+                        });
+                        methodTask.task.after = methodTask.task.after.filter(function (after) {
+                            hasEq = hasEq || after.id === eqId;
+                            return after.id !== eqId;
+                        });
+                        if (methodTask.task.current && methodTask.task.current.id === eqId) {
+                            methodTask.task.current = undefined;
+                            hasEq = true;
+                        }
+                        if (methodTask.replace && methodTask.replace.id === eqId) {
+                            methodTask.replace = undefined;
+                            hasEq = true;
+                        }
+                    })
+                });
+            }
+            return hasEq;
         },
         /**
          *  移除所有劫持相关的方法

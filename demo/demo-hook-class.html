@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="../src/everything-hook.js"></script>
+    <title>Title</title>
+
+    <script>
+        window.F = function (name) {
+            this.name = name || 'F';
+            console.log('this is ' + this.name + ' function');
+        };
+
+        window.F.getStaticVar = function (v) {
+            return v;
+        };
+
+        window.F.prototype = {
+            changeName: function (name) {
+                this.name = name;
+            },
+            hello: function () {
+                console.log('hello: ' + this.name);
+            }
+        };
+
+        window.eHook.hookBefore(window, 'F', function (m, args) {
+            if (args[0]) {
+                args[0] += '-Hooked';
+            }
+        }, false);
+
+        var f = new F('My F');
+        f.hello();
+        f.changeName('Normal');
+        f.hello();
+    </script>
+</head>
+<body>
+
+</body>
+</html>

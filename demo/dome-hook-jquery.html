@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hook JQuery</title>
+
+    <script src="../src/everything-hook.js"></script>
+    <script src="jquery-3.1.1.js"></script>
+
+    <script>
+        var id1 = window.eHook.hookAfter(window, '$', function (m, args, result) {
+            if (args[1]) {
+                result[args[1]].apply(result, args[2]);
+            }
+        }, false);
+
+        var id2 = window.eHook.hookBefore(window, '$', function (m, args) {
+            if (args[2] && typeof args[2][0] === 'string') {
+                console.log(args)
+                args[2][0] = 'Hooked Message: ' + args[2][0];
+            }
+        }, false);
+
+        $(document, 'ready', [function () {
+
+            // Origin way:
+            $('.inner-text').html('I like this page.');
+
+            // Easy to change jq method.
+            $('.inner-text', 'html', ['I like this page1.']);
+
+        }]);
+
+    </script>
+
+</head>
+<body>
+
+<div class="inner-text">
+    <!--Add some text.-->
+</div>
+
+
+</body>
+</html>
