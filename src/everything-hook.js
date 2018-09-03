@@ -1058,7 +1058,7 @@
             var args = arguments;
             depend.call(arguments[1] || this, ['FunctionUtils'], function (FunctionUtils) {
                 var depends = FunctionUtils.getFunctionParams(args[0]);
-                depend(depends, args[0]);
+                depend.bind(this)(depends, args[0]);
             })
         }
     };
