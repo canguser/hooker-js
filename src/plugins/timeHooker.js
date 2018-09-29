@@ -1,5 +1,6 @@
 // ==UserScript==
-// @name:en         TimerHooker
+// @name        TimerHooker
+// @name:en      TimerHooker
 // @name:zh-CN   计时器掌控者|视频广告跳过|广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
