@@ -33,6 +33,17 @@
                 return false;
             }
             return typeof str === 'string';
+        },
+        uniqueNum: 1000,
+        /**
+         * 根据当前时间戳生产一个随机id
+         * @returns {string}
+         */
+        buildUniqueId: function () {
+            var prefix = new Date().getTime().toString();
+            var suffix = this.uniqueNum.toString();
+            this.uniqueNum++;
+            return prefix + suffix;
         }
     };
 
@@ -979,7 +990,7 @@
         }
     });
 
-    factory('UrlUtils',[],function () {
+    factory('UrlUtils', [], function () {
         return {
             urlMatching: function (url, matchUrl) {
                 var pattern = new RegExp(matchUrl);
@@ -1028,6 +1039,68 @@
         }
     });
 
+    factory('PointUtils', [], function () {
+        var Point2D = function (x, y) {
+            this.x = x;
+            this.y = y;
+        };
+        Point2D.prototype = {
+            constructor: Point2D,
+            /**
+             * 获取指定距离和角度对应的平面点
+             * @param distance
+             * @param deg
+             */
+            getOtherPointFromDistanceAndDeg: function (distance, deg) {
+                var radian = Math.PI / 180 * deg;
+                var point = new this.constructor();
+                point.x = distance * Math.sin(radian) + this.x;
+                point.y = this.y - distance * Math.cos(radian);
+                return point;
+            },
+            /**
+             * 获取当前平面点与另一个平面点之间的距离
+             * @param p
+             * @returns {number}
+             */
+            getDistanceFromAnotherPoint: function (p) {
+                return Math.sqrt((this.x - p.x) * (this.x - p.x) + (this.y - p.y) * (this.y - p.y));
+            },
+            /**
+             * 获取当前平面点与另一个平面点之间的角度
+             * @param p
+             * @returns {number}
+             */
+            getDegFromAnotherPoint: function (p) {
+                var usedPoint = new this.constructor({
+                    x: p.x * 1000000 - this.x * 1000000, y: p.y * 1000000 - this.y * 1000000
+                });
+                var radian = Math.atan2(usedPoint.x * 1000000, usedPoint.y * 1000000);
+                var deg = radian * 180 / Math.PI;
+                return 180 - deg;
+            },
+            /**
+             * 判断该点是否位于一矩形内部
+             * @param x 矩形开始坐标x
+             * @param y 矩形开始坐标y
+             * @param width 矩形宽
+             * @param height 矩形长
+             * @returns {boolean}
+             */
+            isInRect: function (x, y, width, height) {
+                var px = this.x;
+                var py = this.y;
+                if (px < x || px > x + width) {
+                    return false;
+                }
+                return !(py < y || py > y + height);
+            }
+        };
+        return {
+            Point2D: Point2D
+        }
+    });
+
     _global.everyUtils = function () {
         if (BaseUtils.isArray(arguments[0])) {
             depend.call(arguments[2] || this, arguments[0], arguments[1]);
@@ -1040,6 +1113,6 @@
         }
     };
 
-    _global.p = serviceProvider;
+    _global.eUtils = serviceProvider;
 
 }(window);

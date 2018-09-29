@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name         TimerHooker
+// @name:zh-CN   计时器掌控者|视频广告跳过|广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      0.2.0005
+// @version      0.2.0010
 // @description  it can hook the timer speed to change.
+// @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
 // @include      *
-// @require      https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
+// @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=632651
 // @author       Cangshi
 // @match        http://*/*
 // @run-at       document-start
