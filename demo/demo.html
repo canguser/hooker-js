@@ -9,11 +9,145 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>Title</title>
     <style>
-        /** {*/
-            /*-webkit-box-sizing: border-box;*/
-            /*-moz-box-sizing: border-box;*/
-            /*box-sizing: border-box;*/
-        /*}*/
+        ._th-container ._th-item {
+            margin-bottom: 3px;
+            position: relative;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            opacity: .3;
+            background-color: aquamarine;
+            border-radius: 100%;
+            text-align: center;
+            line-height: 30px;
+            -webkit-transition: all .5s;
+            -o-transition: all .5s;
+            transition: all .5s;
+            right: 30px
+        }
+
+        ._th-container ._th-item._item-x2 {
+            margin-left: 18px;
+            width: 40px;
+            height: 40px;
+            line-height: 40px
+        }
+
+        ._th-container ._th-item._item-x-2 {
+            margin-left: 17px;
+            width: 38px;
+            height: 38px;
+            line-height: 38px
+        }
+
+        ._th-container ._th-item._item-x4 {
+            width: 36px;
+            height: 36px;
+            margin-left: 16px;
+            line-height: 36px
+        }
+
+        ._th-container ._th-item._item-x-4 {
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            margin-left: 14px
+        }
+
+        ._th-container ._th-item._item-reset {
+            width: 30px;
+            line-height: 30px;
+            height: 30px;
+            margin-left: 10px
+        }
+
+        ._th-click-hover {
+            position: relative;
+            -webkit-transition: all .5s;
+            -o-transition: all .5s;
+            transition: all .5s;
+            height: 50px;
+            width: 50px;
+            cursor: pointer;
+            opacity: .3;
+            border-radius: 100%;
+            background-color: aquamarine;
+            text-align: center;
+            line-height: 50px;
+            right: 0
+        }
+
+        ._th-container:hover {
+            left: -10px
+        }
+
+        ._th-container {
+            font-size: 12px;
+            -webkit-transition: all .5s;
+            -o-transition: all .5s;
+            transition: all .5s;
+            left: -40px;
+            top: 20%;
+            position: fixed;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            z-index: 99999
+        }
+
+        ._th-container ._th-item:hover {
+            opacity: .8;
+            background-color: #5fb492;
+            color: aliceblue
+        }
+
+        ._th-container:hover ._th-click-hover {
+            opacity: .8
+        }
+
+        ._th-container:hover ._th-item {
+            opacity: .6;
+            right: 0
+        }
+
+        ._th-container ._th-click-hover:hover {
+            opacity: .8;
+            background-color: #5fb492;
+            color: aliceblue
+        }
+
+        ._th_cover-all-show-times {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 99999;
+            opacity: 1;
+            font-weight: 900;
+            font-size: 30px;
+            color: #4f4f4f;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        ._th_cover-all-show-times._th_hidden {
+            z-index: -1;
+            opacity: 0;
+            transition: 1s all;
+        }
+
+        ._th_cover-all-show-times ._th_times {
+            width: 80px;
+            height: 80px;
+            border-radius: 80px;
+            background-color: rgba(127, 255, 212, 0.51);
+            text-align: center;
+            line-height: 80px;
+            position: absolute;
+            top: 50%;
+            right: 50%;
+            margin-top: -40px;
+            margin-right: -40px;
+        }
 
     </style>
     <script src="../src/everything-hook.js"></script>
@@ -29,6 +163,16 @@
             console.log('hh');
         }, 5000)
 
+        function f() {
+            var a = document.getElementsByClassName('_th_cover-all-show-times')[0];
+            console.log(a.className);
+            a.className = '_th_cover-all-show-times';
+            setTimeout(function () {
+                a.className = '_th_cover-all-show-times _th_hidden';
+            }, 100);
+
+        }
+
     </script>
 </head>
 <body>
@@ -41,6 +185,9 @@
     <div class="_th-item _item-x2">&gt;&gt;</div>
     <div class="_th-item _item-x-4">&lt;&lt;</div>
     <div class="_th-item _item-reset">O</div>
+</div>
+<div class="_th_cover-all-show-times _th_hidden">
+    <div class="_th_times">x1</div>
 </div>
 </body>
 </html>

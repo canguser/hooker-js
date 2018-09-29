@@ -4,7 +4,7 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      0.2.0013
+// @version      0.2.0020
 // @description       控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
@@ -116,7 +116,7 @@
                             result = 1 / parseFloat(t);
                         } else {
                             if (isa && anum) {
-                                if (1 /__this._percentage <= 1 && anum < 0) {
+                                if (1 / __this._percentage <= 1 && anum < 0) {
                                     return;
                                 }
                                 result = 1 / (1 / __this._percentage + anum);
@@ -129,7 +129,7 @@
                         }
                         timer.change(result);
                     };
-                    var style = '._th-container ._th-item{margin-bottom:3px;position:relative;width:30px;height:30px;cursor:pointer;opacity:.3;background-color:aquamarine;border-radius:100%;text-align:center;line-height:30px;-webkit-transition:all .5s;-o-transition:all .5s;transition:all .5s;right:30px}._th-container ._th-item._item-x2{margin-left:18px;width:40px;height:40px;line-height:40px}._th-container ._th-item._item-x-2{margin-left:17px;width:38px;height:38px;line-height:38px}._th-container ._th-item._item-x4{width:36px;height:36px;margin-left:16px;line-height:36px}._th-container ._th-item._item-x-4{width:32px;height:32px;line-height:32px;margin-left:14px}._th-container ._th-item._item-reset{width:30px;line-height:30px;height:30px;margin-left:10px}._th-click-hover{position:relative;-webkit-transition:all .5s;-o-transition:all .5s;transition:all .5s;height:50px;width:50px;cursor:pointer;opacity:.3;border-radius:100%;background-color:aquamarine;text-align:center;line-height:50px;right:0}._th-container:hover{left:-10px}._th-container{font-size:12px;-webkit-transition:all .5s;-o-transition:all .5s;transition:all .5s;left:-40px;top:20%;position:fixed;-webkit-box-sizing:border-box;box-sizing:border-box;z-index:99999}._th-container ._th-item:hover{opacity:.8;background-color:#5fb492;color:aliceblue}._th-container:hover ._th-click-hover{opacity:.8}._th-container:hover ._th-item{opacity:.6;right:0}._th-container ._th-click-hover:hover{opacity:.8;background-color:#5fb492;color:aliceblue}';
+                    var style = '._th-container ._th-item{margin-bottom:3px;position:relative;width:30px;height:30px;cursor:pointer;opacity:.3;background-color:aquamarine;border-radius:100%;text-align:center;line-height:30px;-webkit-transition:all .5s;-o-transition:all .5s;transition:all .5s;right:30px}._th-container ._th-item._item-x2{margin-left:18px;width:40px;height:40px;line-height:40px}._th-container ._th-item._item-x-2{margin-left:17px;width:38px;height:38px;line-height:38px}._th-container ._th-item._item-x4{width:36px;height:36px;margin-left:16px;line-height:36px}._th-container ._th-item._item-x-4{width:32px;height:32px;line-height:32px;margin-left:14px}._th-container ._th-item._item-reset{width:30px;line-height:30px;height:30px;margin-left:10px}._th-click-hover{position:relative;-webkit-transition:all .5s;-o-transition:all .5s;transition:all .5s;height:50px;width:50px;cursor:pointer;opacity:.3;border-radius:100%;background-color:aquamarine;text-align:center;line-height:50px;right:0}._th-container:hover{left:-10px}._th-container{font-size:12px;-webkit-transition:all .5s;-o-transition:all .5s;transition:all .5s;left:-40px;top:20%;position:fixed;-webkit-box-sizing:border-box;box-sizing:border-box;z-index:100000}._th-container ._th-item:hover{opacity:.8;background-color:#5fb492;color:aliceblue}._th-container:hover ._th-click-hover{opacity:.8}._th-container:hover ._th-item{opacity:.6;right:0}._th-container ._th-click-hover:hover{opacity:.8;background-color:#5fb492;color:aliceblue}._th_cover-all-show-times{position:fixed;top:0;right:0;width:100%;height:100%;z-index:99999;opacity:1;font-weight:900;font-size:30px;color:#4f4f4f;background-color:rgba(0,0,0,0.1)}._th_cover-all-show-times._th_hidden{z-index:-1;opacity:0;-webkit-transition:1s all;-o-transition:1s all;transition:1s all}._th_cover-all-show-times ._th_times{width:80px;height:80px;border-radius:80px;background-color:rgba(127,255,212,0.51);text-align:center;line-height:80px;position:absolute;top:50%;right:50%;margin-top:-40px;margin-right:-40px}';
 
                     // 在页面左边添加一个半圆便于修改
                     var html = '<div class="_th-container">\n' +
@@ -141,7 +141,11 @@
                         '    <div class="_th-item _item-x4" onclick="changTime(0,4)">&gt;&gt;</div>\n' +
                         '    <div class="_th-item _item-x-4" onclick="changTime(0,-4)">&lt;&lt;</div>\n' +
                         '    <div class="_th-item _item-reset" onclick="changTime(0,0,false,true)">O</div>\n' +
-                        '</div>';
+                        '</div>\n' +
+                        '<div class="_th_cover-all-show-times _th_hidden">\n' +
+                        '    <div class="_th_times">x' + 1 / __this._percentage + '</div>\n' +
+                        '</div>' +
+                        '';
                     var stylenode = document.createElement('style');
                     stylenode.setAttribute("type", "text/css");
                     if (stylenode.styleSheet) {// IE
@@ -155,6 +159,40 @@
                     window.addEventListener('load', function () {
                         document.head.appendChild(stylenode);
                         document.body.appendChild(node);
+                    });
+                    // 快捷键注册
+                    window.addEventListener('keydown', function (e) {
+                        switch (e.keyCode) {
+                            case 187: {
+                                if (e.key === '=' && e.ctrlKey) {
+                                    // console.log('+2');
+                                    changTime(2, 0, true);
+                                } else if (e.key === '+') {
+                                    // console.log('x4');
+                                    changTime(0, 4);
+                                }
+                                break;
+                            }
+                            case 189: {
+                                if (e.key === '-' && e.ctrlKey) {
+                                    // console.log('-2');
+                                    changTime(-2, 0, true);
+                                } else if (e.key === '_') {
+                                    // console.log('x-4');
+                                    changTime(0, -4);
+                                }
+                                break;
+                            }
+                            case 48: {
+                                if (e.ctrlKey) {
+                                    // console.log('reset');
+                                    changTime(0, 0, false, true);
+                                }
+                                break;
+                            }
+                            default:
+                            // console.log(e);
+                        }
                     });
                 },
                 /**
@@ -179,7 +217,15 @@
                 change: function (percentage) {
                     this._percentage = percentage;
                     var oldNode = document.getElementsByClassName('_th-click-hover');
+                    var oldNode1 = document.getElementsByClassName('_th_times');
                     oldNode[0].innerHTML = 'x' + 1 / this._percentage;
+                    oldNode1[0].innerHTML = 'x' + 1 / this._percentage;
+                    var a = document.getElementsByClassName('_th_cover-all-show-times')[0];
+                    // console.log(a.className);
+                    a.className = '_th_cover-all-show-times';
+                    setTimeout(function () {
+                        a.className = '_th_cover-all-show-times _th_hidden';
+                    }, 100);
                 }
             };
             // 默认初始化
