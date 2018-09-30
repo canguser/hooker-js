@@ -4,7 +4,7 @@
 // @version      0.1.001
 // @description  it can hook all ajax
 // @include      *
-// @require      https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
+// @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=632910
 // @author       Cangshi
 // @match        *://*/*
 // @run-at       document-start
@@ -38,9 +38,7 @@
                             ajaxChange.cb.req.call(this, args[0], util);
                             var aimedUrl = util.urlUtils.margeUrlAndParams(args[0].requestUrl, args[0].requestParams);
                             if (aimedUrl !== src) {
-                                // src = aimedUrl;
                                 args[0].src = aimedUrl;
-                                console.log(src, args[0].src, aimedUrl);
                             }
                             var cbName = 'cb';
                             args[0].requestParams.map(function (kv) {
