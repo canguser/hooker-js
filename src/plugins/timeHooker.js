@@ -10,7 +10,7 @@
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
 // @include      *
 // @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=632910
-// @require      https://greasyfork.org/scripts/372706-hook-all-ajax/code/Hook%20all%20ajax.js?version=633030
+// @require      https://greasyfork.org/scripts/372706-hook-all-ajax/code/Hook%20all%20ajax.js?version=635105
 // @author       Cangshi
 // @match        http://*/*
 // @run-at       document-start
