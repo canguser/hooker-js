@@ -4,7 +4,7 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      0.2.0040
+// @version      0.2.0045
 // @description       控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
@@ -237,15 +237,17 @@
             timerHooker.init();
             // filter
             if (global.NetHook) {
-                global.NetHook.onInit = function () {
-                    var isAutoInit = localStorage.getItem('__hook_all_auto_init');
-                    if (isAutoInit && isAutoInit !== 'false') {
-                        var url = location.href;
-                        errorUrls.forEach(function (value) {
-                            if (util.urlMatching(url, '.*' + value + '.*')) {
-                                global.NetHook.setting.autoInit(false);
-                            }
-                        });
+                var isAutoInit = localStorage.getItem('__hook_all_auto_init');
+                if (isAutoInit && isAutoInit !== 'false') {
+                    var url = location.href;
+                    var hasSetting = false;
+                    errorUrls.forEach(function (value) {
+                        if (util.urlMatching(url, '.*' + value + '.*')) {
+                            global.NetHook.setting.autoInit(false);
+                            hasSetting = true;
+                        }
+                    });
+                    if (hasSetting) {
                         location.reload();
                     }
                 }
