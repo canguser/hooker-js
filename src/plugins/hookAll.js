@@ -87,9 +87,13 @@
                     }
                 };
                 var isAutoInit = localStorage.getItem('__hook_all_auto_init');
+                if (!isAutoInit) {
+                    localStorage.setItem('__hook_all_auto_init', JSON.stringify(true));
+                    isAutoInit = localStorage.getItem('__hook_all_auto_init');
+                }
                 var ajaxObject = {
                     filterPatten: '',
-                    isAutoInit: isAutoInit || isAutoInit !== null
+                    isAutoInit: isAutoInit && isAutoInit !== 'false'
                 };
                 var ajaxChange = {
                     filter: function (pattern) {
@@ -146,9 +150,11 @@
                                 }
                             }
                         );
+                    },
+                    onInit: function () {
                     }
                 };
-
+                ajaxChange.onInit();
                 if (ajaxObject.isAutoInit) {
                     ajaxChange.init();
                 }
