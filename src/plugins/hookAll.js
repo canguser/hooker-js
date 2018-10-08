@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hook all ajax
 // @namespace    https://gitee.com/HGJing/everthing-hook/
-// @version      0.1.010
+// @version      0.1.018
 // @description  it can hook all ajax
 // @include      *
 // @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=632910
@@ -86,8 +86,10 @@
 
                     }
                 };
+                var isAutoInit = localStorage.getItem('__hook_all_auto_init');
                 var ajaxObject = {
-                    filterPatten: ''
+                    filterPatten: '',
+                    isAutoInit: isAutoInit || isAutoInit !== null
                 };
                 var ajaxChange = {
                     filter: function (pattern) {
@@ -102,42 +104,55 @@
                     cb: {
                         req: undefined,
                         resp: undefined
+                    },
+                    setting: {
+                        autoInit: function (b) {
+                            ajaxObject.isAutoInit = b;
+                            localStorage.setItem('__hook_all_auto_init', JSON.stringify(b));
+                        }
+                    },
+                    init: function () {
+                        // hook jsonp
+                        global.eHook.hookBefore(Node.prototype, 'appendChild', function (m, args) {
+                            cbObject.parseScript(m, args);
+                        }, false);
+                        global.eHook.hookBefore(Node.prototype, 'insertBefore', function (m, args) {
+                            cbObject.parseScript(m, args);
+                        }, false);
+
+                        global.aHook.register('.*', {
+                                hookResponse: function () {
+                                    var isPass = true;
+                                    if (ajaxObject.filterPatten) {
+                                        isPass = util.urlUtils.urlMatching(this.responseURL, ajaxObject.filterPatten);
+                                    }
+                                    return !isPass ? undefined : ajaxChange.ajax.resp && ajaxChange.ajax.resp.call(this, arguments, util);
+                                },
+                                hookSend: function (args) {
+                                    var isPass = true;
+                                    if (ajaxObject.filterPatten) {
+                                        isPass = util.urlUtils.urlMatching(this.requestURL, ajaxObject.filterPatten);
+                                    }
+                                    return !isPass ? undefined : ajaxChange.ajax.send && ajaxChange.ajax.send.call(this, arguments, util);
+                                },
+                                hookRequest: function (args) {
+                                    window.util = util;
+                                    var isPass = true;
+                                    if (ajaxObject.filterPatten) {
+                                        isPass = util.urlUtils.urlMatching(args.fullUrl, ajaxObject.filterPatten);
+                                    }
+                                    this.requestURL = args.fullUrl;
+                                    return !isPass ? undefined : ajaxChange.ajax.req && ajaxChange.ajax.req.call(this, arguments, util);
+                                }
+                            }
+                        );
                     }
                 };
-                // hook jsonp
-                global.eHook.hookBefore(Node.prototype, 'appendChild', function (m, args) {
-                    cbObject.parseScript(m, args);
-                }, false);
-                global.eHook.hookBefore(Node.prototype, 'insertBefore', function (m, args) {
-                    cbObject.parseScript(m, args);
-                }, false);
 
-                global.aHook.register('.*', {
-                        hookResponse: function () {
-                            var isPass = true;
-                            if (ajaxObject.filterPatten) {
-                                isPass = util.urlUtils.urlMatching(this.responseURL, ajaxObject.filterPatten);
-                            }
-                            return !isPass ? undefined : ajaxChange.ajax.resp && ajaxChange.ajax.resp.call(this, arguments, util);
-                        },
-                        hookSend: function (args) {
-                            var isPass = true;
-                            if (ajaxObject.filterPatten) {
-                                isPass = util.urlUtils.urlMatching(this.requestURL, ajaxObject.filterPatten);
-                            }
-                            return !isPass ? undefined : ajaxChange.ajax.send && ajaxChange.ajax.send.call(this, arguments, util);
-                        },
-                        hookRequest: function (args) {
-                            window.util = util;
-                            var isPass = true;
-                            if (ajaxObject.filterPatten) {
-                                isPass = util.urlUtils.urlMatching(args.fullUrl, ajaxObject.filterPatten);
-                            }
-                            this.requestURL = args.fullUrl;
-                            return !isPass ? undefined : ajaxChange.ajax.req && ajaxChange.ajax.req.call(this, arguments, util);
-                        }
-                    }
-                );
+                if (ajaxObject.isAutoInit) {
+                    ajaxChange.init();
+                }
+
                 return ajaxChange;
             }
         });
