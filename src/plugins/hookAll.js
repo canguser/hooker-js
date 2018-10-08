@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hook all ajax
 // @namespace    https://gitee.com/HGJing/everthing-hook/
-// @version      0.1.004
+// @version      0.1.010
 // @description  it can hook all ajax
 // @include      *
 // @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=632910
@@ -24,61 +24,66 @@
                 var cbObject = {
                     resp: {},
                     parseScript: function (m, args) {
-                        if (args[0].localName === 'script') {
-                            var src = decodeURI(args[0].src);
-                            var isPass = true;
-                            if (ajaxObject.filterPatten) {
-                                isPass = util.urlUtils.urlMatching(src, ajaxObject.filterPatten);
+                        if (args[0].localName !== 'script') {
+                            return;
+                        }
+                        var src = decodeURI(args[0].src);
+                        var isPass = true;
+                        if (ajaxObject.filterPatten) {
+                            isPass = util.urlUtils.urlMatching(src, ajaxObject.filterPatten);
+                        }
+                        if (!isPass || !ajaxChange.cb.req) {
+                            return;
+                        }
+                        args[0].requestParams = util.urlUtils.getParamFromUrl(src);
+                        args[0].requestUrl = util.urlUtils.getUrlWithoutParam(src);
+                        ajaxChange.cb.req.call(this, args[0], util);
+                        var aimedUrl = util.urlUtils.margeUrlAndParams(args[0].requestUrl, args[0].requestParams);
+                        if (aimedUrl !== src) {
+                            args[0].src = aimedUrl;
+                        }
+                        var cbName = undefined;
+                        args[0].requestParams.map(function (kv) {
+                            if (kv.key.toLowerCase() === 'cb' || kv.key.toLowerCase() === 'callback') {
+                                cbName = kv.value;
                             }
-                            if (!isPass) {
-                                return;
+                        });
+                        if (!cbName || !ajaxChange.cb.resp) {
+                            return;
+                        }
+                        if (window[cbName]) {
+                            global.eHook.removeHookMethod(window, cbName);
+                            global.eHook.hookBefore(window, cbName, function (m, args) {
+                                ajaxChange.cb.resp.call(window, args, util);
+                                // console.log('Hooking call back: ' + cbName + ' success.')
+                            }, false);
+                        } else {
+                            var isDelete = false;
+                            try {
+                                isDelete = delete window[cbName]
+                            } catch (e) {
+                                isDelete = false;
                             }
-                            args[0].requestParams = util.urlUtils.getParamFromUrl(src);
-                            args[0].requestUrl = util.urlUtils.getUrlWithoutParam(src);
-                            ajaxChange.cb.req.call(this, args[0], util);
-                            var aimedUrl = util.urlUtils.margeUrlAndParams(args[0].requestUrl, args[0].requestParams);
-                            if (aimedUrl !== src) {
-                                args[0].src = aimedUrl;
-                            }
-                            var cbName = 'cb';
-                            args[0].requestParams.map(function (kv) {
-                                if (kv.key.toLowerCase() === 'cb' || kv.key.toLowerCase() === 'callback') {
-                                    cbName = kv.value;
-                                }
-                            });
-                            if (window[cbName]) {
-                                global.eHook.removeHookMethod(window, cbName);
-                                global.eHook.hookBefore(window, cbName, function (m, args) {
-                                    ajaxChange.cb.resp.call(window, args, util);
-                                    // console.log('Hooking call back: ' + cbName + ' success.')
-                                }, false);
+                            if (isDelete) {
+                                Object.defineProperty(window, cbName, {
+                                    set: function (v) {
+                                        global.eHook.unHook(cbObject.resp, cbName, true);
+                                        cbObject.resp[cbName] = v;
+                                        global.eHook.hookBefore(cbObject.resp,
+                                            cbName, function (m, args) {
+                                                ajaxChange.cb.resp.call(this, args, util);
+                                            });
+                                    },
+                                    get: function () {
+                                        return cbObject.resp[cbName];
+                                    }
+                                });
+                                console.log('Hooking(proxy) call back: ' + cbName + ' success.')
                             } else {
-                                var isDelete = false;
-                                try {
-                                    isDelete = delete window[cbName]
-                                } catch (e) {
-                                    isDelete = false;
-                                }
-                                if (isDelete) {
-                                    Object.defineProperty(window, cbName, {
-                                        set: function (v) {
-                                            global.eHook.unHook(cbObject.resp, cbName, true);
-                                            cbObject.resp[cbName] = v;
-                                            global.eHook.hookBefore(cbObject.resp,
-                                                cbName, function (m, args) {
-                                                    ajaxChange.cb.resp.call(this, args, util);
-                                                });
-                                        },
-                                        get: function () {
-                                            return cbObject.resp[cbName];
-                                        }
-                                    });
-                                    console.log('Hooking(proxy) call back: ' + cbName + ' success.')
-                                } else {
-                                    console.log('Hooking call back: ' + cbName + ' failed.')
-                                }
+                                console.log('Hooking call back: ' + cbName + ' failed.')
                             }
                         }
+
                     }
                 };
                 var ajaxObject = {
@@ -90,24 +95,14 @@
                         return this;
                     },
                     ajax: {
-                        req: function () {
-
-                        },
-                        resp: function () {
-
-                        },
-                        send: function () {
-
-                        }
+                        req: undefined,
+                        resp: undefined,
+                        send: undefined
                     },
                     cb: {
-                        req: function () {
-
-                        },
-                        resp: function () {
-
-                        }
-                    },
+                        req: undefined,
+                        resp: undefined
+                    }
                 };
                 // hook jsonp
                 global.eHook.hookBefore(Node.prototype, 'appendChild', function (m, args) {
@@ -123,14 +118,14 @@
                             if (ajaxObject.filterPatten) {
                                 isPass = util.urlUtils.urlMatching(this.responseURL, ajaxObject.filterPatten);
                             }
-                            return !isPass ? undefined : ajaxChange.ajax.resp.call(this, arguments, util);
+                            return !isPass ? undefined : ajaxChange.ajax.resp && ajaxChange.ajax.resp.call(this, arguments, util);
                         },
                         hookSend: function (args) {
                             var isPass = true;
                             if (ajaxObject.filterPatten) {
                                 isPass = util.urlUtils.urlMatching(this.requestURL, ajaxObject.filterPatten);
                             }
-                            return !isPass ? undefined : ajaxChange.ajax.send.call(this, arguments, util);
+                            return !isPass ? undefined : ajaxChange.ajax.send && ajaxChange.ajax.send.call(this, arguments, util);
                         },
                         hookRequest: function (args) {
                             window.util = util;
@@ -139,7 +134,7 @@
                                 isPass = util.urlUtils.urlMatching(args.fullUrl, ajaxObject.filterPatten);
                             }
                             this.requestURL = args.fullUrl;
-                            return !isPass ? undefined : ajaxChange.ajax.req.call(this, arguments, util);
+                            return !isPass ? undefined : ajaxChange.ajax.req && ajaxChange.ajax.req.call(this, arguments, util);
                         }
                     }
                 );
