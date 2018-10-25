@@ -1,4 +1,33 @@
-~function (_global) {
+/**
+ * Every-Utils
+ * version:0.0.2001
+ */
+(function (global, factory) {
+
+    "use strict";
+
+    if (typeof module === "object" && typeof module.exports === "object") {
+
+        // For CommonJS and CommonJS-like environments where a proper `window`
+        // is present, execute the factory and get jQuery.
+        // For environments that do not have a `window` with a `document`
+        // (such as Node.js), expose a factory as module.exports.
+        // This accentuates the need for the creation of a real `window`.
+        // e.g. var jQuery = require("jquery")(window);
+        // See ticket #14549 for more info.
+        module.exports = global.document ?
+            factory(global, true) :
+            function (w) {
+                if (!w.document) {
+                    throw new Error("eUtils requires a window with a document");
+                }
+                return factory(w);
+            };
+    } else {
+        factory(global);
+    }
+
+}(typeof window !== "undefined" ? window : this, function (_global, noGlobal) {
 
     // base
     var BaseUtils = {
@@ -421,6 +450,63 @@
                     return resultArr.slice(0);
                 }
                 return resultArr;
+            },
+            /**
+             * 将类数组转化为数组
+             * @param arrLike 类数组对象
+             */
+            toArray: function (arrLike) {
+                if (!arrLike || arrLike.length === 0) {
+                    return [];
+                }
+                // 非伪类对象，直接返回最好
+                if (!arrLike.length) {
+                    return arrLike;
+                }
+                // 针对IE8以前 DOM的COM实现
+                try {
+                    return [].slice.call(arrLike);
+                } catch (e) {
+                    var i = 0,
+                        j = arrLike.length,
+                        res = [];
+                    for (; i < j; i++) {
+                        res.push(arrLike[i]);
+                    }
+                    return res;
+                }
+            },
+            /**
+             * 判断是否为类数组
+             * @param o
+             * @returns {boolean}
+             */
+            isArrayLick: function (o) {
+                if (o &&                                // o is not null, undefined, etc.
+                    typeof o === 'object' &&            // o is an object
+                    isFinite(o.length) &&               // o.length is a finite number
+                    o.length >= 0 &&                    // o.length is non-negative
+                    o.length === Math.floor(o.length) &&  // o.length is an integer
+                    o.length < 4294967296)              // o.length < 2^32
+                    return true;                        // Then o is array-like
+                else
+                    return false;                       // Otherwise it is not
+
+            },
+            /**
+             * 判断数组是否包含对象
+             * @param arr
+             * @param obj
+             */
+            contains: function (arr, obj) {
+                let contains = false;
+                this.ergodicArrayObject(this, arr, function (a) {
+                    if (a === arr) {
+                        contains = true;
+                        return -1;
+                    }
+                });
+                return contains;
             }
         }
     });
@@ -653,6 +739,7 @@
                 if (typeof obj === 'string' ||
                     typeof obj === 'number' ||
                     typeof obj === 'undefined' ||
+                    typeof obj === 'function' ||
                     typeof obj === 'boolean') {
                     return obj;
                 }
@@ -675,6 +762,71 @@
                     });
                 }
                 return newObj;
+            },
+            // cloneIndeed: function (obj) {
+            //     var hash = new Map();
+            //     var result = this._cloneIndeed(obj, hash);
+            //     for (var item of hash.values()) {
+            //         ArrayUtils.ergodicArrayObject(this, item.settingArr, function (func) {
+            //             func.call(this);
+            //         })
+            //     }
+            //     return result;
+            // },
+            // _cloneIndeed: function (obj, hash) {
+            //     hash = hash || new Map();
+            //     var result = {};
+            //     // 获取数据类型
+            //     var dataType = typeof obj;
+            //     switch (dataType.toLowerCase()) {
+            //         case 'string':
+            //         case 'number':
+            //         case 'boolean':
+            //         case 'undefined':
+            //             return obj;
+            //         case 'object':
+            //         default: {
+            //             for (var key in obj) {
+            //                 var nextObj = obj[key];
+            //                 var hashObj = hash.get(nextObj);
+            //                 if (hashObj != null && hashObj.clonedObj != null) {
+            //                     obj[key] = null;
+            //                 }
+            //                 hash.set(nextObj, {
+            //                         clonedObj: result,
+            //                         settingArr: [],
+            //                         active: false
+            //                     }
+            //                 );
+            //                 result[key] = this._cloneIndeed(nextObj, hash);
+            //             }
+            //             if (obj != null) {
+            //                 result['__proto__'] = obj['__proto__'];
+            //             }
+            //         }
+            //
+            //     }
+            //     return result;
+            // },
+            /**
+             * 获取对象的哈希码
+             * @param obj {Object}
+             * @returns {number}
+             */
+            getObjHashCode: function (obj) {
+                var str = JSON.stringify(obj);
+                var hash = 0, i, chr, len;
+                console.log(str)
+                console.log(hash)
+                if (str.length === 0) return hash;
+                for (i = 0, len = str.length; i < len; i++) {
+                    chr = str.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + chr;
+                    hash |= 0; // Convert to 32bit integer
+                }
+                console.log(str)
+                console.log(hash)
+                return hash;
             },
             /**
              * 扩展对象属性
@@ -1041,8 +1193,8 @@
 
     factory('PointUtils', [], function () {
         var Point2D = function (x, y) {
-            this.x = x;
-            this.y = y;
+            this.x = x || 0;
+            this.y = y || 0;
         };
         Point2D.prototype = {
             constructor: Point2D,
@@ -1072,9 +1224,7 @@
              * @returns {number}
              */
             getDegFromAnotherPoint: function (p) {
-                var usedPoint = new this.constructor({
-                    x: p.x * 1000000 - this.x * 1000000, y: p.y * 1000000 - this.y * 1000000
-                });
+                var usedPoint = new Point2D(p.x * 1000000 - this.x * 1000000, p.y * 1000000 - this.y * 1000000);
                 var radian = Math.atan2(usedPoint.x * 1000000, usedPoint.y * 1000000);
                 var deg = radian * 180 / Math.PI;
                 return 180 - deg;
@@ -1113,6 +1263,55 @@
         }
     };
 
-    _global.eUtils = serviceProvider;
+    _global.eUtils = (function () {
+        var utils = {};
+        if (window.everyUtils) {
+            window.everyUtils(function (
+                ArrayUtils,
+                ObjectUtils,
+                BaseUtils,
+                FunctionUtils,
+                ColorUtils,
+                PointUtils,
+                UrlUtils) {
+                utils = {
+                    ArrayUtils: ArrayUtils,
+                    ObjectUtils: ObjectUtils,
+                    BaseUtils: BaseUtils,
+                    ColorUtils: ColorUtils,
+                    UrlUtils: UrlUtils,
+                    urlUtils: UrlUtils,
+                    PointUtils: PointUtils,
+                    FunctionUtils: FunctionUtils
+                };
+            });
+        }
+        var proxy = {};
+        Object.keys(utils).forEach(function (utilName) {
+            if (!utilName) {
+                return;
+            }
+            Object.defineProperty(proxy, utilName, {
+                get: function () {
+                    return utils[utilName];
+                }
+            });
+            Object.keys(utils[utilName]).forEach(function (key) {
+                if (!key) {
+                    return;
+                }
+                if (proxy[key]) {
+                    return;
+                }
+                Object.defineProperty(proxy, key, {
+                    get: function () {
+                        return utils[utilName][key];
+                    }
+                })
+            })
+        });
+        return proxy;
+    })();
 
-}(window);
+    return _global.eUtils;
+}));
