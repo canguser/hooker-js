@@ -28,7 +28,8 @@
 
     var errorUrls = [
         'iqiyi.com',
-        'jd.com'
+        'jd.com',
+        'tmall.com'
     ];
 
     var generate = function () {
