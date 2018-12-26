@@ -9,7 +9,7 @@
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
 // @include      *
-// @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=656794
+// @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=656795
 // @author       Cangshi
 // @match        http://*/*
 // @run-at       document-start
