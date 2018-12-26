@@ -1,0 +1,58 @@
+<!---- Creator: Eoly -->
+<!---- On 2017/9/20 -->
+<!---- Call http://palerock.cn -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Title</title>
+    <style>
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+    </style>
+    <!--<script src="ajaxHook.js"></script>-->
+    <script src="../src/everything-hook.js"></script>
+    <script src="../src/plugins/hookAll.js"></script>
+    <script>
+        // var id = aHook.register('.*/login', {
+        //     hookSend: function (args) {
+        //     },
+        //     hookResponse: function (e) {
+        //         console.log(this)
+        //     }
+        // });
+        // console.log(id);
+    </script>
+    <script src="jquery-3.1.1.js"></script>
+    <script>
+        function send(){
+            $.ajax({
+                method: 'post',
+                dataType: "json",
+                contentType: "application/json;charset=UTF-8",
+                url: 'http://palerock.cn/h5_back/login',
+                data: '{"userPhoneNumber":"xiaoxigua","userLoginPsw":"12"}',
+                success: function (res) {
+                    console.log(res);
+                },
+                error: function (res) {
+                    console.log(res);
+                }
+            })
+        }
+        NetHook.filter('.*/palerock.cn/.*').ajax.resp = function (res) {
+            console.log(res);
+            console.log(this)
+        }
+
+    </script>
+</head>
+<body>
+    <button onclick="send()">hhhhhh</button>
+</body>
+</html>

@@ -4,13 +4,12 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      0.2.0052
+// @version      0.2.0105
 // @description       控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
 // @include      *
-// @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=632910
-// @require      https://greasyfork.org/scripts/372706-hook-all-ajax/code/Hook%20all%20ajax.js?version=635123
+// @require      http://localhost:63342/everthing-hook/src/everything-hook.js
 // @author       Cangshi
 // @match        http://*/*
 // @run-at       document-start
@@ -23,7 +22,6 @@
  * View: http://palerock.cn
  * ---------------------------
  */
-//               https://code.jquery.com/jquery-3.3.1.min.js
 ~function (global) {
 
     var errorUrls = [
@@ -50,6 +48,9 @@
                 _setInterval: window['setInterval'],
                 _clearInterval: window['clearInterval'],
                 _setTimeout: window['setTimeout'],
+                _Date: window['Date'],
+                __lastDatetime: new Date().getTime(),
+                __lastMDatetime: new Date().getTime(),
                 /**
                  * 初始化方法
                  */
@@ -84,9 +85,54 @@
                     _this.hookBefore(window, 'setTimeout', function (method, args) {
                         args[1] *= __this._percentage;
                     });
+                    var newFunc = function () {
+                        if (arguments.length === 1) {
+                            Object.defineProperty(this, '_innerDate', {
+                                configurable: false,
+                                enumerable: false,
+                                value: new __this._Date(arguments[0]),
+                                writable: false
+                            });
+                            return;
+                        } else if (arguments.length > 1) {
+                            Object.defineProperty(this, '_innerDate', {
+                                configurable: false,
+                                enumerable: false,
+                                value: new __this._Date(
+                                    arguments[0],
+                                    arguments[1],
+                                    arguments[2],
+                                    arguments[3],
+                                    arguments[4],
+                                    arguments[5],
+                                    arguments[6]
+                                ),
+                                writable: false
+                            });
+                            return;
+                        }
+                        var now = __this._Date.now();
+                        var passTime = now - __this.__lastDatetime;
+                        var hookPassTime = passTime * (1 / __this._percentage);
+                        // console.log(__this.__lastDatetime + hookPassTime, now,__this.__lastDatetime + hookPassTime - now);
+                        Object.defineProperty(this, '_innerDate', {
+                            configurable: false,
+                            enumerable: false,
+                            value: new __this._Date(__this.__lastMDatetime + hookPassTime),
+                            writable: false
+                        });
+                    };
+                    _this.hookClass(window, 'Date', newFunc, '_innerDate', ['now']);
+                    Date.now = function () {
+                        return new Date().getTime();
+                    };
+                    _this.hookedToString(__this._Date.now, Date.now);
                     // 保护方法不被篡改
                     _this.protect(window, 'setInterval');
+                    _this.protect(window, 'setTimeout');
                     _this.protect(window, 'clearInterval');
+                    _this.protect(window, 'Date');
+                    __this._mDate = window.Date;
                     // 设定百分比属性被修改的回调
                     Object.defineProperty(__this, '_percentage', {
                         get: function () {
@@ -228,6 +274,12 @@
                  * @param percentage
                  */
                 change: function (percentage) {
+                    this.__lastMDatetime = this._mDate.now();
+                    // console.log(this._mDate.toString());
+                    // console.log(new this._mDate());
+                    this.__lastDatetime = this._Date.now();
+                    // debugger;
+                    //---------------------------------//
                     this._percentage = percentage;
                     var oldNode = document.getElementsByClassName('_th-click-hover');
                     var oldNode1 = document.getElementsByClassName('_th_times');
@@ -243,23 +295,6 @@
             };
             // 默认初始化
             timerHooker.init();
-            // filter
-            if (global.NetHook) {
-                var isAutoInit = localStorage.getItem('__hook_all_auto_init');
-                if (isAutoInit && isAutoInit !== 'false') {
-                    var url = location.href;
-                    var hasSetting = false;
-                    errorUrls.forEach(function (value) {
-                        if (util.urlMatching(url, '.*' + value + '.*')) {
-                            global.NetHook.setting.autoInit(false);
-                            hasSetting = true;
-                        }
-                    });
-                    if (hasSetting) {
-                        location.reload();
-                    }
-                }
-            }
             return timerHooker;
         }
     };

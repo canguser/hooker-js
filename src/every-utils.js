@@ -499,9 +499,9 @@
              * @param obj
              */
             contains: function (arr, obj) {
-                let contains = false;
+                var contains = false;
                 this.ergodicArrayObject(this, arr, function (a) {
-                    if (a === arr) {
+                    if (a === obj) {
                         contains = true;
                         return -1;
                     }

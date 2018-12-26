@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.5.8045
+// @version      0.5.9045
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -19,7 +19,36 @@
  * ---------------------------
  */
 'use strict';
-~function (_global) {
+/**
+ * Every-Utils
+ * version:0.0.2001
+ */
+(function (global, factory) {
+
+    "use strict";
+
+    if (typeof module === "object" && typeof module.exports === "object") {
+
+        // For CommonJS and CommonJS-like environments where a proper `window`
+        // is present, execute the factory and get jQuery.
+        // For environments that do not have a `window` with a `document`
+        // (such as Node.js), expose a factory as module.exports.
+        // This accentuates the need for the creation of a real `window`.
+        // e.g. var jQuery = require("jquery")(window);
+        // See ticket #14549 for more info.
+        module.exports = global.document ?
+            factory(global, true) :
+            function (w) {
+                if (!w.document) {
+                    throw new Error("eUtils requires a window with a document");
+                }
+                return factory(w);
+            };
+    } else {
+        factory(global);
+    }
+
+}(typeof window !== "undefined" ? window : this, function (_global, noGlobal) {
 
     // base
     var BaseUtils = {
@@ -54,6 +83,17 @@
                 return false;
             }
             return typeof str === 'string';
+        },
+        uniqueNum: 1000,
+        /**
+         * 根据当前时间戳生产一个随机id
+         * @returns {string}
+         */
+        buildUniqueId: function () {
+            var prefix = new Date().getTime().toString();
+            var suffix = this.uniqueNum.toString();
+            this.uniqueNum++;
+            return prefix + suffix;
         }
     };
 
@@ -431,6 +471,63 @@
                     return resultArr.slice(0);
                 }
                 return resultArr;
+            },
+            /**
+             * 将类数组转化为数组
+             * @param arrLike 类数组对象
+             */
+            toArray: function (arrLike) {
+                if (!arrLike || arrLike.length === 0) {
+                    return [];
+                }
+                // 非伪类对象，直接返回最好
+                if (!arrLike.length) {
+                    return arrLike;
+                }
+                // 针对IE8以前 DOM的COM实现
+                try {
+                    return [].slice.call(arrLike);
+                } catch (e) {
+                    var i = 0,
+                        j = arrLike.length,
+                        res = [];
+                    for (; i < j; i++) {
+                        res.push(arrLike[i]);
+                    }
+                    return res;
+                }
+            },
+            /**
+             * 判断是否为类数组
+             * @param o
+             * @returns {boolean}
+             */
+            isArrayLick: function (o) {
+                if (o &&                                // o is not null, undefined, etc.
+                    typeof o === 'object' &&            // o is an object
+                    isFinite(o.length) &&               // o.length is a finite number
+                    o.length >= 0 &&                    // o.length is non-negative
+                    o.length === Math.floor(o.length) &&  // o.length is an integer
+                    o.length < 4294967296)              // o.length < 2^32
+                    return true;                        // Then o is array-like
+                else
+                    return false;                       // Otherwise it is not
+
+            },
+            /**
+             * 判断数组是否包含对象
+             * @param arr
+             * @param obj
+             */
+            contains: function (arr, obj) {
+                var contains = false;
+                this.ergodicArrayObject(this, arr, function (a) {
+                    if (a === obj) {
+                        contains = true;
+                        return -1;
+                    }
+                });
+                return contains;
             }
         }
     });
@@ -663,6 +760,7 @@
                 if (typeof obj === 'string' ||
                     typeof obj === 'number' ||
                     typeof obj === 'undefined' ||
+                    typeof obj === 'function' ||
                     typeof obj === 'boolean') {
                     return obj;
                 }
@@ -685,6 +783,71 @@
                     });
                 }
                 return newObj;
+            },
+            // cloneIndeed: function (obj) {
+            //     var hash = new Map();
+            //     var result = this._cloneIndeed(obj, hash);
+            //     for (var item of hash.values()) {
+            //         ArrayUtils.ergodicArrayObject(this, item.settingArr, function (func) {
+            //             func.call(this);
+            //         })
+            //     }
+            //     return result;
+            // },
+            // _cloneIndeed: function (obj, hash) {
+            //     hash = hash || new Map();
+            //     var result = {};
+            //     // 获取数据类型
+            //     var dataType = typeof obj;
+            //     switch (dataType.toLowerCase()) {
+            //         case 'string':
+            //         case 'number':
+            //         case 'boolean':
+            //         case 'undefined':
+            //             return obj;
+            //         case 'object':
+            //         default: {
+            //             for (var key in obj) {
+            //                 var nextObj = obj[key];
+            //                 var hashObj = hash.get(nextObj);
+            //                 if (hashObj != null && hashObj.clonedObj != null) {
+            //                     obj[key] = null;
+            //                 }
+            //                 hash.set(nextObj, {
+            //                         clonedObj: result,
+            //                         settingArr: [],
+            //                         active: false
+            //                     }
+            //                 );
+            //                 result[key] = this._cloneIndeed(nextObj, hash);
+            //             }
+            //             if (obj != null) {
+            //                 result['__proto__'] = obj['__proto__'];
+            //             }
+            //         }
+            //
+            //     }
+            //     return result;
+            // },
+            /**
+             * 获取对象的哈希码
+             * @param obj {Object}
+             * @returns {number}
+             */
+            getObjHashCode: function (obj) {
+                var str = JSON.stringify(obj);
+                var hash = 0, i, chr, len;
+                console.log(str)
+                console.log(hash)
+                if (str.length === 0) return hash;
+                for (i = 0, len = str.length; i < len; i++) {
+                    chr = str.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + chr;
+                    hash |= 0; // Convert to 32bit integer
+                }
+                console.log(str)
+                console.log(hash)
+                return hash;
             },
             /**
              * 扩展对象属性
@@ -1002,6 +1165,37 @@
 
     factory('UrlUtils', [], function () {
         return {
+            getUrlInfo: function (url) {
+                var a = document.createElement('a');
+                a.href = url;
+                return {
+                    source: url,
+                    protocol: a.protocol.replace(':', ''),
+                    host: a.hostname,
+                    port: a.port,
+                    query: a.search,
+                    file: (a.pathname.match(/\/([^\/?#]+)$/i) || [, ''])[1],
+                    hash: a.hash.replace('#', ''),
+                    path: a.pathname.replace(/^([^\/])/, '/$1'),
+                    relative: (a.href.match(/tps?:\/\/[^\/]+(.+)/) || [, ''])[1],
+                    segments: a.pathname.replace(/^\//, '').split('/'),
+                    params: (function () {
+                        var ret = {};
+                        var seg = a.search.replace(/^\?/, '').split('&').filter(function (v, i) {
+                            if (v !== '' && v.indexOf('=')) {
+                                return true;
+                            }
+                        });
+                        seg.forEach(function (element, index) {
+                            var idx = element.indexOf('=');
+                            var key = element.substring(0, idx);
+                            var val = element.substring(idx + 1);
+                            ret[key] = val;
+                        });
+                        return ret;
+                    })()
+                };
+            },
             urlMatching: function (url, matchUrl) {
                 var pattern = new RegExp(matchUrl);
                 return pattern.test(url);
@@ -1011,27 +1205,34 @@
             },
             getParamFromUrl: function (url) {
                 var params = [];
-                var parts = url.split('?');
-                if (parts.length < 2) {
-                    return params;
-                }
-                var paramsStr = parts[1].split('&');
-                for (var i = 0; i < paramsStr.length; i++) {
-                    var index = paramsStr[i].indexOf('=');
-                    var ps = new Array(2);
-                    if (index !== -1) {
-                        ps = [
-                            paramsStr[i].substring(0, index),
-                            paramsStr[i].substring(index + 1),
-                        ];
-                    } else {
-                        ps[0] = paramsStr[i];
-                    }
+                var paramsObject = this.getUrlInfo(url).params;
+                Object.keys(paramsObject).forEach(function (key) {
                     params.push({
-                        key: ps[0],
-                        value: ps[1]
-                    });
-                }
+                        key: key,
+                        value: paramsObject[key]
+                    })
+                });
+                // var parts = url.split('?');
+                // if (parts.length < 2) {
+                //     return params;
+                // }
+                // var paramsStr = parts[1].split('&');
+                // for (var i = 0; i < paramsStr.length; i++) {
+                //     var index = paramsStr[i].indexOf('=');
+                //     var ps = new Array(2);
+                //     if (index !== -1) {
+                //         ps = [
+                //             paramsStr[i].substring(0, index),
+                //             paramsStr[i].substring(index + 1),
+                //         ];
+                //     } else {
+                //         ps[0] = paramsStr[i];
+                //     }
+                //     params.push({
+                //         key: ps[0],
+                //         value: ps[1]
+                //     });
+                // }
                 return params;
             },
             margeUrlAndParams: function (url, params) {
@@ -1041,13 +1242,75 @@
                 var paramsStr = [];
                 for (var i = 0; i < params.length; i++) {
                     if (params[i].key !== null && params[i].value !== null) {
-                        paramsStr.push(params[i].key + '=' + params[i].value);
+                        if (!params[i].key) {
+                            paramsStr.push(params[i].value);
+                        } else {
+                            paramsStr.push(params[i].key + '=' + params[i].value);
+                        }
                     }
                 }
-                var paramsPart = paramsStr.join('&');
-
-                return url + (paramsPart ? '?' + paramsPart : '');
+                return url + '?' + paramsStr.join('&');
             }
+        }
+    });
+
+    factory('PointUtils', [], function () {
+        var Point2D = function (x, y) {
+            this.x = x || 0;
+            this.y = y || 0;
+        };
+        Point2D.prototype = {
+            constructor: Point2D,
+            /**
+             * 获取指定距离和角度对应的平面点
+             * @param distance
+             * @param deg
+             */
+            getOtherPointFromDistanceAndDeg: function (distance, deg) {
+                var radian = Math.PI / 180 * deg;
+                var point = new this.constructor();
+                point.x = distance * Math.sin(radian) + this.x;
+                point.y = this.y - distance * Math.cos(radian);
+                return point;
+            },
+            /**
+             * 获取当前平面点与另一个平面点之间的距离
+             * @param p
+             * @returns {number}
+             */
+            getDistanceFromAnotherPoint: function (p) {
+                return Math.sqrt((this.x - p.x) * (this.x - p.x) + (this.y - p.y) * (this.y - p.y));
+            },
+            /**
+             * 获取当前平面点与另一个平面点之间的角度
+             * @param p
+             * @returns {number}
+             */
+            getDegFromAnotherPoint: function (p) {
+                var usedPoint = new Point2D(p.x * 1000000 - this.x * 1000000, p.y * 1000000 - this.y * 1000000);
+                var radian = Math.atan2(usedPoint.x * 1000000, usedPoint.y * 1000000);
+                var deg = radian * 180 / Math.PI;
+                return 180 - deg;
+            },
+            /**
+             * 判断该点是否位于一矩形内部
+             * @param x 矩形开始坐标x
+             * @param y 矩形开始坐标y
+             * @param width 矩形宽
+             * @param height 矩形长
+             * @returns {boolean}
+             */
+            isInRect: function (x, y, width, height) {
+                var px = this.x;
+                var py = this.y;
+                if (px < x || px > x + width) {
+                    return false;
+                }
+                return !(py < y || py > y + height);
+            }
+        };
+        return {
+            Point2D: Point2D
         }
     });
 
@@ -1058,14 +1321,63 @@
             var args = arguments;
             depend.call(arguments[1] || this, ['FunctionUtils'], function (FunctionUtils) {
                 var depends = FunctionUtils.getFunctionParams(args[0]);
-                depend.bind(this)(depends, args[0]);
+                depend(depends, args[0]);
             })
         }
     };
 
-    _global.p = serviceProvider;
+    _global.eUtils = (function () {
+        var utils = {};
+        if (window.everyUtils) {
+            window.everyUtils(function (
+                ArrayUtils,
+                ObjectUtils,
+                BaseUtils,
+                FunctionUtils,
+                ColorUtils,
+                PointUtils,
+                UrlUtils) {
+                utils = {
+                    ArrayUtils: ArrayUtils,
+                    ObjectUtils: ObjectUtils,
+                    BaseUtils: BaseUtils,
+                    ColorUtils: ColorUtils,
+                    UrlUtils: UrlUtils,
+                    urlUtils: UrlUtils,
+                    PointUtils: PointUtils,
+                    FunctionUtils: FunctionUtils
+                };
+            });
+        }
+        var proxy = {};
+        Object.keys(utils).forEach(function (utilName) {
+            if (!utilName) {
+                return;
+            }
+            Object.defineProperty(proxy, utilName, {
+                get: function () {
+                    return utils[utilName];
+                }
+            });
+            Object.keys(utils[utilName]).forEach(function (key) {
+                if (!key) {
+                    return;
+                }
+                if (proxy[key]) {
+                    return;
+                }
+                Object.defineProperty(proxy, key, {
+                    get: function () {
+                        return utils[utilName][key];
+                    }
+                })
+            })
+        });
+        return proxy;
+    })();
 
-}(window);
+    return _global.eUtils;
+}));
 
 
 ~function (utils) {
@@ -1337,6 +1649,83 @@
                 context: context
             });
         },
+        hookClass: function (parent, className, replace, innerName, excludeProperties) {
+            var _this = this;
+            var originFunc = parent[className];
+            if (!excludeProperties) {
+                excludeProperties = [];
+            }
+            excludeProperties.push('prototype');
+            excludeProperties.push('caller');
+            excludeProperties.push('arguments');
+            innerName = innerName || '_innerHook';
+            var resFunc = function () {
+                this[innerName] = new originFunc();
+                replace.apply(this, arguments);
+            };
+            this.hookedToString(originFunc, resFunc);
+            this.hookedToProperties(originFunc, resFunc, true, excludeProperties);
+            var prototypeProperties = Object.getOwnPropertyNames(originFunc.prototype);
+            var prototype = resFunc.prototype = {
+                constructor: resFunc
+            };
+            prototypeProperties.forEach(function (name) {
+                if (name === 'constructor') {
+                    return;
+                }
+                var method = function () {
+                    if (originFunc.prototype[name] && utils.isFunction(originFunc.prototype[name])) {
+                        return originFunc.prototype[name].apply(this[innerName], arguments);
+                    }
+                    return undefined;
+                };
+                _this.hookedToString(originFunc.prototype[name], method);
+                prototype[name] = method;
+            });
+            this.hookReplace(parent, className, function () {
+                return resFunc;
+            }, parent)
+        },
+        hookedToProperties: function (originObject, resultObject, isDefined, excludeProperties) {
+            var objectProperties = Object.getOwnPropertyNames(originObject);
+            objectProperties.forEach(function (property) {
+                if (utils.contains(excludeProperties, property)) {
+                    return;
+                }
+                if (!isDefined) {
+                    resultObject[property] = originObject[property];
+                } else {
+                    Object.defineProperty(resultObject, property, {
+                        configurable: false,
+                        enumerable: false,
+                        value: originObject[property],
+                        writable: false
+                    });
+                }
+            });
+        },
+        hookedToString: function (originObject, resultObject) {
+            var toString = function () {
+                return originObject.toString();
+            };
+            var toLocaleString = function () {
+                return originObject.toLocaleString();
+            };
+            Object.defineProperties(resultObject, {
+                toString: {
+                    configurable: false,
+                    enumerable: false,
+                    value: toString,
+                    writable: false
+                },
+                toLocaleString: {
+                    configurable: false,
+                    enumerable: false,
+                    value: toLocaleString,
+                    writable: false
+                }
+            })
+        },
         /**
          * 劫持全局ajax
          * @param methods {object} 劫持的方法
@@ -1384,7 +1773,7 @@
                 };
             };
             return this.hookReplace(_global, 'XMLHttpRequest', function (XMLHttpRequest) {
-                return function () {
+                var resFunc = function () {
                     this.xhr = new XMLHttpRequest();
                     for (var propertyName in this.xhr) {
                         var property = this.xhr[propertyName];
@@ -1401,6 +1790,22 @@
                     // 定义外部xhr可以在内部访问
                     this.xhr.xhr = this;
                 };
+                _this.hookedToProperties(XMLHttpRequest, resFunc, true);
+                _this.hookedToString(XMLHttpRequest, resFunc);
+                return resFunc
+            });
+        },
+        /**
+         * 劫持全局ajax
+         * @param methods {object} 劫持的方法
+         * @return {*|number} 劫持的id
+         */
+        hookAjaxV2: function (methods) {
+            this.hookClass(window, 'XMLHttpRequest', function () {
+
+            });
+            utils.ergodicObject(this, methods, function (method) {
+
             });
         },
         /**

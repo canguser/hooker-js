@@ -4,7 +4,7 @@
 // @version      0.1.018
 // @description  it can hook all ajax
 // @include      *
-// @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=632910
+// @require      http://localhost:63342/everthing-hook/src/everything-hook.js
 // @author       Cangshi
 // @match        *://*/*
 // @run-at       document-start
@@ -33,6 +33,10 @@
                             isPass = util.urlUtils.urlMatching(src, ajaxObject.filterPatten);
                         }
                         if (!isPass || !ajaxChange.cb.req) {
+                            return;
+                        }
+                        var urls = src.split(',');
+                        if (urls.length > 1) {
                             return;
                         }
                         args[0].requestParams = util.urlUtils.getParamFromUrl(src);
@@ -155,9 +159,9 @@
                     }
                 };
                 ajaxChange.onInit();
-                if (ajaxObject.isAutoInit) {
-                    ajaxChange.init();
-                }
+                // if (ajaxObject.isAutoInit) {
+                ajaxChange.init();
+                // }
 
                 return ajaxChange;
             }
