@@ -4,7 +4,7 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      0.2.0105
+// @version      0.2.0106
 // @description       控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
@@ -36,8 +36,20 @@
         'item.taobao.com/item',
     ];
 
+    var workerURLs = [
+        'youku.com',
+        'w3school.com.cn'
+    ];
+
     var generate = function () {
         return function (util) {
+            // disable worker
+            // workerURLs.forEach(function (url) {
+            //     if (util.urlMatching(location.href, 'http.*://.*' + url + '.*')) {
+            //         window['Worker'] = undefined;
+            //         console.log('Worker disabled');
+            //     }
+            // });
             var _this = this;
             var timerHooker = {
                 // 用于储存计时器的id和参数
@@ -99,13 +111,13 @@
                                 configurable: false,
                                 enumerable: false,
                                 value: new __this._Date(
-                                    arguments[0],
-                                    arguments[1],
-                                    arguments[2],
-                                    arguments[3],
-                                    arguments[4],
-                                    arguments[5],
-                                    arguments[6]
+                                    arguments[0]||null,
+                                    arguments[1]||null,
+                                    arguments[2]||null,
+                                    arguments[3]||null,
+                                    arguments[4]||null,
+                                    arguments[5]||null,
+                                    arguments[6]||null
                                 ),
                                 writable: false
                             });
