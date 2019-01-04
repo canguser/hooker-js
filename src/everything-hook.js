@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.5.9046
+// @version      0.5.9047
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -1521,7 +1521,7 @@
                     args.push(methodTask.original);
                     args.push(v.arguments);
                     args.push(v.result);
-                    var r = invokeMethods(context || this, methodTask.task.after, args);
+                    var r = invokeMethods(context || v.this, methodTask.task.after, args);
                     return {
                         result: (r != null ? r : v.result)
                     };
