@@ -4,12 +4,12 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      0.2.0106
+// @version      0.2.0107
 // @description       控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
 // @include      *
-// @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=656795
+// @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=659315
 // @author       Cangshi
 // @match        http://*/*
 // @run-at       document-start
@@ -111,13 +111,13 @@
                                 configurable: false,
                                 enumerable: false,
                                 value: new __this._Date(
-                                    arguments[0]||null,
-                                    arguments[1]||null,
-                                    arguments[2]||null,
-                                    arguments[3]||null,
-                                    arguments[4]||null,
-                                    arguments[5]||null,
-                                    arguments[6]||null
+                                    arguments[0] || null,
+                                    arguments[1] || null,
+                                    arguments[2] || null,
+                                    arguments[3] || null,
+                                    arguments[4] || null,
+                                    arguments[5] || null,
+                                    arguments[6] || null
                                 ),
                                 writable: false
                             });
@@ -134,12 +134,29 @@
                             writable: false
                         });
                     };
-                    _this.hookClass(window, 'Date', newFunc, '_innerDate', ['now']);
+                    // _this.hookClass(window, 'Date', newFunc, '_innerDate', ['now']);
                     Date.now = function () {
                         return new Date().getTime();
                     };
                     _this.hookedToString(__this._Date.now, Date.now);
+                    var objToString = Object.prototype.toString;
+                    Object.prototype.toString = function () {
+                        if (this instanceof __this._mDate) {
+                            return '[object Date]';
+                        } else {
+                            return objToString.call(this);
+                        }
+                    };
+                    // _this.hookAfter(Object.prototype, 'toString', function (m, args, result) {
+                    //     if (this instanceof __this._mDate) {
+                    //         return '[object Date]';
+                    //     } else {
+                    //         return result;
+                    //     }
+                    // }, false);
+                    // _this.hookedToString(Object.prototype.toString, objToString);
                     // 保护方法不被篡改
+                    // _this.protect(Object.prototype, 'toString');
                     _this.protect(window, 'setInterval');
                     _this.protect(window, 'setTimeout');
                     _this.protect(window, 'clearInterval');
