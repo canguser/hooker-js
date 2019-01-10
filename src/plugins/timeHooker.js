@@ -4,7 +4,7 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      0.2.0108
+// @version      0.2.0111
 // @description       控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
@@ -251,6 +251,8 @@
                     // 快捷键注册
                     window.addEventListener('keydown', function (e) {
                         switch (e.keyCode) {
+                            // [=]
+                            case 190:
                             case 187: {
                                 if (e.ctrlKey) {
                                     // console.log('+2');
@@ -261,6 +263,8 @@
                                 }
                                 break;
                             }
+                            // [-]
+                            case 188:
                             case 189: {
                                 if (e.ctrlKey) {
                                     // console.log('-2');
@@ -271,6 +275,7 @@
                                 }
                                 break;
                             }
+                            // [0]
                             case 48: {
                                 if (e.ctrlKey || e.altKey) {
                                     // console.log('reset');
