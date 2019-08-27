@@ -1251,6 +1251,48 @@
         }
     });
 
+
+    factory('PropExpand', ['BaseUtils', 'ObjectUtils', 'ArrayUtils', 'UrlUtils'],
+        function (BaseUtils, ObjectUtils, ArrayUtils, UrlUtils) {
+            return {
+                Object: {
+                    getProperty: function (_self, propertyLink) {
+                        return ObjectUtils.readLinkProperty(_self, propertyLink);
+                    },
+                    setProperty: function (_self, propertyLink, value) {
+                        ObjectUtils.createLinkProperty(_self, propertyLink, value);
+                    },
+                    mapConvert: function (_self, mapper) {
+
+                    },
+                    keyMap: function (_self, cb) {
+                    },
+                    keyValues: function (_self, cb) {
+                    },
+                    keyFilter: function (_self, cb) {
+                    },
+                },
+                Array: {
+                    map: function () {
+                    },
+                    forEach: function () {
+                    },
+                    filter: function () {
+                    },
+                    reduce: function () {
+                    },
+                    keep: function () {
+                    },
+                    remove: function () {
+                    }
+                },
+                String: {
+                    join: function (_self, arr) {
+                    },
+                }
+            }
+        });
+
     _global.everyUtils = function () {
         if (BaseUtils.isArray(arguments[0])) {
             depend.call(arguments[2] || this, arguments[0], arguments[1]);
