@@ -4,7 +4,7 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      0.2.0111
+// @version      0.3.0001
 // @description       控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
@@ -24,32 +24,17 @@
  */
 ~function (global) {
 
-    var errorUrls = [
-        'iqiyi.com',
-        'jd.com',
-        'tmall.com',
-        'douyu.com',
-        'kbs.sports.qq.com',
-        'bilibili.com',
-        'youtube.com/watch',
-        'tieba.baidu.com/f',
-        'item.taobao.com/item',
-    ];
-
-    var workerURLs = [
-        'youku.com',
-        'w3school.com.cn'
-    ];
+    var workerURLs = [];
 
     var generate = function () {
         return function (util) {
             // disable worker
-            // workerURLs.forEach(function (url) {
-            //     if (util.urlMatching(location.href, 'http.*://.*' + url + '.*')) {
-            //         window['Worker'] = undefined;
-            //         console.log('Worker disabled');
-            //     }
-            // });
+            workerURLs.forEach(function (url) {
+                if (util.urlMatching(location.href, 'http.*://.*' + url + '.*')) {
+                    window['Worker'] = undefined;
+                    console.log('Worker disabled');
+                }
+            });
             var _this = this;
             var timerHooker = {
                 // 用于储存计时器的id和参数
@@ -63,6 +48,7 @@
                 _Date: window['Date'],
                 __lastDatetime: new Date().getTime(),
                 __lastMDatetime: new Date().getTime(),
+                videoSpeedInterval: 1000,
                 /**
                  * 初始化方法
                  */
@@ -308,6 +294,7 @@
                  * @param percentage
                  */
                 change: function (percentage) {
+                    var _this = this;
                     this.__lastMDatetime = this._mDate.now();
                     // console.log(this._mDate.toString());
                     // console.log(new this._mDate());
@@ -325,6 +312,26 @@
                     this._setTimeout.bind(window)(function () {
                         a.className = '_th_cover-all-show-times _th_hidden';
                     }, 100);
+                    this.changeVideoSpeed();
+                    this.videoSpeedIntervalId = this._setInterval.bind(window)(function () {
+                        _this.changeVideoSpeed();
+                        var rate = 1 / _this._percentage;
+                        if (rate === 1) {
+                            this._clearInterval.bind(window)(_this.videoSpeedIntervalId);
+                        }
+                    }, this.videoSpeedInterval);
+                },
+                changeVideoSpeed: function () {
+                    var rate = 1 / this._percentage;
+                    rate > 16 && (rate = 16);
+                    rate < 0.065 && (rate = 0.065);
+                    var videos = document.querySelectorAll('video');
+                    if (!videos.length) {
+                        return;
+                    }
+                    for (var i = 0; i < videos.length; i++) {
+                        videos[i].playbackRate = rate;
+                    }
                 }
             };
             // 默认初始化
