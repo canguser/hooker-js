@@ -1891,7 +1891,7 @@
          * @param methodName
          */
         isHooked: function (context, methodName) {
-            var hookMap = this._getHookedMap(context);
+            var hookMap = this._getHookedMethodMap(context);
             return hookMap[methodName] !== undefined ? (hookMap[methodName].original !== undefined) : false;
         },
         /**

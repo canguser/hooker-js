@@ -4,7 +4,7 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|视频广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      0.3.0002
+// @version      0.3.0003
 // @description       控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
@@ -147,6 +147,9 @@
                     // _this.protect(window, 'setTimeout');
                     // _this.protect(window, 'clearInterval');
                     // _this.protect(window, 'Date');
+                    _this.hookedToString(__this._setInterval, setInterval);
+                    _this.hookedToString(__this._setTimeout, setTimeout);
+                    _this.hookedToString(__this._clearInterval, clearInterval);
                     __this._mDate = window.Date;
                     // 设定百分比属性被修改的回调
                     Object.defineProperty(__this, '_percentage', {
