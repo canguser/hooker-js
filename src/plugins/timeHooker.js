@@ -4,7 +4,7 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|视频广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      1.0.05
+// @version      1.0.07
 // @description       控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
@@ -343,7 +343,7 @@
                     var rate = 1 / this._percentage;
                     rate > 16 && (rate = 16);
                     rate < 0.065 && (rate = 0.065);
-                    console.log(rate);
+                    // console.log(rate);
                     var videos = document.querySelectorAll('video') || [];
                     if (videos.length) {
                         for (var i = 0; i < videos.length; i++) {
