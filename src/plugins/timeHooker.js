@@ -4,7 +4,7 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|视频广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      1.0.04
+// @version      1.0.05
 // @description       控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
@@ -241,7 +241,8 @@
             percentageChangeHandler: function (percentage) {
                 // 改变所有的循环计时
                 util.ergodicObject(timerContext, timerContext._intervalIds, function (idObj, id) {
-                    idObj.args[1] = idObj.args[2] * percentage;
+                    idObj.args[1] = Math.floor(idObj.args[2] * percentage);
+                    console.log(idObj.args[1]);
                     // 结束原来的计时器
                     this._clearInterval.call(window, idObj.nowId);
                     // 新开一个计时器
@@ -321,14 +322,15 @@
                     var oldNode = document.getElementsByClassName('_th-click-hover');
                     var oldNode1 = document.getElementsByClassName('_th_times');
                     (oldNode[0] || {}).innerHTML = 'x' + 1 / this._percentage;
-                    (oldNode[0] || {}).innerHTML = 'x' + 1 / this._percentage;
-                    var a = document.getElementsByClassName('_th_cover-all-show-times')[0]||{};
+                    (oldNode1[0] || {}).innerHTML = 'x' + 1 / this._percentage;
+                    var a = document.getElementsByClassName('_th_cover-all-show-times')[0] || {};
                     // console.log(a.className);
                     a.className = '_th_cover-all-show-times';
                     this._setTimeout.bind(window)(function () {
                         a.className = '_th_cover-all-show-times _th_hidden';
                     }, 100);
                     this.changeVideoSpeed();
+                    this._clearInterval.bind(window)(this.videoSpeedIntervalId);
                     this.videoSpeedIntervalId = this._setInterval.bind(window)(function () {
                         _this.changeVideoSpeed();
                         var rate = 1 / _this._percentage;
@@ -341,12 +343,12 @@
                     var rate = 1 / this._percentage;
                     rate > 16 && (rate = 16);
                     rate < 0.065 && (rate = 0.065);
+                    console.log(rate);
                     var videos = document.querySelectorAll('video') || [];
-                    if (!videos.length) {
-                        return;
-                    }
-                    for (var i = 0; i < videos.length; i++) {
-                        videos[i].playbackRate = rate;
+                    if (videos.length) {
+                        for (var i = 0; i < videos.length; i++) {
+                            videos[i].playbackRate = rate;
+                        }
                     }
                 }
             };
