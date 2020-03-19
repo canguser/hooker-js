@@ -20,9 +20,9 @@
             border-radius: 100%;
             text-align: center;
             line-height: 30px;
-            -webkit-transition: all .5s;
-            -o-transition: all .5s;
-            transition: all .5s;
+            -webkit-transition: all .35s;
+            -o-transition: all .35s;
+            transition: all .35s;
             right: 30px
         }
 
@@ -91,12 +91,19 @@
             position: fixed;
             -webkit-box-sizing: border-box;
             box-sizing: border-box;
-            z-index: 99999
+            z-index: 100000;
+            user-select: none;
         }
 
         ._th-container ._th-item:hover {
             opacity: .8;
             background-color: #5fb492;
+            color: aliceblue
+        }
+
+        ._th-container ._th-item:active {
+            opacity: .9;
+            background-color: #316347;
             color: aliceblue
         }
 
@@ -126,27 +133,29 @@
             font-weight: 900;
             font-size: 30px;
             color: #4f4f4f;
-            background-color: rgba(0, 0, 0, 0.1);
+            background-color: rgba(0, 0, 0, 0.1)
         }
 
         ._th_cover-all-show-times._th_hidden {
-            z-index: -1;
+            z-index: -99999;
             opacity: 0;
-            transition: 1s all;
+            -webkit-transition: 1s all;
+            -o-transition: 1s all;
+            transition: 1s all
         }
 
         ._th_cover-all-show-times ._th_times {
-            width: 80px;
-            height: 80px;
-            border-radius: 80px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
             background-color: rgba(127, 255, 212, 0.51);
             text-align: center;
-            line-height: 80px;
+            line-height: 300px;
             position: absolute;
             top: 50%;
             right: 50%;
-            margin-top: -40px;
-            margin-right: -40px;
+            margin-top: -150px;
+            margin-right: -150px;
         }
 
     </style>
@@ -186,8 +195,8 @@
     <div class="_th-item _item-x-4">&lt;&lt;</div>
     <div class="_th-item _item-reset">O</div>
 </div>
-<div class="_th_cover-all-show-times _th_hidden">
-    <div class="_th_times">x1</div>
+<div class="_th_cover-all-show-times">
+    <div class="_th_times">x1324324234324</div>
 </div>
 </body>
 </html>

@@ -4,7 +4,7 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|视频广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      1.0.20
+// @version      1.0.30
 // @description       控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
@@ -22,6 +22,15 @@
  * View: http://palerock.cn
  * ---------------------------
  */
+window.isDOMLoaded = false;
+window.isDOMRendered = false;
+
+document.addEventListener('readystatechange', function () {
+    if (document.readyState === "interactive" || document.readyState === "complete") {
+        window.isDOMLoaded = true;
+    }
+});
+
 ~function (global) {
 
     var workerURLs = [];
@@ -30,7 +39,7 @@
     var helper = function (eHookContext, timerContext, util) {
         return {
             applyUI: function () {
-                var style = '._th-container ._th-item{margin-bottom:3px;position:relative;width:30px;height:30px;cursor:pointer;opacity:.3;background-color:aquamarine;border-radius:100%;text-align:center;line-height:30px;-webkit-transition:all .5s;-o-transition:all .5s;transition:all .5s;right:30px}._th-container ._th-item._item-x2{margin-left:18px;width:40px;height:40px;line-height:40px}._th-container ._th-item._item-x-2{margin-left:17px;width:38px;height:38px;line-height:38px}._th-container ._th-item._item-x4{width:36px;height:36px;margin-left:16px;line-height:36px}._th-container ._th-item._item-x-4{width:32px;height:32px;line-height:32px;margin-left:14px}._th-container ._th-item._item-reset{width:30px;line-height:30px;height:30px;margin-left:10px}._th-click-hover{position:relative;-webkit-transition:all .5s;-o-transition:all .5s;transition:all .5s;height:50px;width:50px;cursor:pointer;opacity:.3;border-radius:100%;background-color:aquamarine;text-align:center;line-height:50px;right:0}._th-container:hover{left:-10px}._th-container{font-size:12px;-webkit-transition:all .5s;-o-transition:all .5s;transition:all .5s;left:-40px;top:20%;position:fixed;-webkit-box-sizing:border-box;box-sizing:border-box;z-index:100000}._th-container ._th-item:hover{opacity:.8;background-color:#5fb492;color:aliceblue}._th-container:hover ._th-click-hover{opacity:.8}._th-container:hover ._th-item{opacity:.6;right:0}._th-container ._th-click-hover:hover{opacity:.8;background-color:#5fb492;color:aliceblue}._th_cover-all-show-times{position:fixed;top:0;right:0;width:100%;height:100%;z-index:99999;opacity:1;font-weight:900;font-size:30px;color:#4f4f4f;background-color:rgba(0,0,0,0.1)}._th_cover-all-show-times._th_hidden{z-index:-99999;opacity:0;-webkit-transition:1s all;-o-transition:1s all;transition:1s all}._th_cover-all-show-times ._th_times{width:80px;height:80px;border-radius:80px;background-color:rgba(127,255,212,0.51);text-align:center;line-height:80px;position:absolute;top:50%;right:50%;margin-top:-40px;margin-right:-40px}';
+                var style = '._th-container ._th-item{margin-bottom:3px;position:relative;width:30px;height:30px;cursor:pointer;opacity:.3;background-color:aquamarine;border-radius:100%;text-align:center;line-height:30px;-webkit-transition:all .35s;-o-transition:all .35s;transition:all .35s;right:30px}._th-container ._th-item._item-x2{margin-left:18px;width:40px;height:40px;line-height:40px}._th-container ._th-item._item-x-2{margin-left:17px;width:38px;height:38px;line-height:38px}._th-container ._th-item._item-x4{width:36px;height:36px;margin-left:16px;line-height:36px}._th-container ._th-item._item-x-4{width:32px;height:32px;line-height:32px;margin-left:14px}._th-container ._th-item._item-reset{width:30px;line-height:30px;height:30px;margin-left:10px}._th-click-hover{position:relative;-webkit-transition:all .5s;-o-transition:all .5s;transition:all .5s;height:50px;width:50px;cursor:pointer;opacity:.3;border-radius:100%;background-color:aquamarine;text-align:center;line-height:50px;right:0}._th-container:hover{left:-10px}._th-container{font-size:12px;-webkit-transition:all .5s;-o-transition:all .5s;transition:all .5s;left:-40px;top:20%;position:fixed;-webkit-box-sizing:border-box;box-sizing:border-box;z-index:100000;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}._th-container ._th-item:hover{opacity:.8;background-color:#5fb492;color:aliceblue}._th-container ._th-item:active{opacity:.9;background-color:#316347;color:aliceblue}._th-container:hover ._th-click-hover{opacity:.8}._th-container:hover ._th-item{opacity:.6;right:0}._th-container ._th-click-hover:hover{opacity:.8;background-color:#5fb492;color:aliceblue}._th_cover-all-show-times{position:fixed;top:0;right:0;width:100%;height:100%;z-index:99999;opacity:1;font-weight:900;font-size:30px;color:#4f4f4f;background-color:rgba(0,0,0,0.1)}._th_cover-all-show-times._th_hidden{z-index:-99999;opacity:0;-webkit-transition:1s all;-o-transition:1s all;transition:1s all}._th_cover-all-show-times ._th_times{width:300px;height:300px;border-radius:50%;background-color:rgba(127,255,212,0.51);text-align:center;line-height:300px;position:absolute;top:50%;right:50%;margin-top:-150px;margin-right:-150px;}';
 
                 // 在页面左边添加一个半圆便于修改
                 var html = '<div class="_th-container">\n' +
@@ -57,10 +66,21 @@
                 }
                 var node = document.createElement('div');
                 node.innerHTML = html;
-                window.addEventListener('load', function () {
+                if (!global.isDOMLoaded) {
+                    document.addEventListener('readystatechange', function () {
+                        if ((document.readyState === "interactive" || document.readyState === "complete") && !global.isDOMRendered) {
+                            document.head.appendChild(stylenode);
+                            document.body.appendChild(node);
+                            global.isDOMRendered = true;
+                            console.log('Time Hooker Works!');
+                        }
+                    });
+                } else {
                     document.head.appendChild(stylenode);
                     document.body.appendChild(node);
-                });
+                    global.isDOMRendered = true;
+                    console.log('Time Hooker Works!');
+                }
             },
             applyGlobalAction: function () {
                 // 界面半圆按钮点击的方法
@@ -272,6 +292,30 @@
         }
     };
 
+    var normalUtil = {
+        isInIframe: function () {
+            return global.parent !== global;
+        },
+        listenParentEvent: function (handler) {
+            global.addEventListener('message', function (e) {
+                var data = e.data;
+                var type = data.type || '';
+                if (type === 'changePercentage') {
+                    handler(data.percentage || 0);
+                }
+            })
+        },
+        sentChangesToIframe: function (percentage) {
+            var iframes = document.querySelectorAll('iframe') || [];
+            if (iframes.length) {
+                for (var i = 0; i < iframes.length; i++) {
+                    iframes[i].contentWindow.postMessage(
+                        {type: 'changePercentage', percentage: percentage}, '*');
+                }
+            }
+        }
+    };
+
     var querySelectorAll = function (ele, selector, includeExtra) {
         var elements = ele.querySelectorAll(selector);
         elements = Array.prototype.slice.call(elements || []);
@@ -331,7 +375,13 @@
                         }
                     });
 
-                    h.applyUI();
+                    if (!normalUtil.isInIframe()) {
+                        h.applyUI();
+                    } else {
+                        normalUtil.listenParentEvent((function (percentage) {
+                            this.change(percentage);
+                        }).bind(this))
+                    }
 
                     h.applyGlobalAction();
 
@@ -369,6 +419,7 @@
                             _this._clearInterval.bind(window)(_this.videoSpeedIntervalId);
                         }
                     }, this.videoSpeedInterval);
+                    normalUtil.sentChangesToIframe(percentage);
                 },
                 changeVideoSpeed: function () {
                     var rate = 1 / this._percentage;
