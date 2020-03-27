@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.5.9051
+// @version      0.5.9052
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -1390,7 +1390,7 @@
             return _hookedMap;
         };
         this._getHookedContextMap = function () {
-            return _hookedMap;
+            return _hookedContextMap;
         };
         this._getAutoStrId = function () {
             return '__auto__' + _autoId++;
