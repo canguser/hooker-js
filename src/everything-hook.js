@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.5.9053
+// @version      0.5.9054
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -94,6 +94,13 @@
             var suffix = this.uniqueNum.toString();
             this.uniqueNum++;
             return prefix + suffix;
+        },
+        keys:function (obj) {
+            var results = [];
+            for(var key in obj){
+                results.push(key);
+            }
+            return results;
         }
     };
 
@@ -676,7 +683,7 @@
              * @param isReadInnerObject {boolean=} 是否遍历内部对象的属性
              */
             ergodicObject: function (context, obj, cb, isReadInnerObject) {
-                var keys = Object.keys(obj);
+                var keys = BaseUtils.keys(obj);
                 ArrayUtils.ergodicArrayObject(this, keys, function (propertyName) {
                     // 若内部对象需要遍历
                     var _propertyName = propertyName;
@@ -1135,7 +1142,7 @@
                         rfs.map(function (f) {
                             var dv = f.apply(context || this, [declareVar]);
                             if (dv) {
-                                Object.keys(dv).map(function (key) {
+                                BaseUtils.keys(dv).map(function (key) {
                                     declareVar[key] = dv[key];
                                 });
                             }
@@ -1206,7 +1213,7 @@
             getParamFromUrl: function (url) {
                 var params = [];
                 var paramsObject = this.getUrlInfo(url).params;
-                Object.keys(paramsObject).forEach(function (key) {
+                BaseUtils.keys(paramsObject).forEach(function (key) {
                     params.push({
                         key: key,
                         value: paramsObject[key]
@@ -1910,6 +1917,17 @@
                 writable: false
             });
         },
+        preventError: function (parent, methodName, returnValue, context) {
+            this.hookCurrent(parent, methodName, function (m, args) {
+                var value = returnValue;
+                try {
+                    value = m.apply(this, args);
+                } catch (e) {
+                    console.log('Error Prevented from method ' + methodName, e);
+                }
+                return value;
+            }, context)
+        },
         /**
          * 装载插件
          * @param option
@@ -2139,12 +2157,7 @@
 
     _global['eHook'] = eHook;
     _global['aHook'] = new AHook();
-    var protectObjectMethods = [
-        "length", "name", "prototype", "assign", "getOwnPropertyDescriptor", "getOwnPropertyDescriptors", "getOwnPropertyNames", "getOwnPropertySymbols", "is", "preventExtensions", "seal", "create", "defineProperties", "defineProperty", "freeze", "getPrototypeOf", "setPrototypeOf", "isExtensible", "isFrozen", "isSealed", "keys", "entries", "fromEntries", "values"
-    ];
-    protectObjectMethods.forEach(function (method) {
-        eHook.protect(Object, method);
-    })
+
 
 }.bind(window)(
     (function () {
