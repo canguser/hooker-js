@@ -9,7 +9,7 @@
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
 // @include      *
-// @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=784956
+// @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=784972
 // @author       Cangshi
 // @match        http://*/*
 // @run-at       document-start
@@ -172,14 +172,15 @@ document.addEventListener('readystatechange', function () {
                 eHookContext.hookedToString(timerContext._Date.now, Date.now);
                 var objToString = Object.prototype.toString;
 
-                /*eHookContext.hookAfter(Object.prototype, 'toString',function (m, args, result) {
+                eHookContext.hookAfter(Object.prototype, 'toString', function (m, args, result) {
                     if (this instanceof timerContext._mDate) {
                         return '[object Date]';
                     } else {
                         return result;
                     }
-                }, false);*/
+                }, false);
 
+                eHookContext.hookedToString(objToString, Object.prototype.toString);
                 eHookContext.hookedToString(timerContext._setInterval, setInterval);
                 eHookContext.hookedToString(timerContext._setTimeout, setTimeout);
                 eHookContext.hookedToString(timerContext._clearInterval, clearInterval);
