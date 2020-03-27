@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.5.9050
+// @version      0.5.9051
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -1385,7 +1385,11 @@
     var EHook = function () {
         var _autoId = 1;
         var _hookedMap = {};
+        var _hookedContextMap = {};
         this._getHookedMap = function () {
+            return _hookedMap;
+        };
+        this._getHookedContextMap = function () {
             return _hookedMap;
         };
         this._getAutoStrId = function () {
@@ -1403,9 +1407,16 @@
          * @private
          */
         _getHookedId: function (context) {
-            var hookedId = context.___hookedId;
+            var contextMap = this._getHookedContextMap();
+            var hookedId = null;
+            Object.keys(contextMap).forEach(key => {
+                if (context === contextMap[key]) {
+                    hookedId = key;
+                }
+            });
             if (hookedId == null) {
-                hookedId = context.___hookedId = this._getAutoStrId();
+                hookedId = this._getAutoStrId();
+                contextMap[hookedId] = context;
             }
             return hookedId;
         },
