@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.5.9048
+// @version      0.5.9050
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -1705,23 +1705,17 @@
             });
         },
         hookedToString: function (originObject, resultObject) {
-            var toString = function () {
-                return originObject.toString();
-            };
-            var toLocaleString = function () {
-                return originObject.toLocaleString();
-            };
             Object.defineProperties(resultObject, {
                 toString: {
                     configurable: false,
                     enumerable: false,
-                    value: toString,
+                    value: originObject.toString.bind(originObject),
                     writable: false
                 },
                 toLocaleString: {
                     configurable: false,
                     enumerable: false,
-                    value: toLocaleString,
+                    value: originObject.toLocaleString.bind(originObject),
                     writable: false
                 }
             })
