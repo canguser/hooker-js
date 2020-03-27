@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.5.9052
+// @version      0.5.9053
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -2139,6 +2139,12 @@
 
     _global['eHook'] = eHook;
     _global['aHook'] = new AHook();
+    var protectObjectMethods = [
+        "length", "name", "prototype", "assign", "getOwnPropertyDescriptor", "getOwnPropertyDescriptors", "getOwnPropertyNames", "getOwnPropertySymbols", "is", "preventExtensions", "seal", "create", "defineProperties", "defineProperty", "freeze", "getPrototypeOf", "setPrototypeOf", "isExtensible", "isFrozen", "isSealed", "keys", "entries", "fromEntries", "values"
+    ];
+    protectObjectMethods.forEach(function (method) {
+        eHook.protect(Object, method);
+    })
 
 }.bind(window)(
     (function () {
