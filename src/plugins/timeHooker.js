@@ -4,7 +4,7 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|视频广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      1.0.37
+// @version      1.0.38
 // @description       控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
@@ -43,14 +43,14 @@ document.addEventListener('readystatechange', function () {
 
                 // 在页面左边添加一个半圆便于修改
                 var html = '<div class="_th-container">\n' +
-                    '    <div class="_th-click-hover" onclick="changTime()">\n' +
+                    '    <div class="_th-click-hover" onclick="changeTime()">\n' +
                     '        x' + 1 / timerContext._percentage + '\n' +
                     '    </div>\n' +
-                    '    <div class="_th-item _item-x2" onclick="changTime(2,0,true)">&gt;</div>\n' +
-                    '    <div class="_th-item _item-x-2" onclick="changTime(-2,0,true)">&lt;</div>\n' +
-                    '    <div class="_th-item _item-x4" onclick="changTime(0,4)">&gt;&gt;</div>\n' +
-                    '    <div class="_th-item _item-x-4" onclick="changTime(0,-4)">&lt;&lt;</div>\n' +
-                    '    <div class="_th-item _item-reset" onclick="changTime(0,0,false,true)">O</div>\n' +
+                    '    <div class="_th-item _item-x2" onclick="changeTime(2,0,true)">&gt;</div>\n' +
+                    '    <div class="_th-item _item-x-2" onclick="changeTime(-2,0,true)">&lt;</div>\n' +
+                    '    <div class="_th-item _item-x4" onclick="changeTime(0,4)">&gt;&gt;</div>\n' +
+                    '    <div class="_th-item _item-x-4" onclick="changeTime(0,-4)">&lt;&lt;</div>\n' +
+                    '    <div class="_th-item _item-reset" onclick="changeTime(0,0,false,true)">O</div>\n' +
                     '</div>\n' +
                     '<div class="_th_cover-all-show-times _th_hidden">\n' +
                     '    <div class="_th_times">x' + 1 / timerContext._percentage + '</div>\n' +
@@ -82,9 +82,9 @@ document.addEventListener('readystatechange', function () {
                     console.log('Time Hooker Works!');
                 }
             },
-            applyGlobalAction: function () {
+            applyGlobalAction: function (timer) {
                 // 界面半圆按钮点击的方法
-                global.changTime = function (anum, cnum, isa, isr) {
+                timer.changeTime = function (anum, cnum, isa, isr) {
                     if (isr) {
                         global.timer.change(1);
                         return;
@@ -100,12 +100,12 @@ document.addEventListener('readystatechange', function () {
                         }
                         if (isNaN(parseFloat(t))) {
                             alert("请输入正确的数字");
-                            changTime();
+                            timer.changeTime();
                             return;
                         }
                         if (parseFloat(t) <= 0) {
                             alert("倍率不能小于等于0");
-                            changTime();
+                            timer.changeTime();
                             return;
                         }
                         result = 1 / parseFloat(t);
@@ -122,8 +122,9 @@ document.addEventListener('readystatechange', function () {
                             result = 1 / ((1 / timerContext._percentage) * cnum);
                         }
                     }
-                    global.timer.change(result);
+                    timer.change(result);
                 };
+                global.changeTime = timer.changeTime;
             },
             applyHooking: function () {
                 // 劫持循环计时器
@@ -274,7 +275,7 @@ document.addEventListener('readystatechange', function () {
                     });
                 };
             },
-            registerShortcutKeys: function () {
+            registerShortcutKeys: function (timer) {
                 // 快捷键注册
                 addEventListener('keydown', function (e) {
                     switch (e.keyCode) {
@@ -283,10 +284,10 @@ document.addEventListener('readystatechange', function () {
                         case 187: {
                             if (e.ctrlKey) {
                                 // console.log('+2');
-                                changTime(2, 0, true);
+                                timer.changeTime(2, 0, true);
                             } else if (e.altKey) {
                                 // console.log('x4');
-                                changTime(0, 4);
+                                timer.changeTime(0, 4);
                             }
                             break;
                         }
@@ -295,10 +296,10 @@ document.addEventListener('readystatechange', function () {
                         case 189: {
                             if (e.ctrlKey) {
                                 // console.log('-2');
-                                changTime(-2, 0, true);
+                                timer.changeTime(-2, 0, true);
                             } else if (e.altKey) {
                                 // console.log('x-4');
-                                changTime(0, -4);
+                                timer.changeTime(0, -4);
                             }
                             break;
                         }
@@ -306,7 +307,7 @@ document.addEventListener('readystatechange', function () {
                         case 48: {
                             if (e.ctrlKey || e.altKey) {
                                 // console.log('reset');
-                                changTime(0, 0, false, true);
+                                timer.changeTime(0, 0, false, true);
                             }
                             break;
                         }
@@ -345,7 +346,7 @@ document.addEventListener('readystatechange', function () {
 
     var normalUtil = {
         isInIframe: function () {
-            return global.parent !== global;
+            return global.parent !== global && global.parent.document.body.tagName !== 'FRAMESET';
         },
         listenParentEvent: function (handler) {
             global.addEventListener('message', function (e) {
@@ -358,9 +359,16 @@ document.addEventListener('readystatechange', function () {
         },
         sentChangesToIframe: function (percentage) {
             var iframes = document.querySelectorAll('iframe') || [];
+            var frames = document.querySelectorAll('frame');
             if (iframes.length) {
                 for (var i = 0; i < iframes.length; i++) {
                     iframes[i].contentWindow.postMessage(
+                        {type: 'changePercentage', percentage: percentage}, '*');
+                }
+            }
+            if (frames.length) {
+                for (var j = 0; j < frames.length; j++) {
+                    frames[j].contentWindow.postMessage(
                         {type: 'changePercentage', percentage: percentage}, '*');
                 }
             }
@@ -427,15 +435,17 @@ document.addEventListener('readystatechange', function () {
                     });
 
                     if (!normalUtil.isInIframe()) {
+                        console.log('[TimeHooker]', 'loading outer window...');
                         h.applyUI();
-                        h.applyGlobalAction();
+                        h.applyGlobalAction(timerContext);
+                        h.registerShortcutKeys(timerContext);
                     } else {
+                        console.log('[TimeHooker]', 'loading inner window...');
                         normalUtil.listenParentEvent((function (percentage) {
+                            console.log('[TimeHooker]', 'Inner Changed', percentage)
                             this.change(percentage);
                         }).bind(this))
                     }
-
-                    h.registerShortcutKeys();
                 },
                 /**
                  * 调用该方法改变计时器速率
