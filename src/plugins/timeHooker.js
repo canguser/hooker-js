@@ -14,6 +14,7 @@
 // @match        http://*/*
 // @run-at       document-start
 // @grant        none
+// @license      GPL-3.0-or-later
 // ==/UserScript==
 /**
  * ---------------------------
