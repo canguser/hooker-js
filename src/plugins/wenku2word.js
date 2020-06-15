@@ -5,6 +5,7 @@
 // @version      0.0.1
 // @description  将百度文库内文章中的文本内容转换为 word，仅支持没有阅读限制的文章
 // @require      https://cdn.bootcss.com/jquery/2.2.4/jquery.js
+// @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=784972
 // @author       Cangshi
 // @match        *://wenku.baidu.com/view/*
 // @run-at       document-start
