@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         百度文库转 Word
-// @name:zh-CN   百度文库转 Word
+// @name         百度文库转 Word | 百度文库下载器
+// @name:zh-CN   百度文库转 Word | 百度文库下载器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @version      0.0.1
-// @description  百度文库转 Word
+// @description  将百度文库内文章中的文本内容转换为 word，仅支持非用券的文章
 // @require      https://cdn.bootcss.com/jquery/2.2.4/jquery.js
 // @require      https://cdn.bootcdn.net/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js
 // @author       Cangshi
@@ -74,7 +74,7 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
                             },
                             isLoaded: false,
                             fetchMoreContent() {
-                                var goNext = document.querySelector('.goBtn');
+                                var goNext = document.querySelector('.goBtn') || document.querySelector('.read-all');
                                 let elem = document.documentElement;
                                 let elem2 = document.body;
                                 let totalHeight = elem.scrollHeight;
@@ -86,7 +86,7 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
                                     this.isLoaded = true;
                                     return Promise.resolve();
                                 }
-                                if ($(goNext).is(':hidden')) {
+                                if ($(goNext).is(':hidden') || !goNext) {
                                     return wait(200).then(
                                         function () {
                                             window.scroll(0, scrollTop + clientHeight / 4);
@@ -94,7 +94,7 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
                                         }
                                     );
                                 }
-                                goNext.click();
+                                goNext && goNext.click();
                                 return wait(2000).then(
                                     function () {
                                         return _this.fetchMoreContent();
@@ -108,7 +108,7 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
         }(window);
         console.log('wenku2word loaded successfully');
         window.addEventListener('load', function () {
-            var btn = $('<div class="reader-download btn-download">文库转 Word </div>');
+            var btn = $('<div class="reader-download btn-download btn-pay" style="margin-left: 10px">文库转 Word </div>');
             btn.click(function (e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -136,9 +136,8 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
                     }
                 );
             });
-            $('.toolbar-core-btns-wrap').append(
-                btn
-            );
+            $('.toolbar-core-btns-wrap').append(btn);
+            $('.core-btn-wrapper').append(btn);
             console.log('button added');
         })
     })(jQuery);
