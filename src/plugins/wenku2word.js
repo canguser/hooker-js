@@ -4,6 +4,7 @@
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @version      0.0.1
 // @description  将百度文库内文章中的文本内容转换为 word 并下载，仅支持没有阅读限制的文章（只要没有阅读限制，无论是用券、VIP或付费文章都能下载）
+// @require      https://cdn.bootcss.com/jquery/2.2.4/jquery.js
 // @require      https://greasyfork.org/scripts/405376-filesaver-html5/code/FileSaver(html5).js?version=816426
 // @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=784972
 // @author       Cangshi
@@ -19,6 +20,8 @@ function wait(ms) {
         }, ms);
     })
 }
+
+
 
 
 if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
