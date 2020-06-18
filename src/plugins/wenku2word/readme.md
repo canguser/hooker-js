@@ -1,5 +1,6 @@
 # 百度文库转 Word | 免费下载百度文库文章
 
+![Daily Installs](https://palerock.cn/node-service/images/greasyfork/views-info/405373)
 ![Daily Installs](https://palerock.cn/node-service/images/greasyfork/stats/daily-installs/405373)
 ![Daily Updates](https://palerock.cn/node-service/images/greasyfork/stats/daily-updates/405373)
 ![Total Installs](https://palerock.cn/node-service/images/greasyfork/stats/total-installs/405373)
