@@ -1,4 +1,4 @@
-# 视频广告加速跳过，一秒跳过广告，支持几乎任何视频网站，VIP破解 [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&w=20)](https://gitee.com/HGJing/everthing-hook/tree/master/src/plugins/timer-hooker) 
+# 视频广告加速跳过，一秒跳过广告，支持几乎任何视频网站，VIP破解 [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&w=20)](https://gitee.com/HGJing/everthing-hook/tree/master/src/plugins/timer-hooker "Gitee") 
 
 ![Daily Installs](https://palerock.cn/node-service/images/greasyfork/views-info/372673)
 ![Daily Installs](https://palerock.cn/node-service/images/greasyfork/stats/daily-installs/372673)
