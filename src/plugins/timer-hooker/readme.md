@@ -5,8 +5,6 @@
 ![Daily Updates](https://palerock.cn/node-service/images/greasyfork/stats/daily-updates/372673)
 ![Total Installs](https://palerock.cn/node-service/images/greasyfork/stats/total-installs/372673)
 
-
-
 #### 支持腾讯，优酷，爱奇艺等几乎所有视频网站和用于其他用途的任一网站（其他用途自行研究哦）
 #### 原理是控制网页计时器，几乎所有通过计时器实现的内容都可以变速
 
@@ -109,3 +107,5 @@
     全屏显示倍率信息
     
 ### 最后，转载，复用，修改该插件需注明出处，未经允许不得用于商用或盈利
+
+> Power by [苍石居](https://palerock.cn)
