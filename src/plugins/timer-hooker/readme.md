@@ -1,9 +1,11 @@
-# 视频广告加速跳过，一秒跳过广告，支持几乎任何视频网站，VIP破解
+# 视频广告加速跳过，一秒跳过广告，支持几乎任何视频网站，VIP破解 [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&w=20)](https://gitee.com/HGJing/everthing-hook/tree/master/src/plugins/timer-hooker) 
 
 ![Daily Installs](https://palerock.cn/node-service/images/greasyfork/views-info/372673)
 ![Daily Installs](https://palerock.cn/node-service/images/greasyfork/stats/daily-installs/372673)
 ![Daily Updates](https://palerock.cn/node-service/images/greasyfork/stats/daily-updates/372673)
 ![Total Installs](https://palerock.cn/node-service/images/greasyfork/stats/total-installs/372673)
+
+
 
 #### 支持腾讯，优酷，爱奇艺等几乎所有视频网站和用于其他用途的任一网站（其他用途自行研究哦）
 #### 原理是控制网页计时器，几乎所有通过计时器实现的内容都可以变速
