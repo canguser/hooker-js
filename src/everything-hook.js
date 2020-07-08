@@ -10,7 +10,6 @@
 // @grant        none
 // @run-at       document-start
 // ==/UserScript==
-
 /**
  * ---------------------------
  * Time: 2017/9/20 18:33.
@@ -95,9 +94,9 @@
             this.uniqueNum++;
             return prefix + suffix;
         },
-        keys:function (obj) {
+        keys: function (obj) {
             var results = [];
-            for(var key in obj){
+            for (var key in obj) {
                 results.push(key);
             }
             return results;
@@ -1389,6 +1388,13 @@
 
 ~function (utils) {
     var _global = this;
+    /**
+     * @namespace EHook
+     * @author Cangshi
+     * @constructor
+     * @see {@link https://palerock.cn/projects/006HDUuOhBj}
+     * @license Apache License 2.0
+     */
     var EHook = function () {
         var _autoId = 1;
         var _hookedMap = {};
@@ -1582,9 +1588,11 @@
         },
         /**
          * 劫持一个方法
-         * @param parent
-         * @param methodName {string}
-         * @param config
+         * @inner
+         * @memberOf EHook
+         * @param parent{Object} 指定方法所在的对象
+         * @param methodName{String} 指定方法的名称
+         * @param config{Object} 劫持的配置对象
          */
         hook: function (parent, methodName, config) {
             var hookedFailure = -1;
@@ -1637,10 +1645,13 @@
         },
         /**
          * 劫持替换一个方法
-         * @param parent
-         * @param context
-         * @param methodName {string}
-         * @param replace {function}
+         * @see 注意：该方法会覆盖指定劫持方法在之前所进行的一切劫持，也不能重复使用，并且不和hookAfter,hookCurrent,hookBefore共存，在同时使用的情况下，优先使用hookReplace而不是其他的方法
+         * @inner
+         * @memberOf EHook
+         * @param parent{Object} 指定方法所在的对象
+         * @param context{Object=} 回调方法的上下文
+         * @param methodName{String} 指定方法的名称
+         * @param replace {function} 回调方法，该方法的返回值便是替换的方法 回调参数及返回值：[ method:指定的原方法，类型:function return:规定被替换的方法内容，类型:function ]
          * @return {number} 该次劫持的id
          */
         hookReplace: function (parent, methodName, replace, context) {
@@ -1649,18 +1660,49 @@
                 context: context
             });
         },
+        /**
+         * 在指定方法前执行
+         * @inner
+         * @memberOf EHook
+         * @param parent{Object} 指定方法所在的对象
+         * @param methodName{String} 指定方法的名称
+         * @param before{function} 回调方法，该方法在指定方法运行前执行 回调参数：[ method:指定的原方法 args:原方法运行的参数（在此改变参数值会影响后续指定方法的参数值） ]
+         * @param context{Object=} 回调方法的上下文
+         * @returns {number} 劫持id（用于解除劫持）
+         */
         hookBefore: function (parent, methodName, before, context) {
             return this.hook(parent, methodName, {
                 before: before,
                 context: context
             });
         },
+        /**
+         * 劫持方法的运行，在对制定方法进行该劫持的时候，指定方法不会主动执行，替换为执行参数中的current方法
+         * @see 注意：该方法只能对指定方法进行一次劫持，若再次使用该方法劫持就会覆盖之前的劫持[可以和hookBefore,hookAfter共存，且hookBefore和hookAfter可以对同个指定方法多次劫持]
+         * @inner
+         * @memberOf EHook
+         * @param parent{Object} 指定方法所在的对象
+         * @param methodName{String} 指定方法的名称
+         * @param current{function} 回调方法，该方法在指定方法被调用时执行 回调参数及返回值：[ parent:指定方法所在的对象，类型:object method:指定的原方法，类型:function args:原方法的参数，类型:array return:规定被劫持方法的返回值，类型:* ]
+         * @param context{Object=} 回调方法的上下文
+         * @returns {number} 劫持id（用于解除劫持）
+         */
         hookCurrent: function (parent, methodName, current, context) {
             return this.hook(parent, methodName, {
                 current: current,
                 context: context
             });
         },
+        /**
+         * 在指定方法后执行
+         * @inner
+         * @memberOf EHook
+         * @param parent{Object} 指定方法所在的对象
+         * @param methodName{String} 指定方法的名称
+         * @param after{function} 回调方法，该方法在指定方法运行后执行 回调参数及返回值：[ method:指定的原方法，类型:function args:原方法的参数，类型:array result:原方法的返回值，类型:* return:规定被劫持方法的返回值，类型:* ]
+         * @param context{Object=} 回调方法的上下文
+         * @returns {number} 劫持id（用于解除劫持）
+         */
         hookAfter: function (parent, methodName, after, context) {
             return this.hook(parent, methodName, {
                 after: after,
@@ -1740,6 +1782,8 @@
         },
         /**
          * 劫持全局ajax
+         * @inner
+         * @memberOf EHook
          * @param methods {object} 劫持的方法
          * @return {*|number} 劫持的id
          */
@@ -1822,6 +1866,8 @@
         },
         /**
          * 解除劫持
+         * @inner
+         * @memberOf EHook
          * @param context 上下文
          * @param methodName 方法名
          * @param isDeeply {boolean=} 是否深度解除[默认为false]
@@ -1848,6 +1894,8 @@
         },
         /**
          * 通过Id解除劫持
+         * @inner
+         * @memberOf EHook
          * @param eqId
          * @returns {boolean}
          */
@@ -1880,6 +1928,8 @@
         },
         /**
          *  移除所有劫持相关的方法
+         * @inner
+         * @memberOf EHook
          * @param context 上下文
          * @param methodName 方法名
          */
@@ -1899,6 +1949,8 @@
         },
         /**
          * 判断一个方法是否被劫持过
+         * @inner
+         * @memberOf EHook
          * @param context
          * @param methodName
          */
@@ -1908,6 +1960,8 @@
         },
         /**
          * 保护一个对象使之不会被篡改
+         * @inner
+         * @memberOf EHook
          * @param parent
          * @param methodName
          */
@@ -1930,6 +1984,8 @@
         },
         /**
          * 装载插件
+         * @inner
+         * @memberOf EHook
          * @param option
          */
         plugins: function (option) {
@@ -1945,6 +2001,13 @@
         return;
     }
     var eHook = new EHook();
+    /**
+     * @namespace AHook
+     * @author Cangshi
+     * @constructor
+     * @see {@link https://palerock.cn/projects/006HDUuOhBj}
+     * @license Apache License 2.0
+     */
     var AHook = function () {
         this.isHooked = false;
         var autoId = 1;
@@ -2081,6 +2144,8 @@
         },
         /**
          * 手动开始劫持
+         * @inner
+         * @memberOf AHook
          */
         startHook: function () {
             var _this = this;
@@ -2117,6 +2182,8 @@
         },
         /**
          * 注册ajaxUrl拦截
+         * @inner
+         * @memberOf AHook
          * @param urlPatcher
          * @param configOrRequest
          * @param response

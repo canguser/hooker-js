@@ -1,0 +1,24 @@
+{
+  "name": "hook-js",
+  "version": "0.5.9054",
+  "description": "**Everything-Hook**\r ===============",
+  "main": "index",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-utils-doc": "jsdoc ./src/every-utils.js -d ./out/utils",
+    "build-hook-doc": "jsdoc ./src/everything-hook.js -d ./out -P ./package.json -R ./README.md",
+    "build-doc": "rm -rf ./out & npm run build-utils-doc & npm run build-hook-doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/HGJing/everthing-hook.git"
+  },
+  "keywords": [
+    "hook"
+  ],
+  "author": "Cangshi",
+  "license": "Apache License 2.0",
+  "devDependencies": {
+    "jsdoc": "^3.6.4"
+  }
+}
