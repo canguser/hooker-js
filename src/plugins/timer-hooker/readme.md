@@ -5,7 +5,7 @@
 ![Daily Updates](https://palerock.cn/node-service/images/greasyfork/stats/daily-updates/372673)
 ![Total Installs](https://palerock.cn/node-service/images/greasyfork/stats/total-installs/372673)
 ![得分](https://palerock.cn/node-service/images/greasyfork/info/fan_score/372673?name=得分&rcolor=orange)
-![好评](https://palerock.cn/node-service/images/greasyfork/info/good_ratings/372673?name=好评&rcolor=palegreen)
+![好评](https://palerock.cn/node-service/images/greasyfork/info/good_ratings/372673?name=好评&rcolor=darkcyan)
 ![许可证](https://palerock.cn/node-service/images/greasyfork/info/license/372673?name=许可证&rcolor=blueviolet)
 
 #### 支持腾讯，优酷，爱奇艺等几乎所有视频网站和用于其他用途的任一网站（其他用途自行研究哦）
