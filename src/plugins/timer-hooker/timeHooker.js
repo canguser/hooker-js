@@ -4,7 +4,7 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|视频广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      1.0.39
+// @version      1.0.50
 // @description       控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
@@ -44,14 +44,14 @@ document.addEventListener('readystatechange', function () {
 
                 // 在页面左边添加一个半圆便于修改
                 var html = '<div class="_th-container">\n' +
-                    '    <div class="_th-click-hover" onclick="changeTime()">\n' +
+                    '    <div class="_th-click-hover _item-input" onclick="changeTime()">\n' +
                     '        x' + 1 / timerContext._percentage + '\n' +
                     '    </div>\n' +
-                    '    <div class="_th-item _item-x2" onclick="changeTime(2,0,true)">&gt;</div>\n' +
-                    '    <div class="_th-item _item-x-2" onclick="changeTime(-2,0,true)">&lt;</div>\n' +
-                    '    <div class="_th-item _item-x4" onclick="changeTime(0,4)">&gt;&gt;</div>\n' +
-                    '    <div class="_th-item _item-x-4" onclick="changeTime(0,-4)">&lt;&lt;</div>\n' +
-                    '    <div class="_th-item _item-reset" onclick="changeTime(0,0,false,true)">O</div>\n' +
+                    '    <div class="_th-item _item-x2">&gt;</div>\n' +
+                    '    <div class="_th-item _item-x-2">&lt;</div>\n' +
+                    '    <div class="_th-item _item-x4">&gt;&gt;</div>\n' +
+                    '    <div class="_th-item _item-x-4">&lt;&lt;</div>\n' +
+                    '    <div class="_th-item _item-reset">O</div>\n' +
                     '</div>\n' +
                     '<div class="_th_cover-all-show-times _th_hidden">\n' +
                     '    <div class="_th_times">x' + 1 / timerContext._percentage + '</div>\n' +
@@ -67,6 +67,36 @@ document.addEventListener('readystatechange', function () {
                 }
                 var node = document.createElement('div');
                 node.innerHTML = html;
+
+                var clickMapper = {
+                    '_item-input': function () {
+                        changeTime();
+                    },
+                    '_item-x2': function () {
+                        changeTime(2, 0, true);
+                    },
+                    '_item-x-2': function () {
+                        changeTime(-2, 0, true);
+                    },
+                    '_item-x4': function () {
+                        changeTime(0, 4);
+                    },
+                    '_item-x-4': function () {
+                        changeTime(0, -4);
+                    },
+                    '_item-reset': function () {
+                        changeTime(0, 0, false, true);
+                    }
+                };
+
+                Object.keys(clickMapper).forEach(function (className) {
+                    var exec = clickMapper[className];
+                    var targetEle = node.getElementsByClassName(className)[0];
+                    if (targetEle) {
+                        targetEle.onclick = exec;
+                    }
+                });
+
                 if (!global.isDOMLoaded) {
                     document.addEventListener('readystatechange', function () {
                         if ((document.readyState === "interactive" || document.readyState === "complete") && !global.isDOMRendered) {
