@@ -2,6 +2,8 @@
 
 > 用于劫持方法，进行AOP切面操作
 
+----------
+
 ### Hello Word Demo
 
 ```javascript
@@ -19,10 +21,7 @@ alert('hello eHook'); // hello eHook[被劫持的参数]
 ----------
 
 ## API 文档
-----------
 ### eHook对象
-----------
-
 #### `hookBefore`(parent, methodName, before, context)
 
 在指定方法前执行
@@ -151,3 +150,4 @@ console.log(Math.max(1, 8)); // 1
 ### 文档撰写中...
 ### 如有疑问请评论或留言
 
+----------
