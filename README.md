@@ -55,7 +55,7 @@ alert('hello eHook'); // hello eHook[被劫持的参数]
 `parent`:  
 类型：`object`，必须，指定方法所在的对象  
 
-methodName:  
+`methodName`:  
 类型：`string`，必须，指定方法的名称  
 
 `current`:  
