@@ -1,4 +1,4 @@
-# 视频广告加速跳过，一秒跳过广告，支持几乎任何视频网站，VIP破解 [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&w=20)](https://gitee.com/HGJing/everthing-hook/tree/master/src/plugins/timer-hooker "Gitee") 
+# 计时器掌控者，视频广告一秒跳过，倒计时瞬间归零，几乎支持所有网站 [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&w=20)](https://gitee.com/HGJing/everthing-hook/tree/master/src/plugins/timer-hooker "Gitee") 
 
 ![Daily Installs](https://palerock.cn/node-service/images/greasyfork/views-info/372673)
 ![Daily Installs](https://palerock.cn/node-service/images/greasyfork/stats/daily-installs/372673)
@@ -8,10 +8,8 @@
 ![好评](https://palerock.cn/node-service/images/greasyfork/info/good_ratings/372673?name=好评&rcolor=darkcyan)
 ![许可证](https://palerock.cn/node-service/images/greasyfork/info/license/372673?name=许可证&rcolor=blueviolet)
 
-#### 支持腾讯，优酷，爱奇艺等几乎所有视频网站和用于其他用途的任一网站（其他用途自行研究哦）
-#### 原理是控制网页计时器，几乎所有通过计时器实现的内容都可以变速
-
-**拒绝恶意差评，有问题可以提出来，恶意差评请绕道，地方太小容不下**
+> 支持几乎所有视频网站和用于其他用途的任一网站，可以自行发掘出更多的用处。   
+原理是**控制网页计时器**，几乎**所有**通过计时器实现的内容都可以变速。
 
 ### 使用方法：
 1. 安装（地址：[GreasyFork](https://greasyfork.org/scripts/372673)）
@@ -20,11 +18,11 @@
 4. 该插件支持所有的网页限时广告的跳过，如腾讯，爱奇艺，优酷等等。
 5. 快捷键操作：`’ctrl‘+‘=’` 或 `’ctrl‘+'>'` : 倍率+2, `’alt‘+‘=’` 或 `’alt‘+‘>’` : 倍率x4, `’ctrl‘+‘-’` 或 `’ctrl‘+‘<’` : 倍率-2, `’alt‘+‘-’` 或 `’ctrl‘+‘<’` : 倍率/4, `’ctrl‘+‘0’` 或 `’alt‘+‘0’` : 倍率恢复为1
 6. 在播放视频时，使用该插件可以对视频快进或慢放（注意必须使用 HTML5 视频播放器，Flash 播放器是无效的哦）
-7. 最后，创作不易，喜欢该插件的朋友可以扫描最下方的二维码，捐赠作者，你的鼓励就是我的动力，谢谢！  
+7. **最后，创作不易，喜欢该插件的朋友可以扫描最下方的二维码，捐赠作者，你的鼓励就是我的动力，谢谢！**  
 
-**由于不同使用人群使用该插件可能基于不同目的，一些较小众的功能需求不会作为更新推送给所有人，如有需要可以有偿捐赠并留言**
+> 由于不同使用人群使用该插件可能基于不同目的，一些较小众的功能需求不会作为更新推送给所有人，如有需要可以有偿捐赠并留言
 
-### 更新日志：(大家遇到bug请及时反馈，我会以最快的速度修复的)
+### 更新日志 (BUG或建议请及时反馈，我会以最快的速度修复)
 
 - 2020-08-10 [1.1.50]
     
@@ -114,6 +112,16 @@
     
     全屏显示倍率信息
     
-### 最后，转载，复用，修改该插件需注明出处，未经允许不得用于商用或盈利
+### 其它
 
-> Power by [苍石居](https://palerock.cn)
+项目首页：[https://palerock.cn/projects/0060cG6sIfY](https://palerock.cn/projects/0060cG6sIfY)  
+开源地址：[https://gitee.com/HGJing/everthing-hook/tree/master/src/plugins/timer-hooker](https://gitee.com/HGJing/everthing-hook/tree/master/src/plugins/timer-hooker)  
+附图：  
+- ![image.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDEwMjExMzQzNTAxMzE0VndKbTlEcS5wbmc=&w=300)
+- ![image.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDEwMjExMzQ4MjAxNDROVGcySlgzbC5wbmc=&w=300)
+- ![image.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDEwMjExMzQ4MzI0NDV6dDFDOWdlUS5wbmc=&w=300)
+
+
+
+> **转载，复用，修改该插件**需注明出处，未经允许**不得用于商用或盈利**  
+**Power by** [苍石居: https://palerock.cn](https://palerock.cn)
