@@ -1,0 +1,54 @@
+<!---- Creator: Eoly -->
+<!---- On 2017/9/20 -->
+<!---- Call https://palerock.cn -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Ajax Hook Testing</title>
+    <!--<script src="ajaxHook.js"></script>-->
+    <script src="../build/hooker-mini.js"></script>
+    <script>
+        var id = eHook.hookAjax({
+            //拦截回调
+            onreadystatechange: function (old, args) {
+                console.log("onreadystatechange called: %O", this)
+            },
+            onload: function (old, args) {
+                console.log("onload called: %O", this);
+            },
+            //拦截函数
+            open: function (old, arg) {
+                console.log("open called: method:%s,url:%s,async:%s", arg[0], arg[1], arg[2])
+            }
+        });
+    </script>
+    <script src="lib/jquery-3.1.1.js"></script>
+    <script>
+        $.ajax({
+            url: 'https://palerock.cn/h5_back/group/find-all-groups-count?id=100&ll=9',
+            success: function (res) {
+                console.log(res);
+            },
+            error: function (res) {
+                console.log(res);
+            }
+        });
+        setTimeout(function () {
+            $.ajax({
+                url: 'https://palerock.cn/h5_back/group/find-all-groups-count?id=100&ll=9',
+                success: function (res) {
+                    console.log(res);
+                },
+                error: function (res) {
+                    console.log(res);
+                }
+            });
+        },2000);
+    </script>
+</head>
+<body>
+</body>
+</html>

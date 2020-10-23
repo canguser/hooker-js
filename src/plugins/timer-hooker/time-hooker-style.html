@@ -159,30 +159,6 @@
         }
 
     </style>
-    <script src="../src/everything-hook.js"></script>
-    <script>
-
-        eHook.hookBefore(window, 'setInterval', function (method, args) {
-            args[1] = 400;
-        });
-
-        console.log('do');
-
-        setInterval(function () {
-            console.log('hh');
-        }, 5000)
-
-        function f() {
-            var a = document.getElementsByClassName('_th_cover-all-show-times')[0];
-            console.log(a.className);
-            a.className = '_th_cover-all-show-times';
-            setTimeout(function () {
-                a.className = '_th_cover-all-show-times _th_hidden';
-            }, 100);
-
-        }
-
-    </script>
 </head>
 <body>
 <div class="_th-container">

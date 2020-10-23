@@ -1,6 +1,6 @@
 /**
  * Created by Eoly on 2017/5/8.
- * Call http://palerock.cn
+ * Call https://palerock.cn
  */
 var Ajax = function (conf) {
     if (!conf || typeof conf != 'object') {
@@ -14,7 +14,7 @@ var Ajax = function (conf) {
                     if (typeof params[name] != 'string') {
                         continue;
                     }
-                    if (conf.url.indexOf('?') != -1) {
+                    if (conf.url.indexOf('?') !== -1) {
                         conf.url = conf.url + '&' + name + '=' + params[name];
                     } else {
                         conf.url = conf.url + '?' + name + '=' + params[name];
@@ -60,9 +60,3 @@ Ajax.sentRequest = function (conf) {
     };
     xhr.send();
 };
-// Ajax({
-//     url: 'http://palerock.cn/h5_back/group/find-groups',
-//     method: 'get',
-//     params: {goodsTypeId: 11},
-//     async: true
-// });

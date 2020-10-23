@@ -1,0 +1,15 @@
+/**
+     * @namespace AHook
+     * @author Cangshi
+     * @constructor
+     * @see {@link https://palerock.cn/projects/006HDUuOhBj}
+     * @license Apache License 2.0
+     */
+
+/**
+     * @namespace EHook
+     * @author Cangshi
+     * @constructor
+     * @see {@link https://palerock.cn/projects/006HDUuOhBj}
+     * @license Apache License 2.0
+     */

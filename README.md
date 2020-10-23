@@ -1,10 +1,11 @@
-# HookJS [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&w=15)](https://gitee.com/HGJing/everthing-hook)
+# Hooker JS [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&w=15)](https://gitee.com/HGJing/everthing-hook)
 
-> 用于劫持方法，进行AOP切面操作
+> 用于劫持方法，对目标进行 AOP 切面操作  
+基于 ES5 语法，用于快速开发
 
 ----------
 
-### Hello Word Demo
+## 快速入门
 
 ```javascript
 eHook.hookBefore(window,'alert',function(method,args){
@@ -18,6 +19,21 @@ alert('hello eHook'); // hello eHook[被劫持的参数]
  - `eHook`：包含aop劫持的基本方法 
  - `aHook`：包含 Ajax Url 劫持的基本方法
  
+## 引入方法
+1. 下载源码中的 `hooker.js` 或 `hooker-mini.js` 位于目录 `/build`，然后通过 `<script>` 标签引入，该方式引入即为全局对象：`eHook`，`aHook`
+2. npm / yarn 引入
+	```shell script
+		npm i @palerock/hooker-js
+		# 或
+		yarn add @palerock/hooker-js
+	```
+	然后通过 import 或 require 引入
+	```javascript
+		var hookJS = require('@palerock/hooker-js');
+		var eHook = hookJS.eHook;
+		var aHook = hookJS.aHook;
+		// more...
+	```
 ----------
 
 ## API 文档
@@ -146,8 +162,11 @@ eHook.hookReplace(Math,'max',function (m) {
 });
 console.log(Math.max(1, 8)); // 1
 ```
+### 文档持续撰写中...
 ----------
-### 文档撰写中...
-### 如有疑问请评论或留言
 
-----------
+## 相关地址
+- Gitee 地址：[https://gitee.com/HGJing/hooker-js](https://gitee.com/HGJing/hooker-js)
+- Github 地址 (优先更新源码)：[https://github.com/canguser/hooker-js](https://github.com/canguser/hooker-js)
+- 项目主页：[https://palerock.cn/projects/006HDUuOhBj](https://palerock.cn/projects/006HDUuOhBj)
+## 如有疑问请评论或留言

@@ -1,6 +1,6 @@
 <!---- Creator: Eoly -->
 <!---- On 2017/9/20 -->
-<!---- Call http://palerock.cn -->
+<!---- Call https://palerock.cn -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,26 +16,26 @@
         }
     </style>
     <!--<script src="ajaxHook.js"></script>-->
-    <script src="../src/everything-hook.js"></script>
-    <!--<script src="../src/plugins/hookAll.js"></script>-->
+    <script src="../build/hooker-mini.js"></script>
+    <script src="../src/plugins/hookAll.js"></script>
     <script>
-        var id = aHook.register('.*/login', {
-            hookSend: function (args) {
-            },
-            hookResponse: function (e) {
-                console.log(this)
-            }
-        });
-        console.log(id);
+        // var id = aHook.register('.*/login', {
+        //     hookSend: function (args) {
+        //     },
+        //     hookResponse: function (e) {
+        //         console.log(this)
+        //     }
+        // });
+        // console.log(id);
     </script>
-    <script src="jquery-3.1.1.js"></script>
+    <script src="lib/jquery-3.1.1.js"></script>
     <script>
         function send(){
             $.ajax({
                 method: 'post',
                 dataType: "json",
                 contentType: "application/json;charset=UTF-8",
-                url: 'http://palerock.cn/h5_back/login',
+                url: 'https://palerock.cn/h5_back/login',
                 data: '{"userPhoneNumber":"xiaoxigua","userLoginPsw":"12"}',
                 success: function (res) {
                     console.log(res);
@@ -44,6 +44,10 @@
                     console.log(res);
                 }
             })
+        }
+        NetHook.filter('.*/palerock.cn/.*').ajax.resp = function (res) {
+            console.log(res);
+            console.log(this)
         }
 
     </script>

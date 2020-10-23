@@ -1,33 +1,26 @@
 <!---- Creator: Eoly -->
 <!---- On 2017/9/20 -->
-<!---- Call http://palerock.cn -->
+<!---- Call https://palerock.cn -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>Title</title>
-    <style>
-        * {
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-        }
-    </style>
+    <title>AHook Testing</title>
     <!--<script src="ajaxHook.js"></script>-->
-    <script src="../src/everything-hook.js"></script>
+    <script src="../build/hooker-mini.js"></script>
     <script>
-        aHook.register('http://palerock.cn/h5_back/group/find-all-groups-count', {
+        aHook.register('https://palerock.cn/h5_back/group/find-all-groups-count', {
             open: function () {
 
             }
         });
     </script>
-    <script src="jquery-3.1.1.js"></script>
+    <script src="lib/jquery-3.1.1.js"></script>
     <script>
         $.ajax({
-            url: 'http://palerock.cn/h5_back/group/find-all-groups-count?id=100&ll=9',
+            url: 'https://palerock.cn/h5_back/group/find-all-groups-count?id=100&ll=9',
             success: function (res) {
                 console.log(res);
             },

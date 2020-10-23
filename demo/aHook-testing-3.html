@@ -1,13 +1,13 @@
 <!---- Creator: Eoly -->
 <!---- On 2017/9/20 -->
-<!---- Call http://palerock.cn -->
+<!---- Call https://palerock.cn -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>Title</title>
+    <title>AHook Testing 3</title>
     <style>
         * {
             -webkit-box-sizing: border-box;
@@ -16,7 +16,7 @@
         }
     </style>
     <!--<script src="ajaxHook.js"></script>-->
-    <script src="../src/everything-hook.js"></script>
+    <script src="../build/hooker-mini.js"></script>
     <script>
         // 方法中的this指向内部xhr[只可以调用不可以更改]，
         // this.xhr指向外部xhr可以更改可以重定义[需要用代理属性，即在属性名后面加上'_']
@@ -29,11 +29,11 @@
                 }
         );
     </script>
-    <script src="ajax.js"></script>
-    <script src="jquery-3.1.1.js"></script>
+    <script src="lib/ajax.js"></script>
+    <script src="lib/jquery-3.1.1.js"></script>
     <script>
         Ajax({
-            url: 'http://palerock.cn/h5_back/group/find-groups',
+            url: 'https://palerock.cn/h5_back/group/find-groups',
             method: 'get',
             params: {goodsTypeId: 11},
             async: true
@@ -44,7 +44,7 @@
         });
         setTimeout(function () {
             Ajax({
-                url: 'http://palerock.cn/h5_back/group/find-groups',
+                url: 'https://palerock.cn/h5_back/group/find-groups',
                 method: 'get',
                 params: {goodsTypeId: 11},
                 async: true
@@ -58,7 +58,7 @@
 
         setTimeout(function () {
             Ajax({
-                url: 'http://palerock.cn/h5_back/group/find-groups',
+                url: 'https://palerock.cn/h5_back/group/find-groups',
                 method: 'get',
                 params: {goodsTypeId: 11},
                 async: true
@@ -72,7 +72,7 @@
 
         setTimeout(function () {
             Ajax({
-                url: 'http://palerock.cn/h5_back/group/find-groups',
+                url: 'https://palerock.cn/h5_back/group/find-groups',
                 method: 'get',
                 params: {goodsTypeId: 11},
                 async: true
