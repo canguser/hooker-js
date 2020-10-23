@@ -1,3 +1,15 @@
+// ==UserScript==
+// @name         Everything-Hook
+// @namespace    https://gitee.com/HGJing/everthing-hook/
+// @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
+// @version      0.5.9054
+// @include      *
+// @description  it can hook everything
+// @author       Cangshi
+// @match        http://*/*
+// @grant        none
+// @run-at       document-start
+// ==/UserScript==
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -14,18 +26,6 @@ return /******/ (() => { // webpackBootstrap
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
-// ==UserScript==
-// @name         Everything-Hook
-// @namespace    https://gitee.com/HGJing/everthing-hook/
-// @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.5.9054
-// @include      *
-// @description  it can hook everything
-// @author       Cangshi
-// @match        http://*/*
-// @grant        none
-// @run-at       document-start
-// ==/UserScript==
 /**
  * ---------------------------
  * Time: 2017/9/20 18:33.
