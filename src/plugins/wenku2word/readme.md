@@ -1,4 +1,4 @@
-# 百度文库转 Word | 免费下载百度文库文章 [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&w=20)](https://gitee.com/HGJing/everthing-hook/tree/master/src/plugins/wenku2word "Gitee")
+# 百度文库转 Word | 免费下载百度文库文章 [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&w=20)](https://gitee.com/HGJing/everthing-hook/tree/master/src/plugins/wenku2word "Gitee")  [![github.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNjU3NDkzMDkybWNLRXhHMi5wbmc=&w=15)](https://github.com/canguser/hooker-js/tree/master/src/plugins/wenku2word "Github")
 
 ![Daily Installs](https://palerock.cn/node-service/images/greasyfork/views-info/405373)
 ![Daily Installs](https://palerock.cn/node-service/images/greasyfork/stats/daily-installs/405373)

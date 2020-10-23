@@ -1,4 +1,4 @@
-# 计时器掌控者，视频广告一秒跳过，倒计时瞬间归零，几乎支持所有网站 [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&w=20)](https://gitee.com/HGJing/everthing-hook/tree/master/src/plugins/timer-hooker "Gitee") 
+# 计时器掌控者，视频广告一秒跳过，倒计时瞬间归零，几乎支持所有网站 [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&w=20)](https://gitee.com/HGJing/hooker-js/tree/master/src/plugins/timer-hooker "Gitee")  [![github.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNjU3NDkzMDkybWNLRXhHMi5wbmc=&w=15)](https://github.com/canguser/hooker-js/tree/master/src/plugins/timer-hooker "Github")
 
 ![Daily Installs](https://palerock.cn/node-service/images/greasyfork/views-info/372673)
 ![Daily Installs](https://palerock.cn/node-service/images/greasyfork/stats/daily-installs/372673)
@@ -115,7 +115,10 @@
 ### 其它
 
 项目首页：[https://palerock.cn/projects/0060cG6sIfY](https://palerock.cn/projects/0060cG6sIfY)  
-开源地址：[https://gitee.com/HGJing/everthing-hook/tree/master/src/plugins/timer-hooker](https://gitee.com/HGJing/everthing-hook/tree/master/src/plugins/timer-hooker)  
+开源地址：
+- Gitee: [https://gitee.com/HGJing/hooker-js/tree/master/src/plugins/timer-hooker](https://gitee.com/HGJing/hooker-js/tree/master/src/plugins/timer-hooker)  
+- Github: [https://github.com/canguser/hooker-js/tree/master/src/plugins/timer-hooker](https://github.com/canguser/hooker-js/tree/master/src/plugins/timer-hooker)  
+
 附图：  
 - ![image.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDEwMjExMzQzNTAxMzE0VndKbTlEcS5wbmc=&w=300)
 - ![image.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDEwMjExMzQ4MjAxNDROVGcySlgzbC5wbmc=&w=300)
