@@ -1,8 +1,8 @@
 {
   "name": "@palerock/hooker-js",
-  "version": "0.5.9054",
+  "version": "0.5.9055",
   "description": "用于劫持方法，进行AOP切面操作",
-  "main": "build/hook-js.js",
+  "main": "build/hooker.js",
   "scripts": {
     "build-source": "webpack --progress --env production=false ",
     "build-mini": "webpack --env production=true --progress",
