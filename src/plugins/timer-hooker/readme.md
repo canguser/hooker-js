@@ -1,4 +1,4 @@
-# 计时器掌控者，视频广告一秒跳过，倒计时瞬间归零，几乎支持所有网站 [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&w=20)](https://gitee.com/HGJing/hooker-js/tree/master/src/plugins/timer-hooker "Gitee")  [![github.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNjU3NDkzMDkybWNLRXhHMi5wbmc=&w=15)](https://github.com/canguser/hooker-js/tree/master/src/plugins/timer-hooker "Github")
+# 计时器掌控者，视频广告一秒跳过，倒计时瞬间归零，几乎支持所有网站 [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&w=20)](https://gitee.com/HGJing/hooker-js/tree/master/src/plugins/timer-hooker "Gitee")  [![github.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNjU3NDkzMDkybWNLRXhHMi5wbmc=&w=20)](https://github.com/canguser/hooker-js/tree/master/src/plugins/timer-hooker "Github")
 
 ![Daily Installs](https://palerock.cn/node-service/images/greasyfork/views-info/372673)
 ![Daily Installs](https://palerock.cn/node-service/images/greasyfork/stats/daily-installs/372673)
