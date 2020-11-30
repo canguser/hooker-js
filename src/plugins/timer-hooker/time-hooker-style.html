@@ -12,8 +12,8 @@
         ._th-container ._th-item {
             margin-bottom: 3px;
             position: relative;
-            width: 30px;
-            height: 30px;
+            width: 0;
+            height: 0;
             cursor: pointer;
             opacity: .3;
             background-color: aquamarine;
@@ -23,38 +23,42 @@
             -webkit-transition: all .35s;
             -o-transition: all .35s;
             transition: all .35s;
-            right: 30px
+            right: 30px;
         }
 
-        ._th-container ._th-item._item-x2 {
+        ._th-container ._th-item, ._th-container ._th-click-hover, ._th_cover-all-show-times ._th_times {
+            box-shadow: -3px 4px 12px -5px black;
+        }
+
+        ._th-container:hover ._th-item._item-x2 {
             margin-left: 18px;
             width: 40px;
             height: 40px;
             line-height: 40px
         }
 
-        ._th-container ._th-item._item-x-2 {
+        ._th-container:hover ._th-item._item-x-2 {
             margin-left: 17px;
             width: 38px;
             height: 38px;
             line-height: 38px
         }
 
-        ._th-container ._th-item._item-x4 {
+        ._th-container:hover ._th-item._item-xx2 {
             width: 36px;
             height: 36px;
             margin-left: 16px;
             line-height: 36px
         }
 
-        ._th-container ._th-item._item-x-4 {
+        ._th-container:hover ._th-item._item-xx-2 {
             width: 32px;
             height: 32px;
             line-height: 32px;
             margin-left: 14px
         }
 
-        ._th-container ._th-item._item-reset {
+        ._th-container:hover ._th-item._item-reset {
             width: 30px;
             line-height: 30px;
             height: 30px;
@@ -66,19 +70,19 @@
             -webkit-transition: all .5s;
             -o-transition: all .5s;
             transition: all .5s;
-            height: 50px;
-            width: 50px;
+            height: 45px;
+            width: 45px;
             cursor: pointer;
             opacity: .3;
             border-radius: 100%;
             background-color: aquamarine;
             text-align: center;
-            line-height: 50px;
+            line-height: 45px;
             right: 0
         }
 
         ._th-container:hover {
-            left: -10px
+            left: -5px
         }
 
         ._th-container {
@@ -86,13 +90,16 @@
             -webkit-transition: all .5s;
             -o-transition: all .5s;
             transition: all .5s;
-            left: -40px;
+            left: -35px;
             top: 20%;
             position: fixed;
             -webkit-box-sizing: border-box;
             box-sizing: border-box;
             z-index: 100000;
-            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none
         }
 
         ._th-container ._th-item:hover {
@@ -103,7 +110,150 @@
 
         ._th-container ._th-item:active {
             opacity: .9;
-            background-color: #316347;
+            background-color: #1b3a26;
+            color: aliceblue
+        }
+
+        ._th-container:hover ._th-click-hover {
+            opacity: .8
+        }
+
+        ._th-container:hover ._th-item {
+            opacity: .6;
+            right: 0
+        }
+
+        ._th-container ._th-click-hover:hover {
+            opacity: .8;
+            background-color: #5fb492;
+            color: aliceblue
+        }
+
+        ._th_cover-all-show-times {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 99999;
+            opacity: 1;
+            font-weight: 900;
+            font-size: 30px;
+            color: #4f4f4f;
+            background-color: rgba(0, 0, 0, 0.1)
+        }
+
+        ._th_cover-all-show-times._th_hidden {
+            z-index: -99999;
+            opacity: 0;
+            -webkit-transition: 1s all;
+            -o-transition: 1s all;
+            transition: 1s all
+        }
+
+        ._th-container ._th-item {
+            margin-bottom: 3px;
+            position: relative;
+            width: 0;
+            height: 0;
+            cursor: pointer;
+            opacity: .3;
+            background-color: aquamarine;
+            border-radius: 100%;
+            text-align: center;
+            line-height: 30px;
+            -webkit-transition: all .35s;
+            -o-transition: all .35s;
+            transition: all .35s;
+            right: 30px;
+        }
+
+        ._th-container ._th-item, ._th-container ._th-click-hover, ._th_cover-all-show-times ._th_times {
+            -webkit-box-shadow: -3px 4px 12px -5px black;
+            box-shadow: -3px 4px 12px -5px black;
+        }
+
+        ._th-container:hover ._th-item._item-x2 {
+            margin-left: 18px;
+            width: 40px;
+            height: 40px;
+            line-height: 40px
+        }
+
+        ._th-container:hover ._th-item._item-x-2 {
+            margin-left: 17px;
+            width: 38px;
+            height: 38px;
+            line-height: 38px
+        }
+
+        ._th-container:hover ._th-item._item-xx2 {
+            width: 36px;
+            height: 36px;
+            margin-left: 16px;
+            line-height: 36px
+        }
+
+        ._th-container:hover ._th-item._item-xx-2 {
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            margin-left: 14px
+        }
+
+        ._th-container:hover ._th-item._item-reset {
+            width: 30px;
+            line-height: 30px;
+            height: 30px;
+            margin-left: 10px
+        }
+
+        ._th-click-hover {
+            position: relative;
+            -webkit-transition: all .5s;
+            -o-transition: all .5s;
+            transition: all .5s;
+            height: 45px;
+            width: 45px;
+            cursor: pointer;
+            opacity: .3;
+            border-radius: 100%;
+            background-color: aquamarine;
+            text-align: center;
+            line-height: 45px;
+            right: 0
+        }
+
+        ._th-container:hover {
+            left: -5px
+        }
+
+        ._th-container {
+            font-size: 12px;
+            -webkit-transition: all .5s;
+            -o-transition: all .5s;
+            transition: all .5s;
+            left: -35px;
+            top: 20%;
+            position: fixed;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            z-index: 100000;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none
+        }
+
+        ._th-container ._th-item:hover {
+            opacity: .8;
+            background-color: #5fb492;
+            color: aliceblue
+        }
+
+        ._th-container ._th-item:active {
+            opacity: .9;
+            background-color: #1b3a26;
             color: aliceblue
         }
 
@@ -157,7 +307,6 @@
             margin-top: -150px;
             margin-right: -150px;
         }
-
     </style>
 </head>
 <body>
@@ -165,10 +314,10 @@
     <div class="_th-click-hover" onclick="onChange()">
         1
     </div>
-    <div class="_th-item _item-x4">&gt;</div>
+    <div class="_th-item _item-x2">&gt;</div>
     <div class="_th-item _item-x-2">&lt;</div>
-    <div class="_th-item _item-x2">&gt;&gt;</div>
-    <div class="_th-item _item-x-4">&lt;&lt;</div>
+    <div class="_th-item _item-xx2">&gt;&gt;</div>
+    <div class="_th-item _item-xx-2">&lt;&lt;</div>
     <div class="_th-item _item-reset">O</div>
 </div>
 <div class="_th_cover-all-show-times">
