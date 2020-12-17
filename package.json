@@ -1,13 +1,13 @@
 {
   "name": "@palerock/hooker-js",
-  "version": "0.5.9055",
+  "version": "0.5.9056",
   "description": "用于劫持方法，进行AOP切面操作",
   "main": "build/hooker.js",
   "scripts": {
     "build-source": "webpack --progress --env production=false ",
     "build-mini": "webpack --env production=true --progress",
     "build": "npm run build-source && npm run build-mini",
-    "do-publish": "npm run build && npm publish --access public"
+    "do-publish": "npm publish --access public"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,6 @@
     "webpack-cli": "^4.1.0"
   },
   "dependencies": {
-    "@palerock/every-utils": "^0.2.1"
+    "@palerock/every-utils": "^0.2.2"
   }
 }

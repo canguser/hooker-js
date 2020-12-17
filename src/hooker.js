@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.5.9054
+// @version      0.5.9056
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi

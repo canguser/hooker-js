@@ -2,7 +2,7 @@
 // @name         Everything-Hook
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/everything-hook.js
-// @version      0.5.9054
+// @version      0.5.9056
 // @include      *
 // @description  it can hook everything
 // @author       Cangshi
@@ -10,6 +10,7 @@
 // @grant        none
 // @run-at       document-start
 // ==/UserScript==
+
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -26,6 +27,7 @@ return /******/ (() => { // webpackBootstrap
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
+
 /**
  * ---------------------------
  * Time: 2017/9/20 18:33.
@@ -916,6 +918,10 @@ const eUtils = __webpack_require__(1);
 
 }(typeof window !== "undefined" ? window : this, function (_global, noGlobal) {
 
+    var map = Array.prototype.map;
+    var forEach = Array.prototype.forEach;
+    var reduce = Array.prototype.reduce;
+
     var BaseUtils = {
         /**
          * 对象是否为数组
@@ -969,7 +975,7 @@ const eUtils = __webpack_require__(1);
             if (!BaseUtils.isArray(depends)) {
                 return;
             }
-            depends.forEach(function (depend) {
+            forEach.call(depends, function (depend) {
                 if (BaseUtils.isString(depend)) {
                     dependsArr.push(serviceProvider[depend.toLowerCase()]);
                 }
@@ -1927,7 +1933,7 @@ const eUtils = __webpack_require__(1);
                 var fs = [];
                 fs.push(func);
                 var properties = ['push', 'unshift', 'slice', 'map', 'forEach', 'keys', 'find', 'concat', 'fill', 'shift', 'values'];
-                properties.map(function (property) {
+                map.call(properties, function (property) {
                     if (typeof Array.prototype[property] === 'function') {
                         Object.defineProperty(_this, property, {
                             get: function () {
@@ -1941,7 +1947,7 @@ const eUtils = __webpack_require__(1);
                 });
                 this.result = function (context) {
                     var rfs = [];
-                    fs.map(function (f, index) {
+                    map.call(fs, function (f, index) {
                         if (typeof f === 'function') {
                             rfs.push(f);
                         }
@@ -1951,10 +1957,10 @@ const eUtils = __webpack_require__(1);
                             arguments: arguments,
                             this: this
                         };
-                        rfs.map(function (f) {
+                        map.call(rfs, function (f) {
                             var dv = f.apply(context || this, [declareVar]);
                             if (dv) {
-                                Object.keys(dv).map(function (key) {
+                                map.call(Object.keys(dv), function (key) {
                                     declareVar[key] = dv[key];
                                 });
                             }
@@ -2171,7 +2177,7 @@ const eUtils = __webpack_require__(1);
             });
         }
         var proxy = {};
-        Object.keys(utils).forEach(function (utilName) {
+        forEach.call(Object.keys(utils), function (utilName) {
             if (!utilName) {
                 return;
             }
@@ -2180,7 +2186,7 @@ const eUtils = __webpack_require__(1);
                     return utils[utilName];
                 }
             });
-            Object.keys(utils[utilName]).forEach(function (key) {
+            forEach.call(Object.keys(utils[utilName]), function (key) {
                 if (!key) {
                     return;
                 }
