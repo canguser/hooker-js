@@ -4,7 +4,7 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|视频广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      1.0.54
+// @version      1.0.55
 // @description       控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
@@ -208,6 +208,9 @@ document.addEventListener('readystatechange', function () {
                 var callOrigin = Function.prototype.call;
                 var applyOrigin = Function.prototype.apply;
                 var bindOrigin = Function.prototype.bind;
+                Function.prototype._applyOrigin = applyOrigin;
+                Function.prototype._callOrigin = callOrigin;
+                Function.prototype._bindOrigin = bindOrigin;
 
                 Object.prototype.toString = function toString() {
                     if (this instanceof timerContext._mDate) {
@@ -226,13 +229,8 @@ document.addEventListener('readystatechange', function () {
                             return '[object Undefined]';
                         }
                     }
-                    this.apply = applyOrigin;
-                    var slice = Array.prototype.slice;
-                    slice.call = callOrigin;
-                    var result = this.apply(context, slice.call(arguments, 1));
-                    delete this.apply;
-                    delete slice.call;
-                    return result;
+
+                    return this._callOrigin._applyOrigin(this, arguments);
                 };
 
                 Function.prototype.apply = function apply(context) {
@@ -244,10 +242,7 @@ document.addEventListener('readystatechange', function () {
                             return '[object Undefined]';
                         }
                     }
-                    this.apply = applyOrigin;
-                    var result = this.apply(context, arguments[1]);
-                    delete this.apply;
-                    return result;
+                    return this._applyOrigin._applyOrigin(this, arguments);
                 };
 
                 Function.prototype.bind = function bind(context) {
@@ -263,12 +258,7 @@ document.addEventListener('readystatechange', function () {
                             };
                         }
                     }
-                    this.bind = bindOrigin;
-                    this.bind.apply = applyOrigin;
-                    var result = this.bind.apply(this, arguments);
-                    delete this.bind.apply;
-                    delete this.bind;
-                    return result;
+                    return this._bindOrigin._applyOrigin(this, arguments);
                 };
 
                 eHookContext.hookedToString(callOrigin, Function.prototype.call);
