@@ -4,7 +4,7 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|视频广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      1.0.55
+// @version      1.0.56
 // @description       控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
@@ -205,65 +205,15 @@ document.addEventListener('readystatechange', function () {
                 };
                 eHookContext.hookedToString(timerContext._Date.now, Date.now);
                 var objToString = Object.prototype.toString;
-                var callOrigin = Function.prototype.call;
-                var applyOrigin = Function.prototype.apply;
-                var bindOrigin = Function.prototype.bind;
-                Function.prototype._applyOrigin = applyOrigin;
-                Function.prototype._callOrigin = callOrigin;
-                Function.prototype._bindOrigin = bindOrigin;
 
                 Object.prototype.toString = function toString() {
+                    'use strict';
                     if (this instanceof timerContext._mDate) {
                         return '[object Date]';
                     } else {
                         return objToString.call(this);
                     }
                 };
-
-                Function.prototype.call = function call(context) {
-                    if (this === Object.prototype.toString) {
-                        if (context === null) {
-                            return '[object Null]';
-                        }
-                        if (context === undefined) {
-                            return '[object Undefined]';
-                        }
-                    }
-
-                    return this._callOrigin._applyOrigin(this, arguments);
-                };
-
-                Function.prototype.apply = function apply(context) {
-                    if (this === Object.prototype.toString) {
-                        if (context === null) {
-                            return '[object Null]';
-                        }
-                        if (context === undefined) {
-                            return '[object Undefined]';
-                        }
-                    }
-                    return this._applyOrigin._applyOrigin(this, arguments);
-                };
-
-                Function.prototype.bind = function bind(context) {
-                    if (this === Object.prototype.toString) {
-                        if (context === null) {
-                            return function () {
-                                return '[object Null]';
-                            };
-                        }
-                        if (context === undefined) {
-                            return function () {
-                                return '[object Undefined]';
-                            };
-                        }
-                    }
-                    return this._bindOrigin._applyOrigin(this, arguments);
-                };
-
-                eHookContext.hookedToString(callOrigin, Function.prototype.call);
-                eHookContext.hookedToString(applyOrigin, Function.prototype.apply);
-                eHookContext.hookedToString(bindOrigin, Function.prototype.bind);
 
                 eHookContext.hookedToString(objToString, Object.prototype.toString);
                 eHookContext.hookedToString(timerContext._setInterval, setInterval);
