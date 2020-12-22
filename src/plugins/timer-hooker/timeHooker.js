@@ -4,7 +4,7 @@
 // @name:zh-CN   计时器掌控者|视频广告跳过|视频广告加速器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      1.0.56
+// @version      1.0.57
 // @description       控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
@@ -164,13 +164,14 @@ document.addEventListener('readystatechange', function () {
                 eHookContext.hookReplace(window, 'setInterval', function (setInterval) {
                     return function () {
                         // 储存原始时间间隔
-                        arguments[2] = arguments[1];
+                        var originMS = arguments[1];
                         // 获取变速时间间隔
                         arguments[1] *= timerContext._percentage;
                         var resultId = setInterval.apply(window, arguments);
                         // 保存每次使用计时器得到的id以及参数等
                         timerContext._intervalIds[resultId] = {
                             args: arguments,
+                            originMS: originMS,
                             nowId: resultId
                         };
                         return resultId;
@@ -364,8 +365,7 @@ document.addEventListener('readystatechange', function () {
             percentageChangeHandler: function (percentage) {
                 // 改变所有的循环计时
                 util.ergodicObject(timerContext, timerContext._intervalIds, function (idObj, id) {
-                    idObj.args[1] = Math.floor(idObj.args[2] * percentage);
-                    // console.log(idObj.args[1]);
+                    idObj.args[1] = Math.floor(idObj.originMS || 1 * percentage);
                     // 结束原来的计时器
                     this._clearInterval.call(window, idObj.nowId);
                     // 新开一个计时器
