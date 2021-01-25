@@ -2,7 +2,7 @@
 // @name         百度文库转 Word | 百度文库下载器
 // @name:zh-CN   百度文库转 Word | 百度文库下载器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
-// @version      0.0.1
+// @version      0.0.2
 // @description  将百度文库内文章中的文本内容转换为 word 并下载，仅支持没有阅读限制的文章（只要没有阅读限制，无论是用券、VIP或付费文章都能下载）
 // @require      https://cdn.bootcss.com/jquery/2.2.4/jquery.js
 // @require      https://greasyfork.org/scripts/405376-filesaver-html5/code/FileSaver(html5).js?version=816426
@@ -20,8 +20,6 @@ function wait(ms) {
         }, ms);
     })
 }
-
-
 
 
 if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
@@ -112,7 +110,21 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
         }(window);
         console.log('wenku2word loaded successfully');
         window.addEventListener('load', function () {
-            var btn = $('<div class="reader-download btn-download btn-pay" style="margin-left: 10px">文库转 Word </div>');
+
+            var existBtn = $('.core-btn-wrapper > div');
+
+            var btn = $('<div></div>')
+
+            if (existBtn) {
+                btn = existBtn.clone();
+            }
+
+            btn[0].className = 'reader-download btn-download btn-pay';
+
+            btn[0].innerHTML = '文库转 Word ';
+
+            btn[0].style.marginLeft = '10px';
+
             btn.click(function (e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -140,8 +152,9 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
                     }
                 );
             });
-            $('.toolbar-core-btns-wrap').append(btn);
-            $('.core-btn-wrapper').append(btn);
+
+            $('.toolbar-core-btns-wrap').append(btn[0]);
+            $('.core-btn-wrapper').append(btn[0]);
             console.log('button added');
         })
     })(jQuery);
