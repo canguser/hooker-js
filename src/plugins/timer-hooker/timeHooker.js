@@ -1,10 +1,9 @@
 // ==UserScript==
 // @name            计时器掌控者|视频广告跳过|视频广告加速器
 // @name:en         TimerHooker
-// @name            计时器掌控者|视频广告跳过|视频广告加速器
 // @namespace       https://gitee.com/HGJing/everthing-hook/
 // @updateURL       https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version         1.0.58
+// @version         1.0.59
 // @description     控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @include         *
@@ -159,44 +158,22 @@ document.addEventListener('readystatechange', function () {
                 global.changeTime = timer.changeTime;
             },
             applyHooking: function () {
+                var _this = this;
                 // 劫持循环计时器
                 eHookContext.hookReplace(window, 'setInterval', function (setInterval) {
-                    return function () {
-                        // 储存原始时间间隔
-                        var originMS = arguments[1];
-                        // 获取变速时间间隔
-                        arguments[1] *= timerContext._percentage;
-                        var resultId = setInterval.apply(window, arguments);
-                        // 保存每次使用计时器得到的id以及参数等
-                        timerContext._intervalIds[resultId] = {
-                            args: arguments,
-                            originMS: originMS,
-                            nowId: resultId
-                        };
-                        return resultId;
-                    };
+                    return _this.getHookedTimerFunction('interval', setInterval);
+                });
+                // 劫持单次计时
+                eHookContext.hookReplace(window, 'setTimeout', function (setTimeout) {
+                    return _this.getHookedTimerFunction('timeout', setTimeout)
                 });
                 // 劫持循环计时器的清除方法
                 eHookContext.hookBefore(window, 'clearInterval', function (method, args) {
-                    var id = args[0];
-                    if (timerContext._intervalIds[id]) {
-                        args[0] = timerContext._intervalIds[id].nowId;
-                    }
-                    // 清除该记录id
-                    delete timerContext._intervalIds[id];
+                    _this.redirectNewestId(args);
                 });
                 // 劫持循环计时器的清除方法
                 eHookContext.hookBefore(window, 'clearTimeout', function (method, args) {
-                    var id = args[0];
-                    if (timerContext._intervalIds[id]) {
-                        args[0] = timerContext._intervalIds[id].nowId;
-                    }
-                    // 清除该记录id
-                    delete timerContext._intervalIds[id];
-                });
-                // 劫持单次计时器setTimeout
-                eHookContext.hookBefore(window, 'setTimeout', function (method, args) {
-                    args[1] *= timerContext._percentage;
+                    _this.redirectNewestId(args);
                 });
                 var newFunc = this.getHookedDateConstructor();
                 eHookContext.hookClass(window, 'Date', newFunc, '_innerDate', ['now']);
@@ -309,6 +286,52 @@ document.addEventListener('readystatechange', function () {
                     });
                 };
             },
+            getHookedTimerFunction: function (type, timer) {
+                var property = '_' + type + 'Ids';
+                return function () {
+                    var uniqueId = timerContext.genUniqueId();
+                    var callback = arguments[0];
+                    if (typeof callback === 'string') {
+                        callback += ';timer.notifyExec(' + uniqueId + ')';
+                        arguments[0] = callback;
+                    }
+                    if (typeof callback === 'function') {
+                        arguments[0] = function () {
+                            var returnValue = callback.apply(this, arguments);
+                            timerContext.notifyExec(uniqueId);
+                            return returnValue;
+                        }
+                    }
+                    // 储存原始时间间隔
+                    var originMS = arguments[1];
+                    // 获取变速时间间隔
+                    arguments[1] *= timerContext._percentage;
+                    var resultId = timer.apply(window, arguments);
+                    // 保存每次使用计时器得到的id以及参数等
+                    timerContext[property][resultId] = {
+                        args: arguments,
+                        originMS: originMS,
+                        originId: resultId,
+                        nowId: resultId,
+                        uniqueId: uniqueId,
+                        exceptNextFireTime: timerContext._Date.now() + originMS
+                    };
+                    return resultId;
+                };
+            },
+            redirectNewestId: function (args) {
+                var id = args[0];
+                if (timerContext._intervalIds[id]) {
+                    args[0] = timerContext._intervalIds[id].nowId;
+                    // 清除该记录id
+                    delete timerContext._intervalIds[id];
+                }
+                if (timerContext._timeoutIds[id]) {
+                    args[0] = timerContext._timeoutIds[id].nowId;
+                    // 清除该记录id
+                    delete timerContext._timeoutIds[id];
+                }
+            },
             registerShortcutKeys: function (timer) {
                 // 快捷键注册
                 addEventListener('keydown', function (e) {
@@ -369,6 +392,19 @@ document.addEventListener('readystatechange', function () {
                     this._clearInterval.call(window, idObj.nowId);
                     // 新开一个计时器
                     idObj.nowId = this._setInterval.apply(window, idObj.args);
+                });
+                util.ergodicObject(timerContext, timerContext._timeoutIds, function (idObj, id) {
+                    var now = this._Date.now();
+                    var exceptTime = idObj.exceptNextFireTime;
+                    var time = exceptTime - now;
+                    if (time < 0) {
+                        time = 0;
+                    }
+                    idObj.args[1] = Math.floor((time || 1) * percentage);
+                    // 结束原来的计时器
+                    this._clearTimeout.call(window, idObj.nowId);
+                    // 新开一个计时器
+                    idObj.nowId = this._setTimeout.apply(window, idObj.args);
                 });
             },
             hookShadowRoot: function () {
@@ -444,6 +480,8 @@ document.addEventListener('readystatechange', function () {
             var timerHooker = {
                 // 用于储存计时器的id和参数
                 _intervalIds: {},
+                _timeoutIds: {},
+                _auoUniqueId: 1,
                 // 计时器速率
                 __percentage: 1.0,
                 // 劫持前的原始的方法
@@ -455,6 +493,25 @@ document.addEventListener('readystatechange', function () {
                 __lastDatetime: new Date().getTime(),
                 __lastMDatetime: new Date().getTime(),
                 videoSpeedInterval: 1000,
+                genUniqueId: function () {
+                    return this._auoUniqueId++;
+                },
+                notifyExec: function (uniqueId) {
+                    var _this = this;
+                    if (uniqueId) {
+                        // 清除 timeout 所储存的记录
+                        var timeoutInfos = Object.values(this._timeoutIds).filter(
+                            function (info) {
+                                return info.uniqueId === uniqueId;
+                            }
+                        );
+                        timeoutInfos.forEach(function (info) {
+                            _this._clearTimeout.call(window, info.nowId);
+                            delete _this._timeoutIds[info.originId]
+                        })
+                    }
+                    // console.log(uniqueId, 'called')
+                },
                 /**
                  * 初始化方法
                  */
