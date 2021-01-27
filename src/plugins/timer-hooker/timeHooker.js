@@ -1,20 +1,19 @@
 // ==UserScript==
-// @name        计时器掌控者|视频广告跳过|视频广告加速器
-// @name:en      TimerHooker
-// @name         计时器掌控者|视频广告跳过|视频广告加速器
-// @namespace    https://gitee.com/HGJing/everthing-hook/
-// @updateURL    https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version      1.0.58
-// @description       控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
+// @name            计时器掌控者|视频广告跳过|视频广告加速器
+// @name:en         TimerHooker
+// @name            计时器掌控者|视频广告跳过|视频广告加速器
+// @namespace       https://gitee.com/HGJing/everthing-hook/
+// @updateURL       https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
+// @version         1.0.58
+// @description     控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
-// @description:zh-CN  控制网页计时器速度|加速跳过页面计时广告|跳过广告|支持几乎所有网页.
-// @include      *
-// @require      https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=881251
-// @author       Cangshi
-// @match        http://*/*
-// @run-at       document-start
-// @grant        none
-// @license      GPL-3.0-or-later
+// @include         *
+// @require         https://greasyfork.org/scripts/372672-everything-hook/code/Everything-Hook.js?version=881251
+// @author          Cangshi
+// @match           http://*/*
+// @run-at          document-start
+// @grant           none
+// @license         GPL-3.0-or-later
 // ==/UserScript==
 /**
  * ---------------------------
