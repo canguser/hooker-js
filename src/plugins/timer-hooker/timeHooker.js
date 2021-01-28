@@ -314,6 +314,7 @@ document.addEventListener('readystatechange', function () {
                         originId: resultId,
                         nowId: resultId,
                         uniqueId: uniqueId,
+                        oldPercentage: timerContext._percentage,
                         exceptNextFireTime: timerContext._Date.now() + originMS
                     };
                     return resultId;
@@ -393,14 +394,20 @@ document.addEventListener('readystatechange', function () {
                     // 新开一个计时器
                     idObj.nowId = this._setInterval.apply(window, idObj.args);
                 });
+                // 改变所有的延时计时
                 util.ergodicObject(timerContext, timerContext._timeoutIds, function (idObj, id) {
                     var now = this._Date.now();
                     var exceptTime = idObj.exceptNextFireTime;
+                    var oldPercentage = idObj.oldPercentage;
                     var time = exceptTime - now;
                     if (time < 0) {
                         time = 0;
                     }
-                    idObj.args[1] = Math.floor((time || 1) * percentage);
+                    var changedTime = Math.floor(percentage / oldPercentage * time);
+                    idObj.args[1] = changedTime;
+                    // 重定下次执行时间
+                    idObj.exceptNextFireTime = now + changedTime;
+                    idObj.oldPercentage = percentage;
                     // 结束原来的计时器
                     this._clearTimeout.call(window, idObj.nowId);
                     // 新开一个计时器
