@@ -3,7 +3,7 @@
 // @name:en         TimerHooker
 // @namespace       https://gitee.com/HGJing/everthing-hook/
 // @updateURL       https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version         1.0.59
+// @version         1.0.60
 // @description     控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @include         *
@@ -21,6 +21,14 @@
  * View: http://palerock.cn
  * ---------------------------
  */
+
+/**
+ * 1. hook Object.defineProperty | Object.defineProperties
+ * 2. set configurable: true
+ * 3. delete property
+ * 4. can set property for onxx event method
+ */
+
 window.isDOMLoaded = false;
 window.isDOMRendered = false;
 
@@ -34,6 +42,7 @@ document.addEventListener('readystatechange', function () {
 
     var workerURLs = [];
     var extraElements = [];
+    var suppressEvents = {};
 
     var helper = function (eHookContext, timerContext, util) {
         return {
@@ -422,6 +431,47 @@ document.addEventListener('readystatechange', function () {
                         return result;
                     }, false);
                 eHookContext.hookedToString(origin, Element.prototype.attachShadow);
+            },
+            hookDefine: function () {
+                eHookContext.hookBefore(Object, 'defineProperty', function (m, args) {
+                    var option = args[2];
+                    var ele = args[0];
+                    var key = args[1];
+                    if (option && ele && ele instanceof Element && typeof key === 'string' && key.indexOf('on') >= 0) {
+                        option.configurable = true;
+                    }
+                });
+                eHookContext.hookBefore(Object, 'defineProperties', function (m, args) {
+                    var option = args[1];
+                    var ele = args[0];
+                    if (ele && ele instanceof Element) {
+                        Object.keys(option).forEach(key => {
+                            if (typeof key === 'string' && key.indexOf('on') >= 0) {
+                                var o = option[key];
+                                o.configurable = true;
+                            }
+                        })
+                    }
+                })
+            },
+            suppressEvent: function (ele, eventName) {
+                if (ele) {
+                    delete ele['on' + eventName];
+                    delete ele['on' + eventName];
+                    delete ele['on' + eventName];
+                    ele['on' + eventName] = undefined;
+                }
+                if (!suppressEvents[eventName]) {
+                    eHookContext.hookBefore(EventTarget.prototype, 'addEventListener',
+                        function (m, args) {
+                            var eName = args[0];
+                            if (eventName === eName) {
+                                console.warn(eventName, 'event suppressed.')
+                                args[0] += 'suppressed';
+                            }
+                        }, false);
+                    suppressEvents[eventName] = true;
+                }
             }
         }
     };
@@ -526,6 +576,8 @@ document.addEventListener('readystatechange', function () {
                     var timerContext = this;
                     var h = helper(eHookContext, timerContext, util);
 
+                    h.hookDefine();
+                    h.suppressEvent(null, 'ratechange');
                     h.applyHooking();
 
                     // 设定百分比属性被修改的回调
@@ -592,6 +644,8 @@ document.addEventListener('readystatechange', function () {
                     normalUtil.sentChangesToIframe(percentage);
                 },
                 changeVideoSpeed: function () {
+                    var timerContext = this;
+                    var h = helper(eHookContext, timerContext, util);
                     var rate = 1 / this._percentage;
                     rate > 16 && (rate = 16);
                     rate < 0.065 && (rate = 0.065);
@@ -599,6 +653,7 @@ document.addEventListener('readystatechange', function () {
                     var videos = querySelectorAll(document, 'video', true) || [];
                     if (videos.length) {
                         for (var i = 0; i < videos.length; i++) {
+                            h.suppressEvent(videos[i], 'ratechange');
                             videos[i].playbackRate = rate;
                         }
                     }
