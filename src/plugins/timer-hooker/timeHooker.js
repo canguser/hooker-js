@@ -3,7 +3,7 @@
 // @name:en         TimerHooker
 // @namespace       https://gitee.com/HGJing/everthing-hook/
 // @updateURL       https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version         1.0.60
+// @version         1.0.61
 // @description     控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @include         *
@@ -433,26 +433,39 @@ document.addEventListener('readystatechange', function () {
                 eHookContext.hookedToString(origin, Element.prototype.attachShadow);
             },
             hookDefine: function () {
+                const _this = this;
                 eHookContext.hookBefore(Object, 'defineProperty', function (m, args) {
                     var option = args[2];
                     var ele = args[0];
                     var key = args[1];
-                    if (option && ele && ele instanceof Element && typeof key === 'string' && key.indexOf('on') >= 0) {
-                        option.configurable = true;
-                    }
+                    var afterArgs = _this.hookDefineDetails(ele, key, option);
+                    afterArgs.forEach((arg, i) => {
+                        args[i] = arg;
+                    })
                 });
                 eHookContext.hookBefore(Object, 'defineProperties', function (m, args) {
                     var option = args[1];
                     var ele = args[0];
                     if (ele && ele instanceof Element) {
                         Object.keys(option).forEach(key => {
-                            if (typeof key === 'string' && key.indexOf('on') >= 0) {
-                                var o = option[key];
-                                o.configurable = true;
-                            }
+                            var o = option[key];
+                            var afterArgs = _this.hookDefineDetails(ele, key, o);
+                            args[0] = afterArgs[0];
+                            delete option[key];
+                            option[afterArgs[1]] = afterArgs[2]
                         })
                     }
                 })
+            },
+            hookDefineDetails: function (target, key, option) {
+                if (option && target && target instanceof Element && typeof key === 'string' && key.indexOf('on') >= 0) {
+                    option.configurable = true;
+                }
+                if (target instanceof HTMLVideoElement && key === 'playbackRate') {
+                    console.warn('[Timer Hook]', '已阻止默认操作视频倍率');
+                    key = 'playbackRate_hooked'
+                }
+                return [target, key, option];
             },
             suppressEvent: function (ele, eventName) {
                 if (ele) {
