@@ -3,7 +3,7 @@
 // @name:en         TimerHooker
 // @namespace       https://gitee.com/HGJing/everthing-hook/
 // @updateURL       https://gitee.com/HGJing/everthing-hook/raw/master/src/plugins/timeHooker.js
-// @version         1.0.61
+// @version         1.0.62
 // @description     控制网页计时器速度|加速跳过页面计时广告|视频快进（慢放）|跳过广告|支持几乎所有网页.
 // @description:en  it can hook the timer speed to change.
 // @include         *
@@ -438,6 +438,7 @@ document.addEventListener('readystatechange', function () {
                     var option = args[2];
                     var ele = args[0];
                     var key = args[1];
+                    timerContext.defineProperty = m;
                     var afterArgs = _this.hookDefineDetails(ele, key, option);
                     afterArgs.forEach((arg, i) => {
                         args[i] = arg;
@@ -446,6 +447,7 @@ document.addEventListener('readystatechange', function () {
                 eHookContext.hookBefore(Object, 'defineProperties', function (m, args) {
                     var option = args[1];
                     var ele = args[0];
+                    timerContext.defineProperty = m;
                     if (ele && ele instanceof Element) {
                         Object.keys(option).forEach(key => {
                             var o = option[key];
@@ -462,6 +464,7 @@ document.addEventListener('readystatechange', function () {
                     option.configurable = true;
                 }
                 if (target instanceof HTMLVideoElement && key === 'playbackRate') {
+                    option.configurable = true;
                     console.warn('[Timer Hook]', '已阻止默认操作视频倍率');
                     key = 'playbackRate_hooked'
                 }
@@ -484,6 +487,22 @@ document.addEventListener('readystatechange', function () {
                             }
                         }, false);
                     suppressEvents[eventName] = true;
+                }
+            },
+            changePlaybackRate: function (ele, rate) {
+                delete ele.playbackRate;
+                delete ele.playbackRate;
+                delete ele.playbackRate;
+                ele.playbackRate = rate
+                if (rate !== 1) {
+                    timerContext.defineProperty.call(Object, ele, 'playbackRate', {
+                        configurable: true,
+                        get: function () {
+                            return 1;
+                        },
+                        set: function () {
+                        }
+                    });
                 }
             }
         }
@@ -590,7 +609,6 @@ document.addEventListener('readystatechange', function () {
                     var h = helper(eHookContext, timerContext, util);
 
                     h.hookDefine();
-                    h.suppressEvent(null, 'ratechange');
                     h.applyHooking();
 
                     // 设定百分比属性被修改的回调
@@ -626,13 +644,8 @@ document.addEventListener('readystatechange', function () {
                  * @param percentage
                  */
                 change: function (percentage) {
-                    var _this = this;
                     this.__lastMDatetime = this._mDate.now();
-                    // console.log(this._mDate.toString());
-                    // console.log(new this._mDate());
                     this.__lastDatetime = this._Date.now();
-                    // debugger;
-                    //---------------------------------//
                     this._percentage = percentage;
                     var oldNode = document.getElementsByClassName('_th-click-hover');
                     var oldNode1 = document.getElementsByClassName('_th_times');
@@ -640,20 +653,11 @@ document.addEventListener('readystatechange', function () {
                     (oldNode[0] || {}).innerHTML = 'x' + displayNum;
                     (oldNode1[0] || {}).innerHTML = 'x' + displayNum;
                     var a = document.getElementsByClassName('_th_cover-all-show-times')[0] || {};
-                    // console.log(a.className);
                     a.className = '_th_cover-all-show-times';
                     this._setTimeout.bind(window)(function () {
                         a.className = '_th_cover-all-show-times _th_hidden';
                     }, 100);
                     this.changeVideoSpeed();
-                    this._clearInterval.bind(window)(this.videoSpeedIntervalId);
-                    this.videoSpeedIntervalId = this._setInterval.bind(window)(function () {
-                        _this.changeVideoSpeed();
-                        var rate = 1 / _this._percentage;
-                        if (rate === 1) {
-                            _this._clearInterval.bind(window)(_this.videoSpeedIntervalId);
-                        }
-                    }, this.videoSpeedInterval);
                     normalUtil.sentChangesToIframe(percentage);
                 },
                 changeVideoSpeed: function () {
@@ -662,12 +666,10 @@ document.addEventListener('readystatechange', function () {
                     var rate = 1 / this._percentage;
                     rate > 16 && (rate = 16);
                     rate < 0.065 && (rate = 0.065);
-                    // console.log(rate);
                     var videos = querySelectorAll(document, 'video', true) || [];
                     if (videos.length) {
                         for (var i = 0; i < videos.length; i++) {
-                            h.suppressEvent(videos[i], 'ratechange');
-                            videos[i].playbackRate = rate;
+                            h.changePlaybackRate(videos[i], rate);
                         }
                     }
                 }
