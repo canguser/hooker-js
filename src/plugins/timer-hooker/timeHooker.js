@@ -438,7 +438,6 @@ document.addEventListener('readystatechange', function () {
                     var option = args[2];
                     var ele = args[0];
                     var key = args[1];
-                    timerContext.defineProperty = m;
                     var afterArgs = _this.hookDefineDetails(ele, key, option);
                     afterArgs.forEach((arg, i) => {
                         args[i] = arg;
@@ -447,7 +446,6 @@ document.addEventListener('readystatechange', function () {
                 eHookContext.hookBefore(Object, 'defineProperties', function (m, args) {
                     var option = args[1];
                     var ele = args[0];
-                    timerContext.defineProperty = m;
                     if (ele && ele instanceof Element) {
                         Object.keys(option).forEach(key => {
                             var o = option[key];
@@ -582,6 +580,8 @@ document.addEventListener('readystatechange', function () {
                 __lastDatetime: new Date().getTime(),
                 __lastMDatetime: new Date().getTime(),
                 videoSpeedInterval: 1000,
+                defineProperty: Object.defineProperty,
+                defineProperties: Object.defineProperties,
                 genUniqueId: function () {
                     return this._auoUniqueId++;
                 },
