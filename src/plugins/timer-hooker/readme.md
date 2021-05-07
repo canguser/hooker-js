@@ -11,9 +11,11 @@
 > 支持几乎所有视频网站和用于其他用途的任一网站，可以自行发掘出更多的用处。   
 原理是**控制网页计时器**，几乎**所有**通过计时器实现的内容都可以变速。
 
-### `2.0.0+` 全新版本已上线：[计时器掌控者 2.0 主页](https://timer.palerock.cn)
+### `2.0.5+` 全新版本已上线：[计时器掌控者 2.x 主页](https://timer.palerock.cn)
 
-**新版本直装链接：[计时器掌控者](https://unpkg.com/@hook-js/timer/build/hook.timer.mini.user.js)**
+> 2.0.5 版本新特性：脚本可配置化（自定义倍率，自定义快捷键，自定义悬浮球位置等）
+
+**最新版本直装链接：[计时器掌控者](https://palerock.cn/node-service/scripts/install/@hook-js_timer/hook.timer.user.js)**
 
 > **通过 GreasyFork 安装为遗留版本的脚本，但是依然会在后期进行功能性的维护，仍可放心使用**
 
