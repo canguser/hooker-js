@@ -10,6 +10,8 @@
 
 > 支持几乎所有视频网站和用于其他用途的任一网站，可以自行发掘出更多的用处。   
 原理是**控制网页计时器**，几乎**所有**通过计时器实现的内容都可以变速。
+>
+> 欢迎加入 Q群 讨论：140783474
 
 ### `2.0.5+` 全新版本已上线：[计时器掌控者 2.x 主页](https://timer.palerock.cn)
 
@@ -54,6 +56,10 @@
     **必须遵循该格式，否则反馈一律无视！**
 
     在版本修复前可以自己添加规则排除该插件对指定网站生效: [油猴插件怎么配置能让插件只在特定的网页生效？](https://palerock.cn/articles/001w1s6gHGV)
+
+- 加入 QQ 群进行反馈
+
+  ![image.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMTA1MDgxMjE1MTY2OTVXQW5OODBNRi5wbmc=&w=300)
 
 ### 更新日志
 
@@ -178,6 +184,7 @@
 
 附图：  
 - ![image.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDEwMjExMzQzNTAxMzE0VndKbTlEcS5wbmc=&w=300)
+- ![image.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMTA1MDcyMjU4MDQ1ODFiNkxESnhINC5wbmc=&w=300)
 - ![image.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDEwMjExMzQ4MjAxNDROVGcySlgzbC5wbmc=&w=300)
 - ![image.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDEwMjExMzQ4MzI0NDV6dDFDOWdlUS5wbmc=&w=300)
 
