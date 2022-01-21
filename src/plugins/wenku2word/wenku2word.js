@@ -114,6 +114,7 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
                                 const wrapper = document.createElement('div');
                                 wrapper.setAttribute('style','position: fixed; bottom: 0; right: 0; left: 0; top: 0; z-index: 9999; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; flex-direction: column;');
                                 const button = document.createElement('button');
+                                button.innerText = '点击下载该文库文档为 word 格式';
                                 button.setAttribute('style', 'top: 10px; right: 10px; z-index: 9999; border: 2px solid #fff; padding: 10px; background: #fff; border-radius: 5px; cursor: pointer; color: #fff; font-size: 16px;background: transparent;');
                                 wrapper.appendChild(button);
                                 const p = document.createElement('p');
@@ -121,11 +122,19 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
                                 p.innerText = '需要等待背景加载出文字后才能下载...';
                                 wrapper.appendChild(p);
                                 const _this = this;
+                                window.scroll(0,0)
                                 window.addEventListener('load', function () {
                                     document.body.appendChild(wrapper);
-                                    button.innerText = '点击下载该文库文档为 word 格式';
                                     button.addEventListener('click', function () {
-                                        _this.doExport();
+                                        button.setAttribute('disabled', 'disabled');
+                                        button.style.color = '#ccc';
+                                        button.style.cursor = 'not-allowed';
+                                        p.innerText = '正在下载...';
+                                        _this.fetchMoreContent()
+                                            .then(function (){
+                                                p.innerText = '下载完成，请在浏览器下载内容中查看';
+                                                _this.doExport();
+                                            })
                                     });
                                 });
                             }
