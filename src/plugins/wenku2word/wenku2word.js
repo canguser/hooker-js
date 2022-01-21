@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         百度文库转 Word | 百度文库下载器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
-// @version      0.0.4
+// @version      0.0.5
 // @description  将百度文库内文章中的文本内容转换为 word 并下载，仅支持没有阅读限制的文章（只要没有阅读限制，无论是用券、VIP或付费文章都能下载）
 // @require      https://cdn.bootcss.com/jquery/2.2.4/jquery.js
 // @require      https://greasyfork.org/scripts/405376-filesaver-html5/code/FileSaver(html5).js?version=816426
@@ -9,6 +9,7 @@
 // @author       Cangshi
 // @match        *://wenku.baidu.com/view*
 // @match        *://wenku.baidu.com/link*
+// @match        *://wenku.baidu.com/share*
 // @run-at       document-start
 // @grant        none
 // ==/UserScript==
@@ -102,6 +103,31 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
                                         return _this.fetchMoreContent();
                                     }
                                 );
+                            },
+                            linksShare: function (){
+                                var currentLocation = location.href.split('?')[0];
+                                location.href = currentLocation.replace('/link/', '/share/')
+                                    .replace('/view/', '/share/')
+                                    .replace('.html', '') + '?share_api=1&width=800'
+                            },
+                            addShareDownloadButton: function (){
+                                const wrapper = document.createElement('div');
+                                wrapper.setAttribute('style','position: fixed; bottom: 0; right: 0; left: 0; top: 0; z-index: 9999; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; flex-direction: column;');
+                                const button = document.createElement('button');
+                                button.setAttribute('style', 'top: 10px; right: 10px; z-index: 9999; border: 2px solid #fff; padding: 10px; background: #fff; border-radius: 5px; cursor: pointer; color: #fff; font-size: 16px;background: transparent;');
+                                wrapper.appendChild(button);
+                                const p = document.createElement('p');
+                                p.setAttribute('style', 'color: #fff; font-size: 12px; margin-top: 10px;');
+                                p.innerText = '需要等待背景加载出文字后才能下载...';
+                                wrapper.appendChild(p);
+                                const _this = this;
+                                window.addEventListener('load', function () {
+                                    document.body.appendChild(wrapper);
+                                    button.innerText = '点击下载该文库文档为 word 格式';
+                                    button.addEventListener('click', function () {
+                                        _this.doExport();
+                                    });
+                                });
                             }
                         }
                     }
@@ -109,6 +135,9 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
             }
         }(window);
         console.log('wenku2word loaded successfully');
+        if (/^.*wenku\.baidu\.com\/share\/.*/.test(location.href)) {
+            window.wenku2word.addShareDownloadButton();
+        }
         window.addEventListener('load', function () {
 
             var existBtn = $('.core-btn-wrapper > div');
@@ -131,6 +160,8 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
             btn.click(function (e) {
                 e.preventDefault();
                 e.stopPropagation();
+                window.wenku2word.linksShare();
+                /*
                 window.scroll(0, 0);
                 var spinner = document.createElement('div');
                 spinner.innerText = '解析文章中, 请稍候...';
@@ -154,6 +185,7 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
                         document.body.removeChild(spinner);
                     }
                 );
+                */
             });
 
             $('.toolbar-core-btns-wrap').append(btn[0]);
