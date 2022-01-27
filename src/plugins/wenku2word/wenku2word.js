@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         百度文库转 Word / PDF | 百度文库下载器
+// @name         百度文库转 Word | 百度文库下载器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
 // @version      0.0.6
 // @description  将百度文库内文章中的文本内容转换为 word 并下载，仅支持没有阅读限制的文章（只要没有阅读限制，无论是用券、VIP或付费文章都能下载）
