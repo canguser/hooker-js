@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         百度文库转 Word | 百度文库下载器
+// @name         百度文库转 Word / PDF | 百度文库下载器
 // @namespace    https://gitee.com/HGJing/everthing-hook/
-// @version      0.0.5
+// @version      0.0.6
 // @description  将百度文库内文章中的文本内容转换为 word 并下载，仅支持没有阅读限制的文章（只要没有阅读限制，无论是用券、VIP或付费文章都能下载）
 // @require      https://cdn.bootcss.com/jquery/2.2.4/jquery.js
 // @require      https://greasyfork.org/scripts/405376-filesaver-html5/code/FileSaver(html5).js?version=816426
@@ -110,19 +110,27 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
                                     .replace('/view/', '/share/')
                                     .replace('.html', '') + '?share_api=1&width=800'
                             },
-                            addShareDownloadButton: function (){
-                                const wrapper = document.createElement('div');
+                            genShadowBG(){
+                                if (this.wrapper){
+                                    return this.wrapper;
+                                }
+                                var wrapper = document.createElement('div');
+                                wrapper.classList.add('shadow-bg');
                                 wrapper.setAttribute('style','position: fixed; bottom: 0; right: 0; left: 0; top: 0; z-index: 9999; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; flex-direction: column;');
-                                const button = document.createElement('button');
+                                this.wrapper = wrapper;
+                                return wrapper;
+                            },
+                            addShareDownloadButton: function (){
+                               const button = document.createElement('button');
+                               const wrapper = this.genShadowBG();
                                 button.innerText = '点击下载该文库文档为 word 格式';
                                 button.setAttribute('style', 'top: 10px; right: 10px; z-index: 9999; border: 2px solid #fff; padding: 10px; background: #fff; border-radius: 5px; cursor: pointer; color: #fff; font-size: 16px;background: transparent;');
                                 wrapper.appendChild(button);
                                 const p = document.createElement('p');
-                                p.setAttribute('style', 'color: #fff; font-size: 12px; margin-top: 10px;');
+                                p.setAttribute('style', 'color: #fff; font-size: 12px; margin-top: 10px; margin-bottom: 10px;');
                                 p.innerText = '需要等待背景加载出文字后才能下载...';
                                 wrapper.appendChild(p);
                                 const _this = this;
-                                window.scroll(0,0)
                                 window.addEventListener('load', function () {
                                     document.body.appendChild(wrapper);
                                     button.addEventListener('click', function () {
@@ -130,6 +138,7 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
                                         button.style.color = '#ccc';
                                         button.style.cursor = 'not-allowed';
                                         p.innerText = '正在下载...';
+                                        window.scroll(0,0)
                                         _this.fetchMoreContent()
                                             .then(function (){
                                                 p.innerText = '下载完成，请在浏览器下载内容中查看';
@@ -137,6 +146,63 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
                                             })
                                     });
                                 });
+                            },
+                            addPdfDownloadButton:function (){
+                                this.importScript('https://unpkg.com/jspdf@2.5.0/dist/jspdf.umd.js')
+                                this.importScript('https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js')
+                                const wrapper = this.genShadowBG();
+                                const button = document.createElement('button');
+                                button.innerText = '点击下载该文库文档为 PDF 格式';
+                                button.setAttribute('style', 'top: 10px; right: 10px; z-index: 9999; border: 2px solid #fff; padding: 10px; background: #fff; border-radius: 5px; cursor: pointer; color: #fff; font-size: 16px;background: transparent;');
+                                wrapper.appendChild(button);
+                                const p = document.createElement('p');
+                                p.setAttribute('style', 'color: #fff; font-size: 12px; margin-top: 10px;');
+                                p.innerText = 'PDF 为图片内容，下载后不可复制...';
+                                wrapper.appendChild(p);
+                                const _this = this;
+                                window.addEventListener('load', function () {
+                                    document.body.appendChild(wrapper);
+                                    button.addEventListener('click', function () {
+                                        button.setAttribute('disabled', 'disabled');
+                                        button.style.color = '#ccc';
+                                        button.style.cursor = 'not-allowed';
+                                        p.innerText = '正在下载中...';
+                                        window.scroll(0,0)
+                                        _this.fetchMoreContent()
+                                            .then(function (){
+                                                p.innerText = '正在转换格式中...';
+                                                _this.doExportPdf()
+                                                    .then(function (){
+                                                        p.innerText = '下载完成，请在浏览器下载内容中查看';
+                                                    });
+                                            })
+                                    });
+                                });
+                            },
+                            doExportPdf: function () {
+                                var pages = document.querySelectorAll('.reader-page')
+                                var pdf = new window.jspdf.jsPDF('', 'pt', 'a4');
+                                var promises = [];
+                                for (var i = 0; i < pages.length; i++) {
+                                    promises.push(window.html2canvas(pages[i]))
+                                }
+                                return Promise.all(promises)
+                                    .then(canvasList=>{
+                                        for (var i = 0; i< canvasList.length; i++){
+                                            var canvas = canvasList[i];
+                                            var imgData = canvas.toDataURL('image/jpeg', 1.0);
+                                            pdf.addImage(imgData, 'JPEG', 0, 0, 595.28, 592.28/canvas.width * canvas.height );
+                                            if (i < canvasList.length - 1) {
+                                                pdf.addPage();
+                                            }
+                                        }
+                                        pdf.save('文库文档.pdf');
+                                    })
+                            },
+                            importScript: function (url){
+                                var script = document.createElement('script');
+                                script.src = url;
+                                document.body.appendChild(script);
                             }
                         }
                     }
@@ -146,6 +212,7 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
         console.log('wenku2word loaded successfully');
         if (/^.*wenku\.baidu\.com\/share\/.*/.test(location.href)) {
             window.wenku2word.addShareDownloadButton();
+            window.wenku2word.addPdfDownloadButton();
         }
         window.addEventListener('load', function () {
 
@@ -162,7 +229,7 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
 
             btn[0].className = 'btn-download btn-pay reader-download';
 
-            btn[0].innerHTML = '文库转 Word ';
+            btn[0].innerHTML = '文库转 Word / PDF ';
 
             btn[0].style.marginLeft = '10px';
 
