@@ -1,5 +1,9 @@
 # Hooker JS [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&w=15)](https://gitee.com/HGJing/hooker-js) [![github.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNjU3NDkzMDkybWNLRXhHMi5wbmc=&w=15)](https://github.com/canguser/hooker-js)
 
+> **注意，`Hooker JS` 由于版本问题和历史代码问题，已停止该代码库对应版本的维护**
+>
+> **新版本已改名为[`@hook-js`](https://github.com/canguser/hook-js-core)：[https://github.com/canguser/hook-js-core](https://github.com/canguser/hook-js-core)**
+
 > 用于劫持方法，对目标进行 AOP 切面操作  
 基于 ES5 语法，用于快速开发
 
@@ -162,7 +166,6 @@ eHook.hookReplace(Math,'max',function (m) {
 });
 console.log(Math.max(1, 8)); // 1
 ```
-### 文档持续撰写中...
 ----------
 
 ## 相关地址
