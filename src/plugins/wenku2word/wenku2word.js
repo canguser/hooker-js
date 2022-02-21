@@ -157,7 +157,7 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
                                 wrapper.appendChild(button);
                                 const p = document.createElement('p');
                                 p.setAttribute('style', 'color: #fff; font-size: 12px; margin-top: 10px;');
-                                p.innerText = 'PDF 为图片内容，下载后不可复制...';
+                                p.innerText = 'PDF 为图片内容，且仅支持少量文档（不建议使用）...';
                                 wrapper.appendChild(p);
                                 const _this = this;
                                 window.addEventListener('load', function () {
