@@ -5,6 +5,8 @@
 ![Daily Updates](https://palerock.cn/node-service/images/greasyfork/stats/daily-updates/405373)
 ![Total Installs](https://palerock.cn/node-service/images/greasyfork/stats/total-installs/405373)
 
+<h3 color="red">暂时不可用，维护中！</h3>
+
 不同于其它的文库下载器，该插件原理是使用脚本将文库的文本内容找到并整理格式最后转换为 word / PDF 下载，使用该脚本不会将页面跳转到其它网址，也不会有任何收费选项，只需要等待解析完成即可，**如有问题请多多反馈**
 
 使用方法如下：
