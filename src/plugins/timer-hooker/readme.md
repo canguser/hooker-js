@@ -11,7 +11,7 @@
 > 支持几乎所有视频网站和用于其他用途的任一网站，可以自行发掘出更多的用处。   
 原理是**控制网页计时器**，几乎**所有**通过计时器实现的内容都可以变速。
 >
-> 欢迎加入 Q群 讨论：140783474(已满), 599917798
+> 欢迎加入 Q群 讨论：140783474
 
 ### `2.0.5+` 全新版本已上线：[计时器掌控者 2.x 主页](https://timer.palerock.cn)
 
@@ -34,7 +34,7 @@
     - `’ctrl‘+‘0’` 或 `’alt‘+‘0’` : 倍率恢复为1
     - `’ctrl‘+‘9’` 或 `’alt‘+‘9’` : 弹出自定义倍率输入框
 6. 在播放视频时，使用该插件可以对视频快进或慢放（注意必须使用 HTML5 视频播放器，Flash 播放器是无效的哦）
-7. **最后，创作不易，喜欢该插件的朋友可以扫描最下方的二维码，捐赠作者，你的鼓励就是我的动力，谢谢！**  
+7. **最后，创作不易，喜欢该插件的朋友可以扫描最下方的二维码，捐赠作者，你的鼓励就是我的动力，谢谢！**
 
 > 由于不同使用人群使用该插件可能基于不同目的，一些较小众的功能需求不会作为更新推送给所有人，如有需要可以有偿捐赠并留言
 
@@ -82,11 +82,11 @@
     4. 修改悬浮球以及倍率改变结果样式
 
 - 2020-08-10 [1.0.50]
-    
+
     修复在一些网站中（如：Twitter）悬浮球点击无效的问题
 
 - 2020-04-05 [1.0.39]
-    
+
     修复一些网站兼容问题，现在可以正常的在大部分网页中正常工作了
 
 <details><summary><b>查看更早的更新</b></summary>
@@ -174,19 +174,17 @@
 <br>
 </p>
 </details>
-    
+
 ### 其它
 
-项目首页：[https://palerock.cn/projects/0060cG6sIfY](https://palerock.cn/projects/0060cG6sIfY)  
+项目首页：[https://palerock.cn/projects/0060cG6sIfY](https://palerock.cn/projects/0060cG6sIfY)
 开源地址：
-- Gitee: [https://gitee.com/HGJing/hooker-js/tree/master/src/plugins/timer-hooker](https://gitee.com/HGJing/hooker-js/tree/master/src/plugins/timer-hooker)  
-- Github: [https://github.com/canguser/hooker-js/tree/master/src/plugins/timer-hooker](https://github.com/canguser/hooker-js/tree/master/src/plugins/timer-hooker)  
+- Gitee: [https://gitee.com/HGJing/hooker-js/tree/master/src/plugins/timer-hooker](https://gitee.com/HGJing/hooker-js/tree/master/src/plugins/timer-hooker)
+- Github: [https://github.com/canguser/hooker-js/tree/master/src/plugins/timer-hooker](https://github.com/canguser/hooker-js/tree/master/src/plugins/timer-hooker)
 
-附图：  
-- ![image.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDEwMjExMzQzNTAxMzE0VndKbTlEcS5wbmc=&w=300)
-- ![image.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMTA1MDcyMjU4MDQ1ODFiNkxESnhINC5wbmc=&w=300)
-- ![image.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDEwMjExMzQ4MjAxNDROVGcySlgzbC5wbmc=&w=300)
-- ![image.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDEwMjExMzQ4MzI0NDV6dDFDOWdlUS5wbmc=&w=300)
+## 喜欢该脚本
+
+![image.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyNDA2MjUxMTU4MTMyNjE3TlBobGsxWC5wbmc=&w=400)
 
 
 
